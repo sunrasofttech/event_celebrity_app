@@ -299,7 +299,10 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
 
                         Padding(
                           padding: EdgeInsets.all(10),
-                          child: Text(translate("withdraw_points"), style: blackStyle.copyWith(fontWeight: FontWeight.bold, color: primaryColor)),
+                          child: Text(
+                            "Withdraw Options" /*translate("withdraw_options")*/,
+                            style: blackStyle.copyWith(fontWeight: FontWeight.bold, color: primaryColor),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -309,27 +312,24 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                               GestureDetector(
                                 onTap: () async {
                                   context.read<UserProfileBlocBloc>().add(GetUserProfileEvent());
-                                  setState(() {
-                                    selectedValue = "bank";
-                                    print(selectedValue);
-                                  });
+                                  // setState(() {
+                                  //   selectedValue = "bank";
+                                  //   print(selectedValue);
+                                  // });
 
                                   addDetails(context: context, name: "Bank Account Details", details: state.bankDetails);
                                 },
                                 child: Image.asset("asset/icons/add_funds_options/add_bank_pic.png", height: 150),
                               ),
                               GestureDetector(
-                                onTap:
-                                    state.bankDetails.accountNo!.isNotEmpty && state.bankDetails.ifsc!.isNotEmpty
-                                        ? () {
-                                          context.read<UserProfileBlocBloc>().add(GetUserProfileEvent());
-                                          setState(() {
-                                            selectedValue = "upi";
-                                            print(selectedValue);
-                                          });
-                                          addDetails(context: context, name: "UPI", details: state.bankDetails);
-                                        }
-                                        : null,
+                                onTap: () {
+                                  context.read<UserProfileBlocBloc>().add(GetUserProfileEvent());
+                                  // setState(() {
+                                  //   selectedValue = "upi";
+                                  //   print(selectedValue);
+                                  // });
+                                  addDetails(context: context, name: "UPI", details: state.bankDetails);
+                                },
                                 child: Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Opacity(
@@ -341,6 +341,37 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             ],
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Select Withdraw In Bank/UPI" /*translate("withdraw_options")*/,
+                            style: blackStyle.copyWith(fontWeight: FontWeight.w500, fontSize: 14, color: primaryColor),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(12)),
+                          child: DropdownButton<String>(
+                            value: selectedValue,
+                            items: const [
+                              DropdownMenuItem(value: "bank", child: Text("Bank Account Details")),
+                              DropdownMenuItem(value: "upi", child: Text("UPI")),
+                            ],
+                            onChanged: (String? newValue) {
+                              if (newValue != null) {
+                                setState(() {
+                                  selectedValue = newValue;
+                                  print("Dropdown changed to: $selectedValue");
+                                });
+
+                                final title = newValue == "upi" ? "Withdraw at UPI" : "Withdraw at Bank Account Details";
+                                // addDetails(context: context, name: title, details: state.bankDetails);
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(children: [Text(translate("withdraw_points"), style: blackStyle.copyWith(color: primaryColor))]),
@@ -396,100 +427,122 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                             if (state is LoadingState) {
                               return Center(child: CircularProgressIndicator());
                             }
-                            return BlocBuilder<SettingCubit, SettingState>(
-                              builder: (context, settingState) {
-                                return BlocBuilder<UserProfileBlocBloc, UserProfileBlocState>(
-                                  builder: (context, userState) {
-                                    return ButtonWidget(
-                                      callback: () async {
-                                        if (loading) return;
+                            return BlocBuilder<WithdrawDetailsBloc, WithdrawDetailsState>(
+                              builder: (context, withdrawState) {
+                                return BlocBuilder<SettingCubit, SettingState>(
+                                  builder: (context, settingState) {
+                                    return BlocBuilder<UserProfileBlocBloc, UserProfileBlocState>(
+                                      builder: (context, userState) {
+                                        return ButtonWidget(
+                                          callback: () async {
+                                            if (loading) return;
+                                            if (selectedValue == "bank" && withdrawState is AccountAddedSuccessfullyState) {
+                                              if (withdrawState.bankDetails.ifsc == null || withdrawState.bankDetails.ifsc.toString().trim() == "") {
+                                                Fluttertoast.showToast(msg: "Please Add Bank Details");
+                                                return;
+                                              }
+                                            }
 
-                                        if (settingState is SettingLoadedState) {
-                                          if (settingState.model.data?[0].withdrawEnabled.toString() == "0") {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  content: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        "Withdraw is disabled by admin currently please send request later",
-                                                        style: AppTheme().blackStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                                            if (selectedValue == "upi" &&
+                                                withdrawState is AccountAddedSuccessfullyState &&
+                                                (withdrawState.bankDetails.upi == null || withdrawState.bankDetails.upi.toString().trim() == "")) {
+                                              Fluttertoast.showToast(msg: "Please Add UPI Details");
+                                              return;
+                                            }
+
+                                            if (settingState is SettingLoadedState) {
+                                              ///Is withdraw enabled
+                                              if (settingState.model.data?[0].withdrawEnabled.toString() == "0") {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Text(
+                                                            "Withdraw is disabled by admin currently please send request later",
+                                                            style: AppTheme().blackStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                                                          ),
+                                                          SizedBox(height: 20),
+                                                          ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                              backgroundColor: primaryColor,
+                                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                            ),
+                                                            onPressed: () {
+                                                              Navigator.pop(context);
+                                                            },
+                                                            child: Text(translate("ok"), style: whiteStyle),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      SizedBox(height: 20),
-                                                      ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(
-                                                          backgroundColor: primaryColor,
-                                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.pop(context);
+                                                    );
+                                                  },
+                                                );
+                                              } else {
+                                                ///
+
+                                                log("message ---> withdraw enabled ");
+                                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                                if (_formKey.currentState!.validate()) {
+                                                  if (userState is UserProfileFetchedState) {
+                                                    print(
+                                                      "-------->>>>>> ${double.parse(userState.user.data!.balance!.toString())} 77 ${double.parse(amountController.text)}",
+                                                    );
+                                                    if (double.parse(userState.user.data!.balance!.toString()) >=
+                                                        double.parse(amountController.text)) {
+                                                      setState(() {
+                                                        loading = true;
+                                                      });
+                                                      context.read<CheckBankCubit>().fetchBankData(pref.getString("key").toString(), selectedValue);
+                                                    } else {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDialog(
+                                                            content: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Text(
+                                                                  translate("insufficient_balance"),
+                                                                  style: AppTheme().blackStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
+                                                                ),
+                                                                SizedBox(height: 20),
+                                                                ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: primaryColor,
+                                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                                  ),
+                                                                  onPressed: () {
+                                                                    Navigator.pushReplacement(
+                                                                      context,
+                                                                      MaterialPageRoute(builder: (context) => AddFundScreen()),
+                                                                    );
+                                                                  },
+                                                                  child: Text(translate("ok"), style: whiteStyle),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          );
                                                         },
-                                                        child: Text(translate("ok"), style: whiteStyle),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          } else {
-                                            ///
-                                            log("message ---> withdraw enabled ");
-                                            SharedPreferences pref = await SharedPreferences.getInstance();
-                                            if (_formKey.currentState!.validate()) {
-                                              if (userState is UserProfileFetchedState) {
-                                                print(
-                                                  "-------->>>>>> ${double.parse(userState.user.data!.balance!.toString())} 77 ${double.parse(amountController.text)}",
-                                                );
-                                                if (double.parse(userState.user.data!.balance!.toString()) >= double.parse(amountController.text)) {
-                                                  setState(() {
-                                                    loading = true;
-                                                  });
-                                                  context.read<CheckBankCubit>().fetchBankData(pref.getString("key").toString(), selectedValue);
-                                                } else {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDialog(
-                                                        content: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Text(
-                                                              translate("insufficient_balance"),
-                                                              style: AppTheme().blackStyle.copyWith(fontWeight: FontWeight.bold, fontSize: 18),
-                                                            ),
-                                                            SizedBox(height: 20),
-                                                            ElevatedButton(
-                                                              style: ElevatedButton.styleFrom(
-                                                                backgroundColor: primaryColor,
-                                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                                              ),
-                                                              onPressed: () {
-                                                                Navigator.pushReplacement(
-                                                                  context,
-                                                                  MaterialPageRoute(builder: (context) => AddFundScreen()),
-                                                                );
-                                                              },
-                                                              child: Text(translate("ok"), style: whiteStyle),
-                                                            ),
-                                                          ],
-                                                        ),
                                                       );
-                                                    },
-                                                  );
+                                                    }
+                                                  }
+                                                  FocusScope.of(context).unfocus();
                                                 }
                                               }
-                                              FocusScope.of(context).unfocus();
                                             }
-                                          }
-                                        }
+                                          },
+                                          title:
+                                              loading
+                                                  ? Center(
+                                                    child: SizedBox(height: 15, width: 15, child: CircularProgressIndicator(color: Colors.white)),
+                                                  )
+                                                  : Text(translate("send_request"), style: whiteStyle),
+                                          primaryColor: playColor,
+                                        );
                                       },
-                                      title:
-                                          loading
-                                              ? Center(child: SizedBox(height: 15, width: 15, child: CircularProgressIndicator(color: Colors.white)))
-                                              : Text(translate("send_request"), style: whiteStyle),
-                                      primaryColor: playColor,
                                     );
                                   },
                                 );
