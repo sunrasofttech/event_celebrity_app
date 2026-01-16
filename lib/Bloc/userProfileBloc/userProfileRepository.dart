@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:either_dart/either.dart';
-import 'package:mobi_user/main.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:planner_celebrity/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Utility/const.dart';

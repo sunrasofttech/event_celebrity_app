@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/userProfileBloc/userProfileRepository.dart';
+import 'package:planner_celebrity/Bloc/userProfileBloc/userProfileRepository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/userProfileModel.dart';

@@ -12,6 +12,7 @@
   "mpin_length_error": "పాస్‌వర్డ్ 4 అంకెలుగా ఉండాలి",
   "registration_success": "నమోదు విజయవంతంగా పూర్తైంది",
   "create_button": "సృష్టించు",
+  "terms_and_conditions": "నియమాలు మరియు షరతులు",
   "mpin": {
     "title": "M-Pin నమోదు చేయండి",
     "forgot": "M-Pin మర్చిపోయారా?"
@@ -129,6 +130,7 @@
   "type": "రకం",
   "action": "చర్య",
   "delete": "తొలగించు",
+  "how_to_play": "ఎలా ఆడాలి",
   "bottom_nav": {
     "my_bids": "నా బిడ్స్",
     "passbook": "పాస్‌బుక్",

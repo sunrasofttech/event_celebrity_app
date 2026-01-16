@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
-import 'package:mobi_user/Bloc/AccountBloc/AccountState.dart';
+import 'package:planner_celebrity/Bloc/AccountBloc/AccountState.dart';
 
 import '../../Utility/const.dart';
 import '../../main.dart';
@@ -12,36 +11,25 @@ import 'AccountModel.dart';
 class AccountCubit extends Cubit<AccountState> {
   AccountCubit() : super(InitialState());
 
-  getHistory(int pageKey, String startDate, String endDate) async {
+  getHistory(int pageKey, String startDate, String endDate, {int? pageSize}) async {
     log("Get History");
     String uid = await pref.getString("key").toString();
-    var headers = {
-      'Content-Type': "application/json",
-      'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "",
-    };
+    var headers = {'Content-Type': "application/json", 'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
     emit(InitialState());
     try {
       emit(LoadingState());
-      final resp = await http.post(
+      final resp = await repository.getClient().post(
         Uri.parse(transactionHistoryApi),
-        body: json.encode(
-          {
-            "userId": uid,
-            "fromDate": startDate,
-            "toDate": endDate,
-            "page": pageKey,
-          },
-        ),
-        headers: headers,
-      );
-      print("Data Body=> ${json.encode(
-        {
+        body: json.encode({
           "userId": uid,
           "fromDate": startDate,
           "toDate": endDate,
           "page": pageKey,
-        },
-      )}");
+          "pageSize": pageSize,
+        }),
+        headers: headers,
+      );
+      print("Data Body=> ${json.encode({"userId": uid, "fromDate": startDate, "toDate": endDate, "page": pageKey})}");
       final result = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
         if (result["status"]) {

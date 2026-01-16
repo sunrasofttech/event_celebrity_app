@@ -10,12 +10,6 @@ class CustomProgressIndicator extends StatefulWidget {
 class _CustomProgressIndicatorState extends State<CustomProgressIndicator> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 20,
-        width: 20,
-        child: CircularProgressIndicator(color: Colors.white),
-      ),
-    );
+    return Center(child: Container(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.black)));
   }
 }

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mobi_user/Bloc/userProfileBloc/user_profile_bloc_bloc.dart';
-import 'package:mobi_user/Utility/CustomFont.dart';
-import 'package:mobi_user/Utility/const.dart';
-import 'package:mobi_user/Widget/ButtonWidget.dart';
+import 'package:planner_celebrity/Bloc/userProfileBloc/user_profile_bloc_bloc.dart';
+import 'package:planner_celebrity/Utility/CustomFont.dart';
+import 'package:planner_celebrity/Utility/const.dart';
+import 'package:planner_celebrity/Widget/ButtonWidget.dart';
 
 import '../Bloc/EditProfileBloc/EditProfileBloc.dart';
 import '../Bloc/EditProfileBloc/EditProfileEvent.dart';
@@ -63,10 +63,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("My Profile"),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text("My Profile")),
       body: BlocListener<UserProfileBlocBloc, UserProfileBlocState>(
         listener: (context, state) {
           if (state is UserProfileFetchedState) {
@@ -204,13 +201,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       ),
               ),*/
               SizedBox(height: 30),
-              CircleAvatar(
-                maxRadius: 60,
-                child: Icon(
-                  Icons.person,
-                  size: 50,
-                ),
-              ),
+              CircleAvatar(maxRadius: 60, child: Icon(Icons.person, size: 50)),
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -287,10 +278,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     if (state is LoadingState) {
                       return Center(
                         child: Container(
-                          decoration: const BoxDecoration(
-                            color: redColor,
-                            shape: BoxShape.circle,
-                          ),
+                          decoration: const BoxDecoration(color: redColor, shape: BoxShape.circle),
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: CircularProgressIndicator(color: whiteColor),
@@ -299,16 +287,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                       );
                     }
                     return ButtonWidget(
-                      primaryColor: maroonColor,
+                      primaryColor: primaryColor,
                       callback: () {
                         context.read<EditProfileBloc>().add(
-                              LoadedEvent(
-                                _username.text,
-                                email.text,
-                                phone.text,
-                                imageFile == null ? File("") : File(imageFile!.path),
-                              ),
-                            );
+                          LoadedEvent(
+                            _username.text,
+                            email.text,
+                            phone.text,
+                            imageFile == null ? File("") : File(imageFile!.path),
+                          ),
+                        );
                       },
                       title: Text("Submit", style: whiteStyle),
                     );

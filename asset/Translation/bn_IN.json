@@ -129,6 +129,8 @@
   "type": "ধরন",
   "action": "কর্ম",
   "delete": "মুছে ফেলুন",
+  "how_to_play": "কিভাবে খেলবেন",
+  "terms_and_conditions": "শর্তাবলী",
   "bottom_nav": {
     "my_bids": "আমার বিড",
     "passbook": "পাসবুক",

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/Auth/LoginBloc/LoginModel.dart';
+import 'package:planner_celebrity/Bloc/Auth/LoginBloc/LoginModel.dart';
 
 abstract class LoginState extends Equatable {}
 
@@ -23,6 +23,13 @@ class LoadedState extends LoginState {
 class ErrorState extends LoginState {
   final String error;
   ErrorState(this.error);
+  @override
+  List<Object?> get props => [error];
+}
+
+class LimitReachState extends LoginState {
+  final String error;
+  LimitReachState(this.error);
   @override
   List<Object?> get props => [error];
 }

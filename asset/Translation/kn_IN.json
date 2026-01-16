@@ -12,6 +12,7 @@
   "mpin_length_error": "ಪಾಸ್ವರ್ಡ್ 4 ಅಂಕಿಯವಾಗಿರಬೇಕು",
   "registration_success": "ನೋಂದಣಿ ಯಶಸ್ವಿಯಾಗಿದೆ",
   "create_button": "ರಚಿಸಿ",
+  "terms_and_conditions": "ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು",
   "mpin": {
     "title": "ಎಂ-ಪಿನ್ ನಮೂದಿಸಿ",
     "forgot": "ಎಂ-ಪಿನ್ ಮರೆತಿರಾ?"
@@ -129,6 +130,7 @@
   "type": "ಪ್ರಕಾರ",
   "action": "ಕ್ರಿಯೆ",
   "delete": "ಅಳಿಸಿ",
+  "how_to_play": "ಹೇಗೆ ಆಡಬೇಕು",
   "bottom_nav": {
     "my_bids": "ನನ್ನ ಬಿಡ್‌ಗಳು",
     "passbook": "ಪಾಸ್ಬುಕ್",

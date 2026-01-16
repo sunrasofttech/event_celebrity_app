@@ -12,6 +12,7 @@
   "mpin_length_error": "கடவுச்சொல் 4 இலக்கமாக இருக்க வேண்டும்",
   "registration_success": "பதிவுபற்றுதல் வெற்றிகரமாக முடிந்தது",
   "create_button": "உருவாக்கு",
+  "terms_and_conditions": "விதிமுறைகள் மற்றும் நிபந்தனைகள்",
   "mpin": {
     "title": "M-Pin ஐ உள்ளிடவும்",
     "forgot": "M-Pin மறந்துவிட்டீர்களா?"
@@ -129,6 +130,7 @@
   "type": "வகை",
   "action": "நடவடிக்கை",
   "delete": "அழி",
+  "how_to_play": "எப்படி விளையாடுவது",
   "bottom_nav": {
     "my_bids": "எனது பிட்ஸ்",
     "passbook": "பாஸ்புக்",

@@ -1,7 +1,7 @@
 /*
 import 'dart:convert';
-import 'package:mobi_user/Utility/const.dart';
-import 'package:mobi_user/main.dart';
+import 'package:planner_celebrity/Utility/const.dart';
+import 'package:planner_celebrity/main.dart';
 import 'package:flutter/material.dart';
 
 class CheckUpi with ChangeNotifier {

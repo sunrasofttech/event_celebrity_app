@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobi_user/Utility/MainColor.dart';
+import 'package:planner_celebrity/Utility/MainColor.dart';
 
 class BidCloseAlert {
   static void showClosedForTodayDialog(BuildContext context, {required String? message, required String? marketName}) {

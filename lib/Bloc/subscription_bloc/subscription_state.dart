@@ -1,4 +1,4 @@
-import 'package:mobi_user/Bloc/subscription_bloc/subscription_model.dart';
+import 'package:planner_celebrity/Bloc/subscription_bloc/subscription_model.dart';
 
 abstract class GetSubscriptionsState {}
 

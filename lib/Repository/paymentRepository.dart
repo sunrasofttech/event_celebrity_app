@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:either_dart/either.dart';
-import 'package:mobi_user/error/api_failures.dart';
-import 'package:mobi_user/error/failure_handler.dart';
-import 'package:mobi_user/main.dart';
-import 'package:mobi_user/model/bankDetailsModel.dart';
-import 'package:mobi_user/model/withdraw_details.dart';
+import 'package:planner_celebrity/error/api_failures.dart';
+import 'package:planner_celebrity/error/failure_handler.dart';
+import 'package:planner_celebrity/main.dart';
+import 'package:planner_celebrity/model/bankDetailsModel.dart';
+import 'package:planner_celebrity/model/withdraw_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utility/const.dart';
@@ -168,11 +168,11 @@ class PaymentRepository {
       final response = await repository.postRequest(withdrawAmountApi, data, header: headers);
       print("Withdraw Request Response => " + response.body + " Status Code :- " + response.statusCode.toString());
       final result = jsonDecode(response.body);
-      return response.statusCode == 200 || response.statusCode == 201 ? Right(true) : Left(FailureHandler.handleFailure(result["error"]));
+      return response.statusCode == 200 || response.statusCode == 201
+          ? Right(true)
+          : Left(FailureHandler.handleFailure(result["error"]));
     } catch (e) {
       return Left(FailureHandler.handleFailure(e));
     }
   }
 }
-
-//https://mtadmin.online/junglematka/api/withdraw?userid=44&amount=500&to_ac=gpay

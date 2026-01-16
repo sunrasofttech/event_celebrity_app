@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobi_user/Utility/const.dart';
+import 'package:planner_celebrity/Utility/const.dart';
 
 import '../../../main.dart';
 import 'LoginModel.dart';
@@ -28,12 +28,16 @@ class LoginCubit extends Cubit<LoginState> {
           emit(ErrorState(result["error"]));
         }
       } else {
-        emit(ErrorState(result["error"]));
-        repository.failureMessage(
-          url: resp.request!.url.toString(),
-          data: resp.body,
-          statusCode: resp.statusCode.toString(),
-        );
+        if (result["error"] == "Login limit exceeded contact admin") {
+          emit(LimitReachState(result["error"]));
+        } else {
+          emit(ErrorState(result["error"]));
+          repository.failureMessage(
+            url: resp.request!.url.toString(),
+            data: resp.body,
+            statusCode: resp.statusCode.toString(),
+          );
+        }
       }
     } catch (e, stk) {
       log("Catch Error on Login : $e, $stk");

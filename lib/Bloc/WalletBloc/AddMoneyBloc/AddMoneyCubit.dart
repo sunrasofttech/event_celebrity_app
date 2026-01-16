@@ -1,19 +1,15 @@
 import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobi_user/Utility/const.dart';
-import 'package:mobi_user/main.dart';
+import 'package:planner_celebrity/Utility/const.dart';
+import 'package:planner_celebrity/main.dart';
 
 import 'AddMoneyState.dart';
 
 class AddMoneyCubit extends Cubit<AddMoneyState> {
   AddMoneyCubit() : super(AddMoneyInitState());
 
-  addWalletMoney({
-    required String uid,
-    required String paymentStatus,
-    required String merchantTxnId,
-  }) async {
+  addWalletMoney({required String uid, required String paymentStatus, required String merchantTxnId}) async {
     try {
       emit(AddMoneyLoadingState());
       var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "", "Content-Type": "application/json"};
@@ -22,11 +18,7 @@ class AddMoneyCubit extends Cubit<AddMoneyState> {
         "merchantTransactionId": merchantTxnId,
         "paymentStatus": paymentStatus,
       };
-      final resp = await repository.postRequest(
-        addMoneyToWalletApi,
-        jsonEncode(body),
-        header: headers,
-      );
+      final resp = await repository.postRequest(addMoneyToWalletApi, jsonEncode(body), header: headers);
 
       print("Response Param=>${body}");
       final result = jsonDecode(resp.body);

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobi_user/main.dart';
+import 'package:planner_celebrity/main.dart';
 
 import '../../Utility/const.dart';
 import 'NotificationModel.dart';
@@ -18,14 +18,8 @@ class NotificationCubit extends Cubit<NotificationState> {
     emit(LoadingState());
     try {
       String uid = await pref.getString("key").toString();
-      var headers = {
-        'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "",
-      };
-      final resp = await repository.postRequest(
-        notificationApi,
-        {"userId": uid},
-        header: headers,
-      );
+      var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
+      final resp = await repository.postRequest(notificationApi, {"userId": uid}, header: headers);
       final result = jsonDecode(resp.body);
       log("Response Here=> ${resp.body}");
       if (resp.statusCode == 200) {

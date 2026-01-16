@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 
 import '../../Utility/const.dart';
+import '../../main.dart';
 import 'ReferModel.dart';
 import 'ReferState.dart';
 
@@ -13,7 +13,7 @@ class ReferCubit extends Cubit<ReferState> {
 
   referCode(String uid) async {
     try {
-      final resp = await post(Uri.parse("${referCodeApi}?userid=$uid"));
+      final resp = await repository.getClient().get(Uri.parse("${referCodeApi}?userid=$uid"));
       final result = jsonDecode(resp.body);
       if (resp.statusCode == 200) {
         if (result["status"]) {

@@ -29,14 +29,14 @@ class _BlinkingTextState extends State<BlinkingText> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final isRunning = widget.status == "OPEN";
-    final isClosedToday = widget.status.toLowerCase() == "close";
+    final isClosedToday = widget.status.toLowerCase() == "today_close";
 
     String displayText =
         isClosedToday
-            ? "Betting is close for today"
+            ? "Declared\nHoliday"
             : isRunning
-            ? "Running"
-            : "Betting is close for today";
+            ? ""
+            : "";
 
     Color displayColor =
         isClosedToday
@@ -51,8 +51,16 @@ class _BlinkingTextState extends State<BlinkingText> with SingleTickerProviderSt
           builder: (context, child) {
             return Opacity(opacity: _opacity.value, child: child);
           },
-          child: Text(displayText, style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600, fontSize: 14)),
+          child: Text(
+            displayText,
+            textAlign: TextAlign.end,
+            style: const TextStyle(color: Colors.green, fontWeight: FontWeight.w600, fontSize: 14),
+          ),
         )
-        : Text(displayText, style: TextStyle(color: displayColor, fontWeight: FontWeight.w600, fontSize: 14));
+        : Text(
+          displayText,
+          textAlign: TextAlign.end,
+          style: TextStyle(color: displayColor, fontWeight: FontWeight.w600, fontSize: 14),
+        );
   }
 }

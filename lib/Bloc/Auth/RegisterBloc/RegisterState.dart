@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/Auth/RegisterBloc/RegisterModel.dart';
+import 'package:planner_celebrity/Bloc/Auth/RegisterBloc/RegisterModel.dart';
 
 abstract class RegisterState extends Equatable {}
 

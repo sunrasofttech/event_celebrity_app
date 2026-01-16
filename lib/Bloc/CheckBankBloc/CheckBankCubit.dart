@@ -2,9 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
-import 'package:mobi_user/Bloc/CheckBankBloc/CheckBankModel.dart';
-import 'package:mobi_user/Bloc/CheckBankBloc/CheckBankState.dart';
+import 'package:planner_celebrity/Bloc/CheckBankBloc/CheckBankModel.dart';
+import 'package:planner_celebrity/Bloc/CheckBankBloc/CheckBankState.dart';
 
 import '../../Utility/const.dart';
 import '../../main.dart';
@@ -15,13 +14,8 @@ class CheckBankCubit extends Cubit<CheckBankState> {
     emit(CheckLoadingState());
     try {
       log("UserId $uid");
-      var headers = {
-        'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "",
-      };
-      final resp = await post(
-        Uri.parse("${checkBankDetailApi}/$uid"),
-        headers: headers,
-      );
+      var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
+      final resp = await repository.getClient().post(Uri.parse("${checkBankDetailApi}/$uid"), headers: headers);
       log("Check ---> ${resp.body}");
 
       final result = jsonDecode(resp.body);

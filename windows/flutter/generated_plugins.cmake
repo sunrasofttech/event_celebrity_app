@@ -8,8 +8,10 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   firebase_core
   flutter_inappwebview_windows
+  local_auth_windows
   permission_handler_windows
   share_plus
+  ultra_secure_flutter_kit
   url_launcher_windows
 )
 

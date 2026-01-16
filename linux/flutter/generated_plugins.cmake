@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   awesome_notifications
   file_selector_linux
+  ultra_secure_flutter_kit
   url_launcher_linux
 )
 

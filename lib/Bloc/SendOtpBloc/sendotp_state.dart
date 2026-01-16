@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/SendOtpBloc/sendotp_model.dart';
+import 'package:planner_celebrity/Bloc/SendOtpBloc/sendotp_model.dart';
 
 abstract class SendOtpState extends Equatable {}
 

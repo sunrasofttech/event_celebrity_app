@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/SettingBloc/SettingModel.dart';
+import 'package:planner_celebrity/Bloc/SettingBloc/SettingModel.dart';
 
 abstract class SettingState extends Equatable {}
 

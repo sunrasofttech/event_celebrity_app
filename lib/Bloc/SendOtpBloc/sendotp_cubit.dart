@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:mobi_user/Bloc/SendOtpBloc/sendotp_model.dart';
-import 'package:mobi_user/Bloc/SendOtpBloc/sendotp_state.dart';
-import 'package:mobi_user/main.dart';
+import 'package:planner_celebrity/Bloc/SendOtpBloc/sendotp_model.dart';
+import 'package:planner_celebrity/Bloc/SendOtpBloc/sendotp_state.dart';
+import 'package:planner_celebrity/main.dart';
 
 import '../../Utility/const.dart';
 
@@ -16,12 +16,7 @@ class SendOtpCubit extends Cubit<SendOtpState> {
       // var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
 
       // var data = json.encode({"id": bidId});
-      final _resp = await repository.postRequest(
-        "${sendOtpApiUrl}",
-        {
-          "mobile": phone,
-        },
-      );
+      final _resp = await repository.postRequest("${sendOtpApiUrl}", {"mobile": phone});
       final resp = jsonDecode(_resp.body);
       log("Send OTP Response: ${_resp.body}");
 

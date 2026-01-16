@@ -12,6 +12,7 @@
   "mpin_length_error": "ਪਾਸਵਰਡ 4 ਅੰਕਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ",
   "registration_success": "ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਸਫਲ ਹੋਈ",
   "create_button": "ਬਣਾਓ",
+  "terms_and_conditions": "ਨਿਯਮ ਅਤੇ ਸ਼ਰਤਾਂ",
   "mpin": {
     "title": "ਐਮ-ਪਿਨ ਦਰਜ ਕਰੋ",
     "forgot": "ਐਮ-ਪਿਨ ਭੁੱਲ ਗਏ ਹੋ?"
@@ -129,6 +130,7 @@
   "type": "ਕਿਸਮ",
   "action": "ਕਾਰਵਾਈ",
   "delete": "ਹਟਾਓ",
+  "how_to_play": "ਕਿਵੇਂ ਖੇਡਣਾ ਹੈ",
   "bottom_nav": {
     "my_bids": "ਮੇਰੀਆਂ ਬੋਲੀਆਂ",
     "passbook": "ਪਾਸਬੁੱਕ",

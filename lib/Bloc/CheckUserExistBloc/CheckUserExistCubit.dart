@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 
 import '../../Utility/const.dart';
 import '../../main.dart';
@@ -15,19 +14,10 @@ class CheckUserCubit extends Cubit<CheckUserState> {
     emit(CheckUserLoadingState());
     try {
       log("Checking user with mobile: $mobile");
-      var headers = {
-        'Content-Type': 'application/json',
-        'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "",
-      };
-      final body = jsonEncode({
-        "mobile": mobile,
-      });
+      var headers = {'Content-Type': 'application/json', 'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
+      final body = jsonEncode({"mobile": mobile});
 
-      final response = await post(
-        Uri.parse(checkUserExistApi),
-        headers: headers,
-        body: body,
-      );
+      final response = await repository.getClient().post(Uri.parse(checkUserExistApi), headers: headers, body: body);
 
       log("API Response: ${response.body}");
 

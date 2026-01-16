@@ -1,38 +1,36 @@
 import 'package:flutter/material.dart';
 
+import 'MainColor.dart';
+
 class SimpleButton extends StatelessWidget {
-  final String title;
-  final VoidCallback callback;
-  final TextStyle style;
-  final Color primaryColor;
-  final double padding;
-  final BorderRadius radius;
-  const SimpleButton(
-      {Key? key,
-      required this.title,
-      required this.callback,
-      required this.style,
-      required this.padding,
-      required this.primaryColor,
-      required this.radius})
-      : super(key: key);
+  final String? title;
+  final VoidCallback onPressed;
+  final Color? bgColor;
+  final Color? fgColor;
+  final EdgeInsetsGeometry? padding;
+  final BorderRadius? radius;
+  const SimpleButton({
+    Key? key,
+    this.title,
+    required this.onPressed,
+    this.padding,
+    this.bgColor,
+    this.fgColor,
+    this.radius,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: primaryColor,
-            shape: RoundedRectangleBorder(
-                borderRadius: radius,
-                side: BorderSide(color: primaryColor == Colors.white ? Colors.black : Colors.transparent))),
-        onPressed: callback,
-        child: Padding(
-            padding: EdgeInsets.all(padding),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(title, style: style),
-              ],
-            )));
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: bgColor ?? primaryColor,
+        foregroundColor: fgColor ?? Colors.white,
+        padding: padding ?? const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: radius ?? BorderRadius.circular(10)),
+      ),
+      onPressed: onPressed,
+      child: Text(title ?? "Continue", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    );
   }
 }

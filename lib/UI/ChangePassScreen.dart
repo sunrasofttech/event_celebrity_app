@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mobi_user/Bloc/changePassword/changeEvent.dart';
-import 'package:mobi_user/error/api_failures.dart';
+import 'package:planner_celebrity/Bloc/changePassword/changeEvent.dart';
+import 'package:planner_celebrity/error/api_failures.dart';
 
 import '../Bloc/changePassword/changeBloc.dart';
 import '../Bloc/changePassword/changeState.dart';
@@ -43,9 +43,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Change Password"),
-      ),
+      appBar: AppBar(title: Text("Change Password")),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Form(
@@ -71,15 +69,16 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     return null;
                   },
                   decoration: InputDecoration(
-                      hintText: "Old Password",
-                      label: Text("Old Password"),
-                      prefixIcon: Icon(Icons.lock),
-                      hintStyle: blackStyle,
-                      contentPadding: const EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: maroonColor),
-                        borderRadius: BorderRadius.circular(10),
-                      )),
+                    hintText: "Old Password",
+                    label: Text("Old Password"),
+                    prefixIcon: Icon(Icons.lock),
+                    hintStyle: blackStyle,
+                    contentPadding: const EdgeInsets.all(10),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(color: primaryColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
               Padding(
@@ -105,7 +104,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     prefixIcon: Icon(Icons.lock),
                     contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
-                      borderSide: const BorderSide(color: maroonColor),
+                      borderSide: const BorderSide(color: primaryColor),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -117,7 +116,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                   controller: _confirm,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z0-9]")),
-                    FilteringTextInputFormatter.deny(RegExp(r'\s'))
+                    FilteringTextInputFormatter.deny(RegExp(r'\s')),
                   ],
                   cursorColor: whiteColor,
                   style: blackStyle,
@@ -130,15 +129,16 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     return null;
                   },
                   decoration: InputDecoration(
-                      hintStyle: blackStyle,
-                      label: Text("Confirm Password"),
-                      prefixIcon: Icon(Icons.lock),
-                      hintText: "Enter Confirm Password",
-                      contentPadding: const EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(color: maroonColor),
-                        borderRadius: BorderRadius.circular(10),
-                      )),
+                    hintStyle: blackStyle,
+                    label: Text("Confirm Password"),
+                    prefixIcon: Icon(Icons.lock),
+                    hintText: "Enter Confirm Password",
+                    contentPadding: const EdgeInsets.all(10),
+                    border: OutlineInputBorder(
+                      borderSide: const BorderSide(color: primaryColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                   onTap: () {},
                 ),
               ),
@@ -147,19 +147,19 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                   if (state is ChangePasswordNowState) {
                     state.apiFailureOrSuccessOption.fold(
                       () => null,
-                      (either) => either.fold((failure) {
-                        final failureMessage = failure.failureMessage;
+                      (either) => either.fold(
+                        (failure) {
+                          final failureMessage = failure.failureMessage;
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(failureMessage),
-                            duration: const Duration(milliseconds: 1000),
-                          ),
-                        );
-                      }, (right) {
-                        Fluttertoast.showToast(msg: "Password changed successfully");
-                        Navigator.pop(context);
-                      }),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(failureMessage), duration: const Duration(milliseconds: 1000)),
+                          );
+                        },
+                        (right) {
+                          Fluttertoast.showToast(msg: "Password changed successfully");
+                          Navigator.pop(context);
+                        },
+                      ),
                     );
                   }
                 },
@@ -169,7 +169,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                       padding: const EdgeInsets.all(20.0),
                       child: ButtonWidget(
                         title: Text("Submit", style: whiteStyle),
-                        primaryColor: maroonColor,
+                        primaryColor: primaryColor,
                         callback: () {
                           if (_confirm.text != _newpass.text) {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -182,9 +182,9 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                           }
                           if (formKey.currentState!.validate()) {
                             BlocProvider.of<ChangePasswordBloc>(context).add(InitialChangePassword());
-                            BlocProvider.of<ChangePasswordBloc>(context).add(
-                              ChangePasswordUserEvent(newPassword: _confirm.text, oldPassword: _oldpass.text),
-                            );
+                            BlocProvider.of<ChangePasswordBloc>(
+                              context,
+                            ).add(ChangePasswordUserEvent(newPassword: _confirm.text, oldPassword: _oldpass.text));
                             formKey.currentState!.save();
                           }
                         },
@@ -192,7 +192,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ),

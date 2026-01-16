@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:mobi_user/Bloc/NotificationBloc/NotificationCubit.dart';
-import 'package:mobi_user/Bloc/NotificationBloc/NotificationModel.dart';
-import 'package:mobi_user/Bloc/NotificationBloc/NotificationState.dart';
-import 'package:mobi_user/Utility/CustomFont.dart';
-import 'package:mobi_user/Utility/MainColor.dart';
+import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationCubit.dart';
+import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationModel.dart';
+import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationState.dart';
+import 'package:planner_celebrity/Utility/CustomFont.dart';
+import 'package:planner_celebrity/Utility/MainColor.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -51,13 +51,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
       if (status == PagingStatus.subsequentPageError) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'Something went wrong while fetching a new page.',
-            ),
-            action: SnackBarAction(
-              label: 'Retry',
-              onPressed: () => _pagingController.retryLastFailedRequest(),
-            ),
+            content: const Text('Something went wrong while fetching a new page.'),
+            action: SnackBarAction(label: 'Retry', onPressed: () => _pagingController.retryLastFailedRequest()),
           ),
         );
       }
@@ -74,9 +69,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Notifications"),
-      ),
+      appBar: AppBar(title: Text("Notifications")),
       body: BlocBuilder<NotificationCubit, NotificationState>(
         builder: (context, state) {
           if (state is LoadingState) {
@@ -102,14 +95,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       child: ListTile(
                         leading: CircleAvatar(
                           backgroundColor: whiteColor,
-                          child: Icon(Icons.notifications_active, color: blackColor),
+                          child: Icon(Icons.notifications_active, color: whiteColor),
                         ),
-                        title: Text("${item.title ?? "-"}", style: blackStyle),
+                        title: Text("${item.title ?? "-"}", style: whiteStyle),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("${item.message ?? "-"}", style: blackStyle),
-                            Text("${item.date ?? "-"}", style: blackStyle),
+                            Text("${item.message ?? "-"}", style: whiteStyle),
+                            Text("${item.date ?? "-"}", style: whiteStyle),
                           ],
                         ),
                       ),

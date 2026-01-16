@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/NotificationBloc/NotificationModel.dart';
+import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationModel.dart';
 
 abstract class NotificationState extends Equatable {}
 

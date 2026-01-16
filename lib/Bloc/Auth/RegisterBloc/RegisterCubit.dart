@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobi_user/Bloc/Auth/RegisterBloc/RegisterModel.dart';
-import 'package:mobi_user/Utility/const.dart';
+import 'package:planner_celebrity/Bloc/Auth/RegisterBloc/RegisterModel.dart';
+import 'package:planner_celebrity/Utility/const.dart';
 
 import '../../../main.dart';
 import 'RegisterState.dart';

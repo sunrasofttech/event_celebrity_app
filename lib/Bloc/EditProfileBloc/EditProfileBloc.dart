@@ -4,11 +4,11 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:mobi_user/Bloc/EditProfileBloc/EditProfileEvent.dart';
-import 'package:mobi_user/Bloc/EditProfileBloc/EditProfileModel.dart';
-import 'package:mobi_user/Bloc/EditProfileBloc/EditProfileState.dart';
-import 'package:mobi_user/Utility/const.dart';
-import 'package:mobi_user/main.dart';
+import 'package:planner_celebrity/Bloc/EditProfileBloc/EditProfileEvent.dart';
+import 'package:planner_celebrity/Bloc/EditProfileBloc/EditProfileModel.dart';
+import 'package:planner_celebrity/Bloc/EditProfileBloc/EditProfileState.dart';
+import 'package:planner_celebrity/Utility/const.dart';
+import 'package:planner_celebrity/main.dart';
 
 class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   EditProfileBloc() : super(InitialState()) {

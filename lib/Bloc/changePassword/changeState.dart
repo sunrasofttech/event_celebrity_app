@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart' as option;
 import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/error/api_failures.dart';
+import 'package:planner_celebrity/error/api_failures.dart';
 
 abstract class ChangePasswordState extends Equatable {}
 
@@ -18,7 +18,5 @@ class ChangePasswordNowState extends ChangePasswordState {
   ChangePasswordNowState({required this.apiFailureOrSuccessOption});
   @override
   // TODO: implement props
-  List<Object?> get props => [
-        apiFailureOrSuccessOption,
-      ];
+  List<Object?> get props => [apiFailureOrSuccessOption];
 }

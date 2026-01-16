@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/CheckBankBloc/CheckBankModel.dart';
+import 'package:planner_celebrity/Bloc/CheckBankBloc/CheckBankModel.dart';
 
 abstract class CheckBankState extends Equatable {}
 

@@ -1,95 +1,83 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class Constants {
-  static String baseUrl = "https://api.mobiii.shop";
+  static final baseUrl = dotenv.env['BASE_URL'];
 }
 
 class AppConstants {
-  static final String appName = "Goa567"; //TODO: Change This
+  static final String appName = "Jio7"; //TODO: Change This
   static final String appLogo = "asset/icons/logo.png"; //TODO: Change This FILE
 }
 
-const String appName = "Goa567";
+const String appName = "Vip999";
 const String appLogo = "asset/icons/logo.png";
 final String sharedPrefFCMTokenKey = 'fcm_token';
 final String sharedPrefAPITokenKey = 'api_token';
 
-final String url = 'https://mobisattaresult.com/';
+final String url = dotenv.env['SHARE_URL'] ?? '';
 
-final String loginApi = '${Constants.baseUrl}/app/user/login';
-final String logOutApi = '${Constants.baseUrl}/app/user/logout';
+///-----------------------------
 
-final String checkUserExistApi = '${Constants.baseUrl}/app/user/check-user';
-final String sendOtpApiUrl = "${Constants.baseUrl}/app/user/get-otp";
+String _full(String path) => '${Constants.baseUrl}$path';
 
-final String changePassApi = '${Constants.baseUrl}/app/user/changePassword';
-final String registerApi = '${Constants.baseUrl}/app/user/createUser';
+final String loginApi = _full(dotenv.env['LOGIN_API'] ?? '');
+final String logOutApi = _full(dotenv.env['LOGOUT_API'] ?? '');
+final String checkUserExistApi = _full(dotenv.env['CHECK_USER_EXIST_API'] ?? '');
+final String sendOtpApiUrl = _full(dotenv.env['SEND_OTP_API'] ?? '');
+final String howToPlayApiUrl = _full(dotenv.env['HOW_TO_PLAY_API'] ?? '');
+final String getLiveDataByMarketId = _full(dotenv.env['GET_LIVE_DATA_BY_MARKET_ID'] ?? '');
+final String registerApi = _full(dotenv.env['REGISTER_API'] ?? '');
+final String forgetPassApi = _full(dotenv.env['FORGET_PASS_API'] ?? '');
+final String bannersApi = _full(dotenv.env['BANNERS_API'] ?? '');
+final String popBannerApi = _full(dotenv.env['POP_BANNER_API'] ?? '');
+final String marketApi = _full(dotenv.env['MARKET_API'] ?? '');
+final String gameTypesApi = _full(dotenv.env['GAME_TYPES_API'] ?? '');
+final String userProfileApi = _full(dotenv.env['USER_PROFILE_API'] ?? '');
+final String editProfileApi = _full(dotenv.env['EDIT_PROFILE_API'] ?? '');
+final String paymentReceiveNewApi = _full(dotenv.env['PAYMENT_RECEIVE_NEW_API'] ?? '');
+final String getRefferalCodeApi = _full(dotenv.env['GET_REFERRAL_CODE_API'] ?? '');
+final String getVersionNumberApi = _full(dotenv.env['GET_VERSION_NUMBER_API'] ?? '');
+final String placeBidApi = _full(dotenv.env['PLACE_BID_API'] ?? '');
+final String placeBidNewApi = _full(dotenv.env['PLACE_BID_NEW_API'] ?? '');
+final String placeSPDPTPBidNewApi = _full(dotenv.env['PLACE_SPDPTP_BID_NEW_API'] ?? '');
+final String winHistoryApi = _full(dotenv.env['WIN_HISTORY_API'] ?? '');
+final String cancelBidApiUrl = _full(dotenv.env['CANCEL_BID_API'] ?? '');
+final String getVideosApi = _full(dotenv.env['GET_VIDEOS_API'] ?? '');
+final String bidHistoryApi = _full(dotenv.env['BID_HISTORY_API'] ?? '');
+final String generateUpiPayment = _full(dotenv.env['GENERATE_UPI_PAYMENT_API'] ?? '');
+final String addMoneyToWalletApi = _full(dotenv.env['ADD_MONEY_TO_WALLET_API'] ?? '');
+final String panaByAnkApi = _full(dotenv.env['PANA_BY_ANK_API'] ?? '');
+final String addMoneyLimitCheckAPi = _full(dotenv.env['ADD_MONEY_LIMIT_CHECK_API'] ?? '');
+final String getAdminUpi = _full(dotenv.env['GET_ADMIN_UPI_API'] ?? '');
+final String getwithdrawDetailsUpi = _full(dotenv.env['GET_WITHDRAW_DETAILS_UPI_API'] ?? '');
+final String addAcountApi = _full(dotenv.env['ADD_ACCOUNT_API'] ?? '');
+final String getBankDetailsApi = _full(dotenv.env['GET_BANK_DETAILS_API'] ?? '');
+final String withdrawAmountApi = _full(dotenv.env['WITHDRAW_AMOUNT_API'] ?? '');
+final String withdrawAmountApiForTime = _full(dotenv.env['WITHDRAW_AMOUNT_TIME_API'] ?? '');
+final String referCodeApi = _full(dotenv.env['REFER_CODE_API'] ?? '');
+final String sendOtpApi = _full(dotenv.env['SEND_OTP_ALT_API'] ?? '');
+final String verifyOtpApi = _full(dotenv.env['VERIFY_OTP_API'] ?? '');
+final String gameRateApi = _full(dotenv.env['GAME_RATE_API'] ?? '');
+final String checkOpenCloseTimeApi = _full(dotenv.env['CHECK_OPEN_CLOSE_TIME_API'] ?? '');
+final String settingApi = _full(dotenv.env['SETTING_API'] ?? '');
+final String getPhoneNumberApi = _full(dotenv.env['GET_PHONE_NUMBER_API'] ?? '');
+final String panaListApi = _full(dotenv.env['PANA_LIST_API'] ?? '');
+final String searchDigitApi = _full(dotenv.env['SEARCH_DIGIT_API'] ?? '');
+final String oddEvenApi = _full(dotenv.env['ODD_EVEN_API'] ?? '');
+final String redJodiApi = _full(dotenv.env['RED_JODI_API'] ?? '');
+final String suggestionListApi = _full(dotenv.env['SUGGESTION_LIST_API'] ?? '');
+final String getpattiesApi = _full(dotenv.env['GET_PATTIES_API'] ?? '');
+final String placeBidForPattiApi = _full(dotenv.env['PLACE_BID_FOR_PATTI_API'] ?? '');
+final String getsuggestionApi = _full(dotenv.env['GET_SUGGESTION_API'] ?? '');
+final String checkBankDetailApi = _full(dotenv.env['CHECK_BANK_DETAIL_API'] ?? '');
+final String notificationApi = _full(dotenv.env['NOTIFICATION_API'] ?? '');
+final String transactionHistoryApi = _full(dotenv.env['TRANSACTION_HISTORY_API'] ?? '');
+final String instructionApi = _full(dotenv.env['INSTRUCTION_API'] ?? '');
+final String depositListApi = _full(dotenv.env['DEPOSIT_LIST_API'] ?? '');
+final String homeTextApi = _full(dotenv.env['HOME_TEXT_API'] ?? '');
+final String getAllSubscriptionApiUrl = _full(dotenv.env['GET_ALL_SUBSCRIPTION_API'] ?? '');
+final String assignSubscriptionApiUrl = _full(dotenv.env['ASSIGN_SUBSCRIPTION_API'] ?? '');
+final String checkAppApiUrl = _full(dotenv.env['CHECK_APP_API'] ?? '');
+final String changePassApi = _full(dotenv.env['CHANGE_PASS_API'] ?? '');
 
-final String forgetPassApi = '${Constants.baseUrl}/api/forgetPass';
-
-final String bannersApi = '${Constants.baseUrl}/app/banner/getAllBanner';
-final String popBannerApi = '${Constants.baseUrl}/api/popBannerJ';
-
-final String marketApi = '${Constants.baseUrl}/app/market/getAllActiveMarkets?market_type=';
-final String gameTypesApi = '${Constants.baseUrl}/app/game/getAllGamesUser';
-final String userProfileApi = '${Constants.baseUrl}/app/user/getProfile';
-
-final String editProfileApi = '${Constants.baseUrl}/app/user/updateUser';
-final String paymentReceiveNewApi = '${Constants.baseUrl}/app/deposit/paymentReceiveNew';
-
-final String getRefferalCodeApi = '${Constants.baseUrl}/api/getRefferalCode';
-final String getVersionNumberApi = '${Constants.baseUrl}/app/settings/getAllSettingsUser';
-
-// Bids
-final String placeBidApi = '${Constants.baseUrl}/app/bid/createBid';
-final String placeBidNewApi = '${Constants.baseUrl}/app/bid/createBidNew';
-final String placeSPDPTPBidNewApi = '${Constants.baseUrl}/app/bid/createBidSpDpTpNew';
-final String winHistoryApi = '${Constants.baseUrl}/app/winners/getWinningHistoryByDate';
-
-final String cancelBidApiUrl = "${Constants.baseUrl}/app/bid/bid_cancel";
-
-final String getVideosApi = '${Constants.baseUrl}/api/videos';
-final String bidHistoryApi = '${Constants.baseUrl}/app/bid/getAllBidByUserId';
-
-final String generateUpiPayment = '${Constants.baseUrl}/app/deposit/createDeposit';
-
-// Payments APIs
-final String addMoneyToWalletApi = '${Constants.baseUrl}/app/deposit/paymentReceive';
-final String panaByAnkApi = '${Constants.baseUrl}/api/getPanasbyank';
-
-final String addMoneyLimitCheckAPi = '${Constants.baseUrl}/api/checkLimit';
-final String getAdminUpi = '${Constants.baseUrl}/api/upis';
-final String getwithdrawDetailsUpi = '${Constants.baseUrl}/api/withdrawDetails';
-
-final String addAcountApi = '${Constants.baseUrl}/app/bankDetails/createBankDetails';
-final String getBankDetailsApi = '${Constants.baseUrl}/app/bankDetails/getAllBankDetails';
-
-final String withdrawAmountApi = '${Constants.baseUrl}/app/withdrawRequest/createWithdrawRequest';
-final String withdrawAmountApiForTime = '${Constants.baseUrl}/api/getWithdrawTime';
-final String referCodeApi = '${Constants.baseUrl}/api/getRefferalCode';
-final String sendOtpApi = '${Constants.baseUrl}/api/sendOtp';
-final String verifyOtpApi = '${Constants.baseUrl}/api/verifyOtp';
-
-final String gameRateApi = '${Constants.baseUrl}/app/game/getAllGamesUser';
-final String checkOpenCloseTimeApi = '${Constants.baseUrl}/app/market/getMarketStatusType';
-final String settingApi = '${Constants.baseUrl}/app/settings/getAllSettingsUser';
-final String getPhoneNumberApi = '${Constants.baseUrl}/app/settings/getPhoneNumber';
-final String panaListApi = '${Constants.baseUrl}/app/game/getPanasbyank';
-final String searchDigitApi = '${Constants.baseUrl}/app/bid/searchDigit';
-final String oddEvenApi = '${Constants.baseUrl}/app/game/oddEven';
-final String redJodiApi = '${Constants.baseUrl}/app/game/redJodi';
-
-final String suggestionListApi = '${Constants.baseUrl}/app/bid/searchDigit';
-final String getpattiesApi = '${Constants.baseUrl}/api/getpatties';
-final String placeBidForPattiApi = '${Constants.baseUrl}/api/bidonPana';
-final String getsuggestionApi = '${Constants.baseUrl}/app/game/suggestpanas';
-
-final String checkBankDetailApi = '${Constants.baseUrl}/app/bankDetails/getAllBankDetails';
-final String notificationApi = '${Constants.baseUrl}/app/notification/getAllNotificationByUserId';
-final String transactionHistoryApi = '${Constants.baseUrl}/app/transaction/getAllTransactionByDate';
-
-final String instructionApi = '${Constants.baseUrl}/app/instruction/getAllInstructions';
-final String depositListApi = '${Constants.baseUrl}/app/deposit/getDepositValue';
-
-final String homeTextApi = '${Constants.baseUrl}/app/dashboard/getHomeText';
-final String getAllSubscriptionApiUrl = '${Constants.baseUrl}/app/subscription/get-all';
-final String assignSubscriptionApiUrl = '${Constants.baseUrl}/app/subscription/user';
-final String checkAppApiUrl = '${Constants.baseUrl}/app/user/get-alert';
+///-----------------------------

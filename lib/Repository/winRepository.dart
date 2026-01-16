@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:either_dart/either.dart';
-import 'package:mobi_user/error/api_failures.dart';
-import 'package:mobi_user/error/failure_handler.dart';
-import 'package:mobi_user/main.dart';
-import 'package:mobi_user/model/win_history_model.dart';
+import 'package:planner_celebrity/error/api_failures.dart';
+import 'package:planner_celebrity/error/failure_handler.dart';
+import 'package:planner_celebrity/main.dart';
+import 'package:planner_celebrity/model/win_history_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Utility/const.dart';
@@ -21,17 +21,10 @@ class WinRepository {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var userId = prefs.getString("key");
       var data = jsonEncode({"userId": userId, "page": pagination, "fromDate": sdate, "toDate": edate});
-      var headers = {
-        'Content-Type': "application/json",
-        'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "",
-      };
+      var headers = {'Content-Type': "application/json", 'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
       print(data);
       // https://mtadmin.online/junglerajyog_king/api/winningHistory?userid=45&sdate=2023-03-03&edate=2023-03-05
-      final response = await repository.postRequest(
-        "${winHistoryApi}",
-        data,
-        header: headers,
-      );
+      final response = await repository.postRequest("${winHistoryApi}", data, header: headers);
       print(response);
       final result = jsonDecode(response.body);
       List<Datum> list = List.generate(result["data"].length, (index) => Datum.fromJson(result["data"][index]));
@@ -42,7 +35,7 @@ class WinRepository {
     }
   }
 
-/* Future<Either<ApiFailure, List<WinRatesModel>>> getWinRates() async {
+  /* Future<Either<ApiFailure, List<WinRatesModel>>> getWinRates() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var userId = prefs.getString("userId");

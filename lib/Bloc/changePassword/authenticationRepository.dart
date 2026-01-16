@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:either_dart/either.dart';
-import 'package:mobi_user/main.dart';
+import 'package:planner_celebrity/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Utility/const.dart';
@@ -91,10 +91,7 @@ class AuthenticationRepository {
     }
   }*/
 
-  Future<Either<ApiFailure, bool>> changePassword({
-    required String newPassword,
-    required String oldPassword,
-  }) async {
+  Future<Either<ApiFailure, bool>> changePassword({required String newPassword, required String oldPassword}) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var userId = prefs.getString("key");

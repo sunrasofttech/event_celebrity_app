@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_upi_india/flutter_upi_india.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobi_user/Utility/CustomFont.dart';
+import 'package:planner_celebrity/Utility/CustomFont.dart';
 
 import '../Utility/const.dart';
 import '../main.dart';
@@ -51,7 +51,12 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
       String uid = await pref.getString("key").toString();
 
       var request = http.Request('POST', Uri.parse(paymentReceiveNewApi));
-      request.body = json.encode({"userId": uid, "merchantTransactionId": a.txnId, "paymentStatus": "success", "amount": widget.amount});
+      request.body = json.encode({
+        "userId": uid,
+        "merchantTransactionId": a.txnId,
+        "paymentStatus": "success",
+        "amount": widget.amount,
+      });
       request.headers.addAll(headers);
 
       http.StreamedResponse response = await request.send();
@@ -111,7 +116,11 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (route) => false);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainScreen()),
+                    (route) => false,
+                  );
                 },
                 child: Text(translate("ok")),
               ),
@@ -165,7 +174,10 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
         child: ListView(
           children: <Widget>[
             if (_upiAddrError != null) _vpaError(),
-            Container(margin: EdgeInsets.only(top: 20), child: Center(child: Text("Rs.${widget.amount}", style: blackStyle))),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Center(child: Text("Rs.${widget.amount}", style: whiteStyle)),
+            ),
             if (Platform.isIOS) _submitButton(),
             Platform.isAndroid ? _androidApps() : _iosApps(),
           ],
@@ -175,7 +187,10 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
   }
 
   Widget _vpaError() {
-    return Container(margin: EdgeInsets.only(top: 4, left: 12), child: Text(_upiAddrError!, style: TextStyle(color: Colors.red)));
+    return Container(
+      margin: EdgeInsets.only(top: 4, left: 12),
+      child: Text(_upiAddrError!, style: TextStyle(color: Colors.red)),
+    );
   }
 
   Widget _submitButton() {
@@ -189,7 +204,10 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
               color: Theme.of(context).colorScheme.secondary,
               height: 48,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-              child: Text('Initiate Transaction', style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white)),
+              child: Text(
+                'Initiate Transaction',
+                style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.white),
+              ),
             ),
           ),
         ],
@@ -203,7 +221,7 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(margin: EdgeInsets.only(bottom: 12), child: Text('Pay Using', style: Theme.of(context).textTheme.bodyLarge)),
+          Container(margin: EdgeInsets.only(bottom: 12), child: Text('Pay Using', style: whiteStyle)),
           if (_apps != null) _appsGrid(_apps!.map((e) => e).toList()),
         ],
       ),
@@ -221,14 +239,14 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
             child: Text(
               'One of these will be invoked automatically by your phone to '
               'make a payment',
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: whiteStyle,
             ),
           ),
-          Container(margin: EdgeInsets.only(bottom: 12), child: Text('Detected Installed Apps', style: Theme.of(context).textTheme.bodyLarge)),
+          Container(margin: EdgeInsets.only(bottom: 12), child: Text('Detected Installed Apps', style: whiteStyle)),
           if (_apps != null) _discoverableAppsGrid(),
           Container(
             margin: EdgeInsets.only(top: 12, bottom: 12),
-            child: Text('Other Supported Apps (Cannot detect)', style: Theme.of(context).textTheme.bodyLarge),
+            child: Text('Other Supported Apps (Cannot detect)', style: whiteStyle),
           ),
           if (_apps != null) _nonDiscoverableAppsGrid(),
         ],
@@ -260,7 +278,9 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
     if (apps.isEmpty) {
       return Center(child: Text("No UPI APPLICATION FOUND"));
     }
-    apps.sort((a, b) => a.upiApplication.getAppName().toLowerCase().compareTo(b.upiApplication.getAppName().toLowerCase()));
+    apps.sort(
+      (a, b) => a.upiApplication.getAppName().toLowerCase().compareTo(b.upiApplication.getAppName().toLowerCase()),
+    );
     return GridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,

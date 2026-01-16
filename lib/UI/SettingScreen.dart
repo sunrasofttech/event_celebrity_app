@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobi_user/Utility/CustomFont.dart';
-import 'package:mobi_user/Utility/MainColor.dart';
+import 'package:planner_celebrity/Utility/CustomFont.dart';
+import 'package:planner_celebrity/Utility/MainColor.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -20,15 +20,13 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text("Setting"),
-        ),
+        appBar: AppBar(title: Text("Setting")),
         body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
-                color: maroonColor,
+                color: playColor,
                 /* shape: RoundedRectangleBorder(
                   side: const BorderSide(
                     color: blueColor,
@@ -46,23 +44,25 @@ class _SettingScreenState extends State<SettingScreen> {
                       ),
                     ),
                     RadioListTile(
-                        title: Text("Login with Username Password", style: whiteStyle),
-                        value: "Login with Username Password",
-                        groupValue: select,
-                        onChanged: (val) {
-                          setState(() {
-                            select = val.toString();
-                          });
-                        }),
+                      title: Text("Login with Username Password", style: whiteStyle),
+                      value: "Login with Username Password",
+                      groupValue: select,
+                      onChanged: (val) {
+                        setState(() {
+                          select = val.toString();
+                        });
+                      },
+                    ),
                     RadioListTile(
-                        title: Text("Direct Login", style: whiteStyle),
-                        value: "Direct Login",
-                        groupValue: select,
-                        onChanged: (val) {
-                          setState(() {
-                            select = val.toString();
-                          });
-                        }),
+                      title: Text("Direct Login", style: whiteStyle),
+                      value: "Direct Login",
+                      groupValue: select,
+                      onChanged: (val) {
+                        setState(() {
+                          select = val.toString();
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -70,48 +70,47 @@ class _SettingScreenState extends State<SettingScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
-                color: maroonColor,
-                /* shape: RoundedRectangleBorder(
-                    side: const BorderSide(
-                      color: blueColor,
-                    ),
-                    borderRadius: BorderRadius.circular(10)
-                ),*/
+                color: playColor,
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Text("Notification Settings",
-                              style: whiteStyle.copyWith(fontSize: 16, fontWeight: FontWeight.bold)),
+                          Text(
+                            "Notification Settings",
+                            style: whiteStyle.copyWith(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
                         ],
                       ),
                     ),
                     SwitchListTile(
-                        title: Text("Main Notification", style: whiteStyle),
-                        value: mainNotification,
-                        onChanged: (val) {
-                          setState(() {
-                            mainNotification = val;
-                          });
-                        }),
+                      title: Text("Main Notification", style: whiteStyle),
+                      value: mainNotification,
+                      onChanged: (val) {
+                        setState(() {
+                          mainNotification = val;
+                        });
+                      },
+                    ),
                     SwitchListTile(
-                        title: Text("Game Notification", style: whiteStyle),
-                        value: gameNotification,
-                        onChanged: (val) {
-                          setState(() {
-                            gameNotification = val;
-                          });
-                        }),
+                      title: Text("Game Notification", style: whiteStyle),
+                      value: gameNotification,
+                      onChanged: (val) {
+                        setState(() {
+                          gameNotification = val;
+                        });
+                      },
+                    ),
                     SwitchListTile(
-                        title: Text("Starline Notification", style: whiteStyle),
-                        value: starNotification,
-                        onChanged: (val) {
-                          setState(() {
-                            starNotification = val;
-                          });
-                        }),
+                      title: Text("Starline Notification", style: whiteStyle),
+                      value: starNotification,
+                      onChanged: (val) {
+                        setState(() {
+                          starNotification = val;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),

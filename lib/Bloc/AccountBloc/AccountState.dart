@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/AccountBloc/AccountModel.dart';
+import 'package:planner_celebrity/Bloc/AccountBloc/AccountModel.dart';
 
 abstract class AccountState extends Equatable {}
 

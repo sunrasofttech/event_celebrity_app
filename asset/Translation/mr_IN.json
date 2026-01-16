@@ -12,6 +12,7 @@
   "mpin_length_error": "पासवर्ड 4 अंकी असावा",
   "registration_success": "नोंदणी यशस्वी",
   "create_button": "तयार करा",
+  "terms_and_conditions": "अटी व शर्ती",
   "mpin": {
     "title": "M-Pin प्रविष्ट करा",
     "forgot": "M-Pin विसरलात?"
@@ -129,6 +130,7 @@
   "type": "प्रकार",
   "action": "क्रिया",
   "delete": "हटवा",
+  "how_to_play": "कसे खेळायचे",
   "bottom_nav": {
     "my_bids": "माझ्या बोली",
     "passbook": "पासबुक",

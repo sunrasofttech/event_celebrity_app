@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mobi_user/Bloc/SuggestionListBloc/SuggestionListModel.dart';
+import 'package:planner_celebrity/Bloc/SuggestionListBloc/SuggestionListModel.dart';
 
 abstract class SuggestionListState extends Equatable {}
 

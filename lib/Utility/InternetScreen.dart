@@ -4,7 +4,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:mobi_user/Utility/MainColor.dart';
+import 'package:planner_celebrity/Utility/MainColor.dart';
 
 // class InternetScreen extends StatelessWidget {
 //   const InternetScreen({Key? key, required this.onClose}) : super(key: key);
@@ -101,7 +101,10 @@ class _InternetScreenState extends State<InternetScreen> {
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: playColor,
-                borderRadius: BorderRadius.only(topLeft: Radius.elliptical(400, 200), topRight: Radius.elliptical(400, 200)),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.elliptical(400, 200),
+                  topRight: Radius.elliptical(400, 200),
+                ),
               ),
             ),
           ),
@@ -114,7 +117,10 @@ class _InternetScreenState extends State<InternetScreen> {
                 const SizedBox(height: 60),
 
                 /// "Oops!" text
-                const Text("Oops!", style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900, color: Color(0xFF004172))),
+                const Text(
+                  "Oops!",
+                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900, color: Color(0xFF004172)),
+                ),
 
                 const SizedBox(height: 16),
 
@@ -153,7 +159,10 @@ class _InternetScreenState extends State<InternetScreen> {
                     elevation: 8,
                     shadowColor: Colors.black12,
                   ),
-                  child: const Text("Turn On Your Internet", style: TextStyle(fontSize: 18, color: Colors.orange, fontWeight: FontWeight.w600)),
+                  child: const Text(
+                    "Turn On Your Internet",
+                    style: TextStyle(fontSize: 18, color: Colors.orange, fontWeight: FontWeight.w600),
+                  ),
                 ),
 
                 const SizedBox(height: 60),

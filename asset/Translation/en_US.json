@@ -119,7 +119,7 @@
   "add": "Add",
   "bid_placed_successfully": "Bid Placed Successfully",
   "total_amount": "Total Amount",
-  "add_bids": "Add Bids",
+  "add_bids": "Add",
   "choose_session": "Choose Session",
   "continue": "Continue",
   "open": "Open",
@@ -129,6 +129,8 @@
   "type": "Type",
   "action": "Action",
   "delete": "Delete",
+  "how_to_play": "How To Play",
+  "terms_and_conditions": "Terms And Conditions",
   "bottom_nav": {
     "my_bids": "My Bids",
     "passbook": "Passbook",

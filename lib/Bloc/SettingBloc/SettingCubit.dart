@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobi_user/Bloc/SettingBloc/SettingModel.dart';
-import 'package:mobi_user/Bloc/SettingBloc/SettingState.dart';
-import 'package:mobi_user/Utility/const.dart';
+import 'package:planner_celebrity/Bloc/SettingBloc/SettingModel.dart';
+import 'package:planner_celebrity/Bloc/SettingBloc/SettingState.dart';
+import 'package:planner_celebrity/Utility/const.dart';
 
 import '../../main.dart';
 
