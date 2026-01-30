@@ -18,11 +18,11 @@ class GetSubscriptionsCubit extends Cubit<GetSubscriptionsState> {
       var _pref = await SharedPreferences.getInstance();
       var headers = {'Authorization': _pref.getString(sharedPrefAPITokenKey) ?? ""};
       final resp = await repository.postRequest(getAllSubscriptionApiUrl, {}, header: headers);
-      final result = jsonDecode(resp.body);
+      final result = jsonDecode(resp.data);
       log("GetSubscriptionsCubit API response : $result");
       if (resp.statusCode == 200) {
         if (result["status"]) {
-          emit(GetSubscriptionsLoaded(subscriptionModelFromJson(resp.body)));
+          emit(GetSubscriptionsLoaded(subscriptionModelFromJson(resp.data)));
         } else {
           emit(GetSubscriptionsError(result["error"]));
         }

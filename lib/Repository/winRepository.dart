@@ -26,7 +26,7 @@ class WinRepository {
       // https://mtadmin.online/junglerajyog_king/api/winningHistory?userid=45&sdate=2023-03-03&edate=2023-03-05
       final response = await repository.postRequest("${winHistoryApi}", data, header: headers);
       print(response);
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
       List<Datum> list = List.generate(result["data"].length, (index) => Datum.fromJson(result["data"][index]));
 
       return Right(list);

@@ -9,126 +9,145 @@ UserProfile userProfileFromJson(String str) => UserProfile.fromJson(json.decode(
 String userProfileToJson(UserProfile data) => json.encode(data.toJson());
 
 class UserProfile {
-  bool? status;
-  String? masg;
-  Data? data;
+    bool? status;
+    Data? data;
 
-  UserProfile({this.status, this.masg, this.data});
+    UserProfile({
+        this.status,
+        this.data,
+    });
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) =>
-      UserProfile(status: json["status"], masg: json["masg"], data: json["data"] == null ? null : Data.fromJson(json["data"]));
+    factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
+        status: json["status"],
+        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    );
 
-  Map<String, dynamic> toJson() => {"status": status, "masg": masg, "data": data?.toJson()};
+    Map<String, dynamic> toJson() => {
+        "status": status,
+        "data": data?.toJson(),
+    };
 }
 
 class Data {
-  int? id;
-  String? apitoken;
-  String? name;
-  String? password;
-  String? mobile;
-  dynamic balance;
-  String? status;
-  String? registrationDate;
-  String? autoDepositStatus;
-  dynamic imagePath;
-  String? referalCode;
-  dynamic referalTo;
-  dynamic starlineStatus;
-  int? isActive;
-  String? deviceToken;
-  String? sub_name;
-  dynamic lowBalanceAmount;
-  dynamic isImage;
-  dynamic lowBalanceAmountBonus;
-  dynamic lowBalanceAmountText;
-  String? latestVersion;
-  String? apkUrl;
-  DateTime? createdAt;
-  DateTime? subscription_expires_at;
-  DateTime? updatedAt;
+    String? id;
+    String? email;
+    String? mobile;
+    bool? isVerified;
+    bool? isActive;
+    String? fullName;
+    String? publicHandle;
+    String? profilePictureUrl;
+    String? shortBio;
+    SocialMediaLinks? socialMediaLinks;
+    dynamic location;
+    dynamic latitude;
+    dynamic longitude;
+    int? profileViews;
+    DateTime? createdAt;
+    DateTime? updatedAt;
+    List<dynamic>? galleryImages;
+    List<Category>? categories;
 
-  Data({
-    this.id,
-    this.apitoken,
-    this.name,
-    this.password,
-    this.mobile,
-    this.isImage,
-    this.balance,
-    this.status,
-    this.registrationDate,
-    this.autoDepositStatus,
-    this.imagePath,
-    this.referalCode,
-    this.sub_name,
-    this.starlineStatus,
-    this.referalTo,
-    this.isActive,
-    this.deviceToken,
-    this.createdAt,
-    this.latestVersion,
-    this.apkUrl,
-    this.lowBalanceAmount,
-    this.lowBalanceAmountText,
-    this.lowBalanceAmountBonus,
-    this.subscription_expires_at,
-    this.updatedAt,
-  });
+    Data({
+        this.id,
+        this.email,
+        this.mobile,
+        this.isVerified,
+        this.isActive,
+        this.fullName,
+        this.publicHandle,
+        this.profilePictureUrl,
+        this.shortBio,
+        this.socialMediaLinks,
+        this.location,
+        this.latitude,
+        this.longitude,
+        this.profileViews,
+        this.createdAt,
+        this.updatedAt,
+        this.galleryImages,
+        this.categories,
+    });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    apitoken: json["apitoken"],
-    name: json["name"],
-    password: json["password"],
-    mobile: json["mobile"],
-    balance: json["balance"],
-    status: json["status"],
-    isImage: json["isImage"],
-    registrationDate: json["registrationDate"],
-    autoDepositStatus: json["autoDepositStatus"],
-    imagePath: json["image_path"],
-    sub_name: json["sub_name"],
-    referalCode: json["referalCode"],
-    referalTo: json["referalTo"],
-    isActive: json["is_active"],
-    latestVersion: json["latest_version"],
-    apkUrl: json["apk_url"],
-    starlineStatus: json["starline_status"],
-    lowBalanceAmount: json["lowBalanceAmount"],
-    lowBalanceAmountText: json["lowBalanceAmountText"],
-    lowBalanceAmountBonus: json["lowBalanceAmountBonus"],
-    deviceToken: json["deviceToken"],
-    createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-    subscription_expires_at: json["subscription_expires_at"] == null ? null : DateTime.parse(json["subscription_expires_at"]),
-    updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-  );
+    factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["id"],
+        email: json["email"],
+        mobile: json["mobile"],
+        isVerified: json["isVerified"],
+        isActive: json["isActive"],
+        fullName: json["fullName"],
+        publicHandle: json["publicHandle"],
+        profilePictureUrl: json["profilePictureUrl"],
+        shortBio: json["shortBio"],
+        socialMediaLinks: json["socialMediaLinks"] == null ? null : SocialMediaLinks.fromJson(json["socialMediaLinks"]),
+        location: json["location"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        profileViews: json["profileViews"],
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        galleryImages: json["galleryImages"] == null ? [] : List<dynamic>.from(json["galleryImages"]!.map((x) => x)),
+        categories: json["categories"] == null ? [] : List<Category>.from(json["categories"]!.map((x) => Category.fromJson(x))),
+    );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "apitoken": apitoken,
-    "name": name,
-    "password": password,
-    "mobile": mobile,
-    "balance": balance,
-    "isImage": isImage,
-    "status": status,
-    "sub_name": sub_name,
-    "registrationDate": registrationDate,
-    "autoDepositStatus": autoDepositStatus,
-    "lowBalanceAmountBonus": lowBalanceAmountBonus,
-    "lowBalanceAmountText": lowBalanceAmountText,
-    "lowBalanceAmount": lowBalanceAmount,
-    "image_path": imagePath,
-    "starline_status": starlineStatus,
-    "referalCode": referalCode,
-    "latest_version": latestVersion,
-    "apk_url": apkUrl,
-    "referalTo": referalTo,
-    "is_active": isActive,
-    "deviceToken": deviceToken,
-    "createdAt": createdAt?.toIso8601String(),
-    "subscription_expires_at": subscription_expires_at?.toIso8601String(),
-    "updatedAt": updatedAt?.toIso8601String(),
-  };
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "email": email,
+        "mobile": mobile,
+        "isVerified": isVerified,
+        "isActive": isActive,
+        "fullName": fullName,
+        "publicHandle": publicHandle,
+        "profilePictureUrl": profilePictureUrl,
+        "shortBio": shortBio,
+        "socialMediaLinks": socialMediaLinks?.toJson(),
+        "location": location,
+        "latitude": latitude,
+        "longitude": longitude,
+        "profileViews": profileViews,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "galleryImages": galleryImages == null ? [] : List<dynamic>.from(galleryImages!.map((x) => x)),
+        "categories": categories == null ? [] : List<dynamic>.from(categories!.map((x) => x.toJson())),
+    };
+}
+
+class Category {
+    String? id;
+    String? title;
+
+    Category({
+        this.id,
+        this.title,
+    });
+
+    factory Category.fromJson(Map<String, dynamic> json) => Category(
+        id: json["id"],
+        title: json["title"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+    };
+}
+
+class SocialMediaLinks {
+    String? twitter;
+    String? instagram;
+
+    SocialMediaLinks({
+        this.twitter,
+        this.instagram,
+    });
+
+    factory SocialMediaLinks.fromJson(Map<String, dynamic> json) => SocialMediaLinks(
+        twitter: json["twitter"],
+        instagram: json["instagram"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "twitter": twitter,
+        "instagram": instagram,
+    };
 }

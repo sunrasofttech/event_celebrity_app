@@ -97,7 +97,6 @@ class AuthenticationRepository {
       var userId = prefs.getString("key");
 
       var data = {
-        "userId": userId,
         "newPassword": newPassword,
         "oldPassword": oldPassword,
         "confirmPassword": newPassword,
@@ -107,7 +106,7 @@ class AuthenticationRepository {
         'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "",
       };
       final resp = await repository.postRequest(changePassApi, data, header: headers);
-      final result = jsonDecode(resp.body);
+      final result = jsonDecode(jsonEncode(resp.data));
       return result["status"] == true ? Right(true) : Left(result["msg"]);
     } catch (e) {
       return Left(FailureHandler.handleFailure(e));

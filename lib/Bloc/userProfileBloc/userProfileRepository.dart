@@ -20,7 +20,7 @@ class UserProfileRepository {
     var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? "", 'Content-Type': "application/json"};
     final resp = await repository.postRequest(userProfileApi, jsonEncode({"userId": userId}), header: headers);
 
-    final result = jsonDecode(resp.body);
+    final result = jsonDecode(resp.data);
     log("--------- profile:---- $result");
     var data = UserProfile.fromJson(result);
     return Right(data);
@@ -34,7 +34,7 @@ class UserProfileRepository {
       log("Userid $userId");
       final response = await repository.getRequest("${getRefferalCodeApi}?userid=$userId");
       //print(jsonEncode(response["result"]));
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
 
       return Right(result["referral_code"]["referral"]);
     } catch (e) {
@@ -82,10 +82,10 @@ class UserProfileRepository {
       var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
       // var data = {"phone": phone, "password": password, "name": name};
       final response = await repository.postRequest(getVersionNumberApi, {"userId": uid}, header: headers);
-      print("get Settings to save version code\n" + jsonEncode(response.body));
+      print("get Settings to save version code\n" + jsonEncode(response.data));
       // return true;
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
       String data = result["data"][0]["version"];
       String code = packageInfo.version;
       print("App Version Check=> $code & Data=>$data");

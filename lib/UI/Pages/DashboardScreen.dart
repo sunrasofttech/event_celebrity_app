@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
 import 'package:planner_celebrity/Utility/MainColor.dart';
+import 'package:planner_celebrity/Utility/const.dart';
 
 class UserModel {
   final String name;
@@ -51,23 +55,23 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     imageUrl: "https://i.pravatar.cc/150?img=3",
   );
 
-  final List<BookingModel> bookings = [
-    BookingModel(
-      title: "Clestial Echo: The Horizon Live at Eden Garden",
-      date: "Sunday, 01 October, 2025",
-      time: "7:00 PM",
-      location: "Eden Garden",
-      imageUrl:
-          "https://images.unsplash.com/photo-1702369412530-0a4ab9980f9e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
-    ),
-    BookingModel(
-      title: "Celestial Echo: The Horizon Live at Eden Garden",
-      date: "Sunday, 01 October, 2025",
-      time: "7:00 PM",
-      location: "Eden Garden",
-      imageUrl: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d",
-    ),
-  ];
+  // final List<BookingModel> bookings = [
+  //   BookingModel(
+  //     title: "Clestial Echo: The Horizon Live at Eden Garden",
+  //     date: "Sunday, 01 October, 2025",
+  //     time: "7:00 PM",
+  //     location: "Eden Garden",
+  //     imageUrl:
+  //         "https://images.unsplash.com/photo-1702369412530-0a4ab9980f9e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
+  //   ),
+  //   BookingModel(
+  //     title: "Celestial Echo: The Horizon Live at Eden Garden",
+  //     date: "Sunday, 01 October, 2025",
+  //     time: "7:00 PM",
+  //     location: "Eden Garden",
+  //     imageUrl: "https://images.unsplash.com/photo-1521412644187-c49fa049e84d",
+  //   ),
+  // ];
 
   final AnalyticsModel analytics = AnalyticsModel(
     totalEarnings: "₹23.34L",
@@ -78,322 +82,363 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade100,
-        body: SingleChildScrollView(
-          // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Section
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    // stops: [0.0, 0.7404,],
-                    colors: [
-                      Color(0xFFFFDCDD),
-                      Color(0xFFFFDCDD),
-                      Color(0xFFF4F4F4),
-                    ],
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 28,
-                            backgroundImage: NetworkImage(user.imageUrl),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          context.read<GetDashboardCubit>().getDash();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.grey.shade100,
+          body: SingleChildScrollView(
+            // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child: BlocBuilder<GetDashboardCubit, GetDashboardState>(
+              builder: (context, state) {
+                if (state is GetDashboardLoadedState) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header Section
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            // stops: [0.0, 0.7404,],
+                            colors: [
+                              Color(0xFFFFDCDD),
+                              Color(0xFFFFDCDD),
+                              Color(0xFFF4F4F4),
+                            ],
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Welcome",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey.shade600,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  BlocBuilder<GetProfileCubit, GetProfileState>(
+                                    builder: (context, state) {
+                                      if (state is GetProfileLoadedState) {
+                                        return CircleAvatar(
+                                          radius: 28,
+                                          backgroundImage: NetworkImage(
+                                           "${Constants.baseUrl}/${state.model.data?.profilePictureUrl}",
+                                          ),
+                                        );
+                                      }
+                                      return SizedBox();
+                                    },
                                   ),
-                                ),
-                                Text(
-                                  user.name,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Image.asset("asset/icons/gitar.png", height: 150),
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 2,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Upcoming Bookings
-                    Text(
-                      "Upcoming Bookings",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    SizedBox(
-                      height: 260,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: bookings.length,
-                        separatorBuilder:
-                            (context, index) => const SizedBox(width: 14),
-                        itemBuilder: (context, index) {
-                          final booking = bookings[index];
-                          return Container(
-                            width: 280,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12.withOpacity(0.05),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16),
-                                  ),
-                                  child: Image.network(
-                                    booking.imageUrl,
-                                    height: 130,
-                                    width: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        booking.title,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${state.model.data?.welcomeMessage ?? ""}",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey.shade600,
+                                          ),
                                         ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            IconsaxPlusBold.calendar_1,
-                                            size: 12,
-                                            color: greyColor,
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Image.asset("asset/icons/gitar.png", height: 150),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 2,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Upcoming Bookings
+                            Text(
+                              "Upcoming Bookings",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            SizedBox(
+                              height: 260,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    state.model.data?.upcomingEvents?.length ??
+                                    0,
+                                separatorBuilder:
+                                    (context, index) =>
+                                        const SizedBox(width: 14),
+                                itemBuilder: (context, index) {
+                                  final booking =
+                                      state.model.data?.upcomingEvents?[index];
+                                  return Container(
+                                    width: 280,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12.withOpacity(
+                                            0.05,
                                           ),
-                                          const SizedBox(width: 6),
-                                          Expanded(
-                                            child: Text(
-                                              booking.date,
-                                              style: TextStyle(
-                                                color: greyColor,
-                                                fontSize: 12,
+                                          blurRadius: 6,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(16),
+                                            topRight: Radius.circular(16),
+                                          ),
+                                          child: Image.network(
+                                            "${Constants.baseUrl}/${booking?.coverImageUrl ?? ""}",
+                                            height: 130,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                booking?.eventName ?? "",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    IconsaxPlusBold.calendar_1,
+                                                    size: 12,
+                                                    color: greyColor,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Expanded(
+                                                    child: Text(
+                                                      booking?.eventDate
+                                                              .toString() ??
+                                                          "",
+                                                      style: TextStyle(
+                                                        color: greyColor,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    IconsaxPlusBold.timer,
+                                                    size: 14,
+                                                    color: greyColor,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Text(
+                                                    booking?.entryTime ?? "",
+                                                    style: TextStyle(
+                                                      color: greyColor,
+                                                      fontSize: 13,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 6),
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    IconsaxPlusBold.location,
+                                                    size: 12,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  Text(
+                                                    booking?.eventAddress ?? "",
+                                                    style: TextStyle(
+                                                      color: greyColor,
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // Analytics Header
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Analytics",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: DropdownButton<String>(
+                                    value: "Last 6 Months",
+                                    underline: const SizedBox(),
+                                    items: const [
+                                      DropdownMenuItem(
+                                        value: "Last 6 Months",
+                                        child: Text("Last 6 Months"),
                                       ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            IconsaxPlusBold.timer,
-                                            size: 14,
-                                            color: greyColor,
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            booking.time,
-                                            style: TextStyle(
-                                              color: greyColor,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ],
+                                      DropdownMenuItem(
+                                        value: "Last 12 Months",
+                                        child: Text("Last 12 Months"),
                                       ),
-                                      const SizedBox(height: 6),
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            IconsaxPlusBold.location,
-                                            size: 12,
-                                            color: Colors.grey,
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            booking.location,
-                                            style: TextStyle(
-                                              color: greyColor,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
+                                    ],
+                                    onChanged: (_) {},
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Analytics Cards
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Expanded(flex: 1, child: revenuCard()),
+                                const SizedBox(width: 12),
+
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      _buildAnalyticsCard(
+                                        imagePath: ("asset/icons/profile.png"),
+                                        title: "Profile Views",
+                                        value:
+                                            state
+                                                .model
+                                                .data
+                                                ?.analytics
+                                                ?.profileViews
+                                                .toString() ??
+                                            "",
+                                      ),
+                                      const SizedBox(height: 12),
+                                      _buildAnalyticsCard(
+                                        imagePath:
+                                            ("asset/icons/calendar_tick.png"),
+                                        title: "Events Booked",
+                                        value:
+                                            state
+                                                .model
+                                                .data
+                                                ?.analytics
+                                                ?.upcomingEventsCount
+                                                .toString() ??
+                                            "",
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                            SizedBox(height: 10),
+                            // Container(
+                            //   width: double.infinity,
+                            //   padding: const EdgeInsets.all(16),
+                            //   decoration: BoxDecoration(
+                            //     color: Colors.white,
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     boxShadow: [
+                            //       BoxShadow(
+                            //         color: Colors.black12.withOpacity(0.05),
+                            //         blurRadius: 6,
+                            //         offset: const Offset(0, 3),
+                            //       ),
+                            //     ],
+                            //   ),
+                            //   child: Row(
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       Image.asset("asset/icons/trans.png"),
+                            //       const SizedBox(width: 8),
+                            //       Column(
+                            //         children: [
+                            //           Text(
+                            //             "Total Revenue",
+                            //             style: TextStyle(
+                            //               color: Colors.grey.shade600,
+                            //               fontSize: 12,
+                            //               fontWeight: FontWeight.w500,
+                            //             ),
+                            //           ),
 
-                    const SizedBox(height: 12),
-
-                    // Analytics Header
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Analytics",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                          ),
+                            //           const SizedBox(height: 8),
+                            //           Text(
+                            //             "₹23341",
+                            //             style: TextStyle(
+                            //               fontSize: 18,
+                            //               fontWeight: FontWeight.w700,
+                            //               color: Colors.black87,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                          ],
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: DropdownButton<String>(
-                            value: "Last 6 Months",
-                            underline: const SizedBox(),
-                            items: const [
-                              DropdownMenuItem(
-                                value: "Last 6 Months",
-                                child: Text("Last 6 Months"),
-                              ),
-                              DropdownMenuItem(
-                                value: "Last 12 Months",
-                                child: Text("Last 12 Months"),
-                              ),
-                            ],
-                            onChanged: (_) {},
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Analytics Cards
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(flex: 1, child: revenuCard()),
-
-                        const SizedBox(width: 12),
-
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            children: [
-                              _buildAnalyticsCard(
-                                imagePath: ("asset/icons/profile.png"),
-                                title: "Profile Views",
-                                value: analytics.profileViews,
-                              ),
-                              const SizedBox(height: 12),
-                              _buildAnalyticsCard(
-                                imagePath: ("asset/icons/calendar_tick.png"),
-                                title: "Events Booked",
-                                value: analytics.eventsBooked.toString(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12.withOpacity(0.05),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset("asset/icons/trans.png"),
-                            const SizedBox(width: 8),
-                          Column(
-                            children: [
-                              Text(
-                                "Total Revenue",
-                                style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                             
-
-                              const SizedBox(height: 8),
-                              Text(
-                                "₹23341",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                    ],
+                  );
+                }
+                return SizedBox();
+              },
+            ),
           ),
         ),
       ),
@@ -427,7 +472,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           Row(
             children: [
               Image.asset(imagePath),
-            SizedBox(width: 5,),
+              SizedBox(width: 5),
               Text(
                 title,
                 style: TextStyle(

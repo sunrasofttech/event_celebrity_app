@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:planner_celebrity/Bloc/SettingBloc/SettingCubit.dart';
+import 'package:planner_celebrity/Bloc/avaibility/get_avalibility/get_avalibility_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_all_events/get_all_events_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
 import 'package:planner_celebrity/UI/Pages/BookingScreen.dart';
 import 'package:planner_celebrity/UI/Pages/CalendarScreen.dart';
 import 'package:planner_celebrity/UI/Pages/DashboardScreen.dart';
 import 'package:planner_celebrity/UI/Pages/profile_screen.dart';
-import 'package:planner_celebrity/UI/Profile/SettingScreen.dart';
 
 import '../Utility/MainColor.dart';
 
@@ -25,11 +30,19 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     // Initialize pages here directly (no need for post frame callback)
     pages = [
-      CalendarScreen(), // Bookings
-      DashBoardScreen(), // Home
-      BookingScreen(), // Funds
-      ProfileScreen(), 
+      CalendarScreen(), 
+      DashBoardScreen(), 
+      BookingScreen(),
+      ProfileScreen(),
     ];
+
+    // context.read<UserProfileBlocBloc>().add(GetUserProfileEvent());
+    context.read<GetDashboardCubit>().getDash();
+    context.read<GetAvalibilityCubit>().GetAvailability();
+    context.read<SettingCubit>().getSettingsApiCall();
+    context.read<GetAvalibilityCubit>().GetAvailability();
+    context.read<GetProfileCubit>().getProfile();
+    context.read<GetAllEventsCubit>().getAllEvent();
   }
 
   @override
@@ -45,10 +58,9 @@ class _MainScreenState extends State<MainScreen> {
               topRight: Radius.circular(30),
             ),
             child: BottomNavigationBar(
-            
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.white,
-          
+
               elevation: 8,
               selectedItemColor: primaryColor,
               unselectedItemColor: greyColor,

@@ -20,21 +20,21 @@ class NotificationCubit extends Cubit<NotificationState> {
       String uid = await pref.getString("key").toString();
       var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
       final resp = await repository.postRequest(notificationApi, {"userId": uid}, header: headers);
-      final result = jsonDecode(resp.body);
-      log("Response Here=> ${resp.body}");
+      final result = jsonDecode(resp.data);
+      log("Response Here=> ${resp.data}");
       if (resp.statusCode == 200) {
         if (result["status"]) {
-          emit(LoadedState(notificationModelFromJson(resp.body)));
+          emit(LoadedState(notificationModelFromJson(resp.data)));
         } else {
           emit(ErrorState(result["error"]));
         }
       } else {
         emit(ErrorState(result["error"]));
-        repository.failureMessage(
-          url: resp.request!.url.toString(),
-          data: resp.body,
-          statusCode: resp.statusCode.toString(),
-        );
+        // repository.failureMessage(
+        //   url: resp.request!.url.toString(),
+        //   data: resp.data,
+        //   statusCode: resp.statusCode.toString(),
+        // );
       }
     } catch (e, stk) {
       log("Catch getNotification Here=> $e, $stk");

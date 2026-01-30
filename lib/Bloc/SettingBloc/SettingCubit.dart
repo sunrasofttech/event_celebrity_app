@@ -16,22 +16,36 @@ class SettingCubit extends Cubit<SettingState> {
   getSettingsApiCall() async {
     try {
       emit(SettingLoadingState());
-      var headers = {'Authorization': pref.getString(sharedPrefAPITokenKey) ?? ""};
-      final resp = await repository.postRequest(settingApi, {}, header: headers);
-      final result = jsonDecode(resp.body);
+
+      var headers = {
+        'Authorization': "Bearer ${pref.getString(sharedPrefAPITokenKey)}",
+        "Content-Type": "application/json",
+      };
+      final resp = await repository.getRequest(
+        "${Constants.baseUrl}/api/celebrity/app-settings",
+        header: headers,
+      );
+      final result = jsonDecode(jsonEncode(resp.data));
       log("Settings API response : $result");
       if (resp.statusCode == 200) {
         if (result["status"]) {
-          emit(SettingLoadedState(settingModelFromJson(resp.body)));
+          emit(SettingLoadedState(SettingModel.fromJson(resp.data)));
         } else {
-          emit(SettingErrorState(result["error"]));
+          emit(
+            SettingErrorState(
+              result["error"]?.toString() ??
+                  result["message"]?.toString() ??
+                  "Something went wrong",
+            ),
+          );
         }
       } else {
-        emit(SettingErrorState(result["message"]));
-        repository.failureMessage(
-          url: resp.request!.url.toString(),
-          data: resp.body,
-          statusCode: resp.statusCode.toString(),
+        emit(
+          SettingErrorState(
+            result["error"]?.toString() ??
+                result["message"]?.toString() ??
+                "Something went wrong",
+          ),
         );
       }
     } catch (e, stk) {

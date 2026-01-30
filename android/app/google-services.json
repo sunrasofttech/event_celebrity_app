@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "914367922448",
-    "project_id": "jio7-matka",
-    "storage_bucket": "jio7-matka.firebasestorage.app"
+    "project_number": "285434320877",
+    "project_id": "lottaevent-33f4a",
+    "storage_bucket": "lottaevent-33f4a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:914367922448:android:244bd69b3c3dad6edca595",
+        "mobilesdk_app_id": "1:285434320877:android:2afbb1efd9ae1dbd1f79e4",
         "android_client_info": {
-          "package_name": "com.jio7.admin"
+          "package_name": "com.celeb.planner"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD8-f4QzysDtRVAaj-LUOZ98SlCx5oofm8"
+          "current_key": "AIzaSyCjNQ2i0WVC2_dz_xPCsXxMMYFv7iqeQTQ"
         }
       ],
       "services": {
@@ -26,15 +26,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:914367922448:android:af4b5915703cdffddca595",
+        "mobilesdk_app_id": "1:285434320877:android:f6b714af2d6ba4271f79e4",
         "android_client_info": {
-          "package_name": "com.jio7.user"
+          "package_name": "com.user.planner"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD8-f4QzysDtRVAaj-LUOZ98SlCx5oofm8"
+          "current_key": "AIzaSyCjNQ2i0WVC2_dz_xPCsXxMMYFv7iqeQTQ"
         }
       ],
       "services": {

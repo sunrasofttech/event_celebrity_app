@@ -38,7 +38,7 @@ class PaymentRepository {
       print(data);
       //?userid=44&digit=123&points=10&market=1&mtype=sd&type=close
       final response = await repository.postRequest(getAdminUpi, data);
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
       //print(response["result"][0]["name"]);
       return Right(result["result"][0]["name"]);
     } catch (e) {
@@ -54,7 +54,7 @@ class PaymentRepository {
       print(data);
       //?userid=44&digit=123&points=10&market=1&mtype=sd&type=close
       final response = await repository.postRequest(getwithdrawDetailsUpi, data);
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
       print(result["result"]);
 
       return Right(WithdrawDetails.fromJson(result["result"]));
@@ -71,7 +71,7 @@ class PaymentRepository {
       print(data);
       //?userid=44&digit=123&points=10&market=1&mtype=sd&type=close
       final response = await repository.postRequest(withdrawAmountApiForTime, data);
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
       print(result["result"][0]["name"]);
 
       return Right(WithdrwalTiming.fromJson(result["result"]));
@@ -105,7 +105,7 @@ class PaymentRepository {
       print(data);
       //?userid=44&digit=123&points=10&market=1&mtype=sd&type=close
       final response = await repository.postRequest("${getBankDetailsApi}/$userId", {}, header: headers);
-      final result = jsonDecode(response.body);
+      final result = jsonDecode(response.data);
       print("Get Bank Details Response ---> $result");
       if (result["status"] == true) {
         var res = BankDetailsModel.fromJson(result["data"]);
@@ -145,8 +145,8 @@ class PaymentRepository {
       print("Data=> ${data}");
       //?userid=44&digit=123&points=10&market=1&mtype=sd&type=close
       final response = await repository.postRequest(addAcountApi, data, header: headers);
-      var result = jsonDecode(response.body);
-      print("Add Bank Account Response => ${response.body}");
+      var result = jsonDecode(response.data);
+      print("Add Bank Account Response => ${response.data}");
       if (response.statusCode == 200) {
         return Right(true);
       } else {
@@ -166,8 +166,8 @@ class PaymentRepository {
       print("Withdraw Request Data => " + data);
       //?userid=44&digit=123&points=10&market=1&mtype=sd&type=close
       final response = await repository.postRequest(withdrawAmountApi, data, header: headers);
-      print("Withdraw Request Response => " + response.body + " Status Code :- " + response.statusCode.toString());
-      final result = jsonDecode(response.body);
+      print("Withdraw Request Response => " + response.data + " Status Code :- " + response.statusCode.toString());
+      final result = jsonDecode(response.data);
       return response.statusCode == 200 || response.statusCode == 201
           ? Right(true)
           : Left(FailureHandler.handleFailure(result["error"]));

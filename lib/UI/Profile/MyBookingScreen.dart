@@ -88,6 +88,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                               width: 100,
                               height: 140,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => SizedBox(),
                             ),
                           ),
                           const SizedBox(width: 12),

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -11,20 +10,29 @@ import 'package:flutter_translate/flutter_translate.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:planner_celebrity/Bloc/AccountBloc/AccountCubit.dart';
+import 'package:planner_celebrity/Bloc/AppContentsBloc/UserAppContentCubit.dart';
 import 'package:planner_celebrity/Bloc/Auth/LoginBloc/LoginCubit.dart';
-import 'package:planner_celebrity/Bloc/Auth/RegisterBloc/RegisterCubit.dart';
 import 'package:planner_celebrity/Bloc/CheckBankBloc/CheckBankCubit.dart';
 import 'package:planner_celebrity/Bloc/EditProfileBloc/EditProfileBloc.dart';
 import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationCubit.dart';
 import 'package:planner_celebrity/Bloc/SettingBloc/SettingCubit.dart';
 import 'package:planner_celebrity/Bloc/SuggestionListBloc/SuggestionListBloc.dart';
 import 'package:planner_celebrity/Bloc/WalletBloc/AddMoneyBloc/AddMoneyCubit.dart';
+import 'package:planner_celebrity/Bloc/add_gallery_image/add_gallery_images_cubit.dart';
+import 'package:planner_celebrity/Bloc/avaibility/get_avalibility/get_avalibility_cubit.dart';
+import 'package:planner_celebrity/Bloc/avaibility/set_ava/set_availbilty_cubit.dart';
+import 'package:planner_celebrity/Bloc/delete_gallery_image/delete_gallery_image_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_all_earing/get_all_earing_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_all_events/get_all_events_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
 import 'package:planner_celebrity/Bloc/userProfileBloc/user_profile_bloc_bloc.dart';
 import 'package:planner_celebrity/Repository/repository.dart';
 import 'package:planner_celebrity/SecurityWatcher.dart';
 import 'package:planner_celebrity/UI/SplashScreen.dart';
 import 'package:planner_celebrity/Utility/CustomFont.dart';
 import 'package:planner_celebrity/Utility/MainColor.dart';
+import 'package:planner_celebrity/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ultra_secure_flutter_kit/ultra_secure_flutter_kit.dart';
 
@@ -38,7 +46,7 @@ import 'Utility/const.dart';
 Repository repository = Repository();
 late SharedPreferences pref;
 Future<void> backgroundHandler(RemoteMessage event) async {
-  await Firebase.initializeApp(options: _firebaseOptions());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   debugPrint("Remote Message:${event.data}");
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -46,7 +54,11 @@ Future<void> backgroundHandler(RemoteMessage event) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
-      FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
+      FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 
       //print(message.notification!.android!.count);
       FirebaseMessaging.instance.getToken().then((token) {
@@ -57,18 +69,23 @@ Future<void> backgroundHandler(RemoteMessage event) async {
 }
 
 //TODO: Change This For Cloning
-FirebaseOptions _firebaseOptions() {
-  return FirebaseOptions(
-    apiKey: "AIzaSyD8-f4QzysDtRVAaj-LUOZ98SlCx5oofm8",
-    appId: "1:914367922448:android:af4b5915703cdffddca595",
-    messagingSenderId: "914367922448",
-    projectId: "jio7-matka",
-  );
-}
+// FirebaseOptions _firebaseOptions() {
+//   return FirebaseOptions(
+//     apiKey: "AIzaSyD8-f4QzysDtRVAaj-LUOZ98SlCx5oofm8",
+//     appId: "1:914367922448:android:af4b5915703cdffddca595",
+//     messagingSenderId: "914367922448",
+//     projectId: "jio7-matka",
+//   );
+// }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   pref = await SharedPreferences.getInstance();
+  if (!kIsWeb) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   await dotenv.load(fileName: "asset/.env");
   final securityKit = UltraSecureFlutterKit();
   if (kReleaseMode) {
@@ -81,7 +98,10 @@ void main() async {
         enableMITMDetection: true,
         enableDeveloperModeDetection: true,
         blockOnHighRisk: true,
-        sslPinningConfig: SSLPinningConfig(mode: SSLPinningMode.strict, pinnedPublicKeys: [dotenv.get("KEY")]),
+        sslPinningConfig: SSLPinningConfig(
+          mode: SSLPinningMode.strict,
+          pinnedPublicKeys: [dotenv.get("KEY")],
+        ),
         obfuscationConfig: ObfuscationConfig(
           enableDartObfuscation: true,
           enableStringObfuscation: true,
@@ -158,10 +178,22 @@ void main() async {
   final savedLocale = pref.getString('selected_locale') ?? 'en_US';
   final delegate = await LocalizationDelegate.create(
     fallbackLocale: 'en_US',
-    supportedLocales: ['bn_IN', 'pa_IN', 'en_US', 'mr_IN', 'hi_IN', 'ta_IN', 'te_IN', 'gu_IN', 'kn_IN'],
+    supportedLocales: [
+      'bn_IN',
+      'pa_IN',
+      'en_US',
+      'mr_IN',
+      'hi_IN',
+      'ta_IN',
+      'te_IN',
+      'gu_IN',
+      'kn_IN',
+    ],
     basePath: 'asset/Translation/',
   );
-  delegate.changeLocale(Locale(savedLocale.split('_')[0], savedLocale.split('_')[1]));
+  delegate.changeLocale(
+    Locale(savedLocale.split('_')[0], savedLocale.split('_')[1]),
+  );
   runApp(LocalizedApp(delegate, MyApp(securityKit: securityKit)));
 }
 
@@ -192,7 +224,6 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => SendOtpCubit()),
           BlocProvider(create: (context) => GetSubscriptionsCubit()),
           BlocProvider(create: (context) => LoginCubit()),
-          BlocProvider(create: (context) => RegisterCubit()),
           BlocProvider(create: (context) => SettingCubit()),
           BlocProvider(create: (context) => AddMoneyCubit()),
           BlocProvider(create: (context) => CheckUserCubit()),
@@ -205,6 +236,15 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => SuggestionListBloc()),
           BlocProvider(create: (context) => EditProfileBloc()),
           BlocProvider(create: (context) => LogOutCubit()),
+          BlocProvider(create: (context) => SetAvailbiltyCubit()),
+          BlocProvider(create: (context) => GetAvalibilityCubit()),
+          BlocProvider(create: (context) => DeleteGalleryImageCubit()),
+          BlocProvider(create: (context) => AddGalleryImagesCubit()),
+          BlocProvider(create: (context) => GetDashboardCubit()),
+          BlocProvider(create: (context) => GetProfileCubit()),
+          BlocProvider(create: (context) => GetUserAppContentCubit()),
+          BlocProvider(create: (context) => GetAllEaringCubit()),
+          BlocProvider(create: (context) => GetAllEventsCubit()),
         ],
         child: MaterialApp(
           title: appName,
@@ -219,7 +259,9 @@ class _MyAppState extends State<MyApp> {
           locale: localizationDelegate.currentLocale,
           theme: ThemeData(
             fontFamily: GoogleFonts.inter().fontFamily,
-            drawerTheme: const DrawerThemeData(shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+            drawerTheme: const DrawerThemeData(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
             cardTheme: CardThemeData(
               elevation: 10,
               shadowColor: Colors.white,
@@ -227,7 +269,10 @@ class _MyAppState extends State<MyApp> {
               color: Colors.white,
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(elevation: 20, shadowColor: Colors.grey),
+              style: ElevatedButton.styleFrom(
+                elevation: 20,
+                shadowColor: Colors.grey,
+              ),
             ),
             appBarTheme: AppBarTheme(
               backgroundColor: Colors.transparent,
@@ -238,9 +283,15 @@ class _MyAppState extends State<MyApp> {
             scaffoldBackgroundColor: scaffoldBgColor,
             iconTheme: IconThemeData(color: greyColor),
             switchTheme: SwitchThemeData(
-              trackColor: MaterialStateColor.resolveWith((states) => primaryColor),
-              thumbColor: MaterialStateColor.resolveWith((states) => Colors.white),
-              trackOutlineColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+              trackColor: MaterialStateColor.resolveWith(
+                (states) => primaryColor,
+              ),
+              thumbColor: MaterialStateColor.resolveWith(
+                (states) => Colors.white,
+              ),
+              trackOutlineColor: MaterialStateColor.resolveWith(
+                (states) => Colors.transparent,
+              ),
             ),
             inputDecorationTheme: InputDecorationTheme(
               contentPadding: EdgeInsets.symmetric(horizontal: 40),

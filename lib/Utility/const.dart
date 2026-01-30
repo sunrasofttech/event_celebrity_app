@@ -9,10 +9,13 @@ class AppConstants {
   static final String appLogo = "asset/icons/logo.png"; //TODO: Change This FILE
 }
 
-const String appName = "Vip999";
-const String appLogo = "asset/icons/logo.png";
+
+final String sharedPrefUserIdKey = 'user_id';
 final String sharedPrefFCMTokenKey = 'fcm_token';
 final String sharedPrefAPITokenKey = 'api_token';
+
+const String appName = "Vip999";
+const String appLogo = "asset/icons/logo.png";
 
 final String url = dotenv.env['SHARE_URL'] ?? '';
 
@@ -79,5 +82,14 @@ final String getAllSubscriptionApiUrl = _full(dotenv.env['GET_ALL_SUBSCRIPTION_A
 final String assignSubscriptionApiUrl = _full(dotenv.env['ASSIGN_SUBSCRIPTION_API'] ?? '');
 final String checkAppApiUrl = _full(dotenv.env['CHECK_APP_API'] ?? '');
 final String changePassApi = _full(dotenv.env['CHANGE_PASS_API'] ?? '');
+final String getAviApi = _full(dotenv.env['GET_AVI'] ?? '');
+final String setAviApi = _full(dotenv.env['SET_AVI'] ?? '');
+final String addGalleryImageApi = _full(dotenv.env['ADD_GALLERY_IMAGES'] ?? '');
+final String getAllEaringApi = _full(dotenv.env['GET_ALL_EARING'] ?? '');
+
+
+
+
+
 
 ///-----------------------------

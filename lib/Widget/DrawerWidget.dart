@@ -73,23 +73,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             BlocBuilder<UserProfileBlocBloc, UserProfileBlocState>(
               builder: (context, state) {
                 if (state is UserProfileFetchedState) {
-                  final expireAtStr = state.user.data?.subscription_expires_at.toString();
-                  int daysRemaining = 0;
-                  bool isExpired = true;
+                 
 
-                  if (expireAtStr != null && expireAtStr.isNotEmpty && expireAtStr != "null") {
-                    try {
-                      final expireDate = DateTime.parse(expireAtStr).toLocal();
-                      final today = DateTime.now();
-
-                      daysRemaining = expireDate.difference(today).inDays;
-                      isExpired = expireDate.isBefore(today);
-                    } catch (e) {
-                      debugPrint("Date parse error: $e");
-                    }
-                  }
-
-                  log("---->>> isExpired:- $isExpired, day remaining $daysRemaining");
                   return Container(
                     margin: const EdgeInsets.only(top: 25, left: 6, right: 6, bottom: 6),
                     // padding: EdgeInsets.only(top: 50),
@@ -113,9 +98,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              state.user.data?.imagePath?.isNotEmpty ?? false
+                              state.user.data?.profilePictureUrl?.isNotEmpty ?? false
                                   ? CachedNetworkImage(
-                                    imageUrl: "${Constants.baseUrl}${state.user.data?.imagePath}",
+                                    imageUrl: "${Constants.baseUrl}${state.user.data?.profilePictureUrl}",
                                     errorWidget: (context, _, child) {
                                       return CircleAvatar(
                                         maxRadius: 30,
@@ -135,7 +120,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    state.user.data?.name.toString() ?? "",
+                                    state.user.data?.fullName.toString() ?? "",
                                     style: whiteStyle.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   Text(state.user.data?.mobile.toString() ?? "", style: whiteStyle),
@@ -186,48 +171,48 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 },
                               ),
 
-                              if (!isExpired)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFF6F9FC),
-                                            borderRadius: BorderRadius.circular(8),
-                                            boxShadow: onlyShadow(),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Image.asset("asset/icons/drawer/favourites.png", height: 20),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                "${state.user.data?.sub_name ?? "Subscription"}",
-                                                style: primaryStyle.copyWith(fontSize: 16, color: playColor),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          translate("days_remaining", args: {"days": daysRemaining.toString()}),
-                                          overflow: TextOverflow.ellipsis,
-                                          style: primaryStyle.copyWith(fontSize: 14),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              // if (!isExpired)
+                              //   Container(
+                              //     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                              //     decoration: BoxDecoration(
+                              //       color: Colors.white,
+                              //       borderRadius: BorderRadius.circular(8),
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisSize: MainAxisSize.max,
+                              //       children: [
+                              //         Expanded(
+                              //           child: Container(
+                              //             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              //             decoration: BoxDecoration(
+                              //               color: const Color(0xFFF6F9FC),
+                              //               borderRadius: BorderRadius.circular(8),
+                              //               boxShadow: onlyShadow(),
+                              //             ),
+                              //             child: Row(
+                              //               mainAxisAlignment: MainAxisAlignment.center,
+                              //               children: [
+                              //                 Image.asset("asset/icons/drawer/favourites.png", height: 20),
+                              //                 const SizedBox(width: 5),
+                              //                 Text(
+                              //                   "${state.user.data?.sub_name ?? "Subscription"}",
+                              //                   style: primaryStyle.copyWith(fontSize: 16, color: playColor),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //         const SizedBox(width: 12),
+                              //         Expanded(
+                              //           child: Text(
+                              //             translate("days_remaining", args: {"days": daysRemaining.toString()}),
+                              //             overflow: TextOverflow.ellipsis,
+                              //             style: primaryStyle.copyWith(fontSize: 14),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
                             ],
                           ),
                         ],
@@ -293,27 +278,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   onTap: () {},
                 ),
 
-                BlocBuilder<SettingCubit, SettingState>(
-                  builder: (context, state) {
-                    return _tile(
-                      leading: Image.asset("asset/icons/drawer/drawer_share.png", color: whiteColor, height: 30),
-                      title: Text(
-                        translate("drawer_share"),
-                        style: GoogleFonts.nunito(
-                          textStyle: blackStyle.copyWith(color: whiteColor, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      onTap: () async {
-                        if (state is SettingLoadedState) {
-                          var shareUrl = state.model.data?[0].shareUrl;
-                          await Share.share("Download this application from website 100% trusted app 👇👇👇 $shareUrl");
-                        } else {
-                          await Share.share("Download this application from website 100% trusted app 👇👇👇 $url");
-                        }
-                      },
-                    );
-                  },
-                ),
+                // BlocBuilder<SettingCubit, SettingState>(
+                //   builder: (context, state) {
+                //     return _tile(
+                //       leading: Image.asset("asset/icons/drawer/drawer_share.png", color: whiteColor, height: 30),
+                //       title: Text(
+                //         translate("drawer_share"),
+                //         style: GoogleFonts.nunito(
+                //           textStyle: blackStyle.copyWith(color: whiteColor, fontWeight: FontWeight.bold),
+                //         ),
+                //       ),
+                //       onTap: () async {
+                //         if (state is SettingLoadedState) {
+                //           var shareUrl = state.model.data?[0].shareUrl;
+                //           await Share.share("Download this application from website 100% trusted app 👇👇👇 $shareUrl");
+                //         } else {
+                //           await Share.share("Download this application from website 100% trusted app 👇👇👇 $url");
+                //         }
+                //       },
+                //     );
+                //   },
+                // ),
                 _tile(
                   leading: Image.asset("asset/icons/drawer/drawer_profile.png", color: whiteColor, height: 30),
                   title: Text(

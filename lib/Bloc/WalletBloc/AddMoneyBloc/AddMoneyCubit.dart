@@ -21,7 +21,7 @@ class AddMoneyCubit extends Cubit<AddMoneyState> {
       final resp = await repository.postRequest(addMoneyToWalletApi, jsonEncode(body), header: headers);
 
       print("Response Param=>${body}");
-      final result = jsonDecode(resp.body);
+      final result = jsonDecode(resp.data);
       print("this is add money response => $result, Status Code => ${resp.statusCode}");
       if (resp.statusCode == 200) {
         if (result["status"] == true) {
@@ -32,11 +32,11 @@ class AddMoneyCubit extends Cubit<AddMoneyState> {
       } else if (resp.statusCode == 400) {
         print("Error 400");
         emit(AddMoneyErrState(result["msg"]));
-        repository.failureMessage(
-          url: resp.request!.url.toString(),
-          data: resp.body,
-          statusCode: resp.statusCode.toString(),
-        );
+        // repository.failureMessage(
+        //   url: resp.request!.url.toString(),
+        //   data: resp.body,
+        //   statusCode: resp.statusCode.toString(),
+        // );
       }
     } catch (e, stk) {
       print("Catch Error on Add Money Cubit:- $e, $stk");

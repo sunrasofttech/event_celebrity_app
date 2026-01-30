@@ -67,10 +67,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       body: BlocListener<UserProfileBlocBloc, UserProfileBlocState>(
         listener: (context, state) {
           if (state is UserProfileFetchedState) {
-            debugPrint("this is image Path ${state.user.data?.imagePath.toString()}");
             setState(() {
-              imageUrl = "${Constants.baseUrl}${state.user.data?.imagePath.toString() ?? " "}";
-              _username.text = state.user.data?.name.toString() ?? "";
+             
+              _username.text = state.user.data?.fullName.toString() ?? "";
               phone.text = state.user.data?.mobile.toString() ?? "";
             });
           }

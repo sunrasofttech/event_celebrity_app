@@ -19,20 +19,20 @@ class SuggestionListBloc extends Bloc<SuggestionListEvent, SuggestionListState> 
           "tableName": event.type,
           "digit": event.digit,
         }, header: headers);
-        final result = jsonDecode(resp.body);
+        final result = jsonDecode(resp.data);
         if (resp.statusCode == 200) {
           if (result["status"]) {
-            emit(LoadedState(suggestionListModelFromJson(resp.body)));
+            emit(LoadedState(suggestionListModelFromJson(resp.data)));
           } else {
             emit(ErrorState(result["error"]));
           }
         } else {
           emit(ErrorState(result["error"]));
-          repository.failureMessage(
-            url: resp.request!.url.toString(),
-            data: resp.body,
-            statusCode: resp.statusCode.toString(),
-          );
+          // repository.failureMessage(
+          //   url: resp.request!.url.toString(),
+          //   data: resp.data,
+          //   statusCode: resp.statusCode.toString(),
+          // );
         }
       } catch (e) {
         emit(InitialState());
@@ -46,20 +46,20 @@ class SuggestionListBloc extends Bloc<SuggestionListEvent, SuggestionListState> 
           // "userid": pref.getString("key"),
           "tableName": event.type,
         });
-        final result = jsonDecode(resp.body);
+        final result = jsonDecode(resp.data);
         if (resp.statusCode == 200) {
           if (result["status"]) {
-            emit(LoadedState(suggestionListModelFromJson(resp.body)));
+            emit(LoadedState(suggestionListModelFromJson(resp.data)));
           } else {
             emit(ErrorState(result["msg"]));
           }
         } else {
           emit(ErrorState(result["msg"]));
-          repository.failureMessage(
-            url: resp.request!.url.toString(),
-            data: resp.body,
-            statusCode: resp.statusCode.toString(),
-          );
+          // repository.failureMessage(
+          //   url: resp.request!.url.toString(),
+          //   data: resp.body,
+          //   statusCode: resp.statusCode.toString(),
+          // );
         }
       } catch (e) {
         emit(InitialState());

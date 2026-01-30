@@ -1,35 +1,132 @@
-import 'dart:developer';
-
-// import 'package:ssl_pinning_plugin/ssl_pinning_plugin.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class Repository {
-  http.Client? _client;
+  final Dio _dio;
 
-  http.Client getClient() {
-    if (_client != null) return _client!;
+  Repository()
+    : _dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 100),
+          receiveTimeout: const Duration(seconds: 100),
+          headers: {'Content-Type': 'application/json'},
+        ),
+      ) {
+    // 🧩 Add your encryption interceptor later like this:
+    // _dio.interceptors.add(EncryptionInterceptor());
 
-    final pinKey = dotenv.env['KEY'];
-
-    // ✅ Normal http client
-    _client = http.Client();
-
-    return _client!;
+    _dio.interceptors.add(LogInterceptor(request: true, requestBody: true, responseBody: true, error: true));
   }
 
-  Future<http.Response> getRequest(String url, {Map<String, String>? header}) async {
-    final resp = await getClient().get(Uri.parse(url), headers: header);
-    return resp;
+  String errorMessage(var result) {
+    return result["error"]?.toString() ??
+        result["message"]?.toString() ??
+        result["errors"]?.toString() ??
+        result["msg"]?.toString() ??
+        "Something went wrong";
   }
 
-  Future<http.Response> postRequest(String url, dynamic data, {Map<String, String>? header}) async {
-    final resp = await getClient().post(Uri.parse(url), body: data, headers: header ?? {});
-    return resp;
+  /// 🌐 GET Request
+  Future<Response> getRequest(String url, {Map<String, String>? header}) async {
+    try {
+      final response = await _dio.get(
+        url,
+        options: Options(headers: header, validateStatus: (status) => status != null && status < 800),
+      );
+      return response;
+    } on DioException catch (e) {
+      failureMessage(url: url, data: '', statusCode: e.response?.statusCode.toString() ?? '500');
+      rethrow;
+    }
   }
 
-  /// Log API failures
-  void failureMessage({required String url, required String data, required String statusCode}) {
-    log("❌ API Error:\n➡️ Url: $url\n➡️ Body: $data\n➡️ Status Code: $statusCode");
+  /// 🌐 POST Request (JSON)
+  Future<Response> postRequest(String url, dynamic data, {Map<String, String>? header}) async {
+    try {
+      final response = await _dio.post(
+        url,
+        data: data,
+        options: Options(headers: header, validateStatus: (status) => status != null && status < 800),
+      );
+      return response;
+    } on DioException catch (e) {
+      failureMessage(url: url, data: data.toString(), statusCode: e.response?.statusCode.toString() ?? '500');
+      rethrow;
+    }
   }
+
+  /// 📸 Multipart (for file uploads like category image)
+  Future<Response> postMultipart(
+    String url,
+    Map<String, dynamic> formData, {
+    Map<String, String>? header,
+    bool withFormData = true,
+    FormData? formdata,
+  }) async {
+    try {
+      final form = formdata ?? FormData.fromMap(formData);
+      final response = await _dio.post(
+        url,
+        data: form,
+        options: Options(
+          headers: {...?header, 'Content-Type': 'multipart/form-data'},
+          validateStatus: (status) => status != null && status < 800,
+        ),
+      );
+      return response;
+    } on DioException catch (e) {
+      failureMessage(url: url, data: formData.toString(), statusCode: e.response?.statusCode.toString() ?? '500');
+      rethrow;
+    }
+  }
+
+  /// 🧩 PATCH request (for update API)
+  Future<Response> patchMultipart(
+    String url,
+    Map<String, dynamic> formData, {
+    Map<String, String>? header,
+    bool withFormData = true,
+    FormData? formdata,
+  }) async {
+     try {
+    final response = await _dio.patch(
+      url,
+      data: withFormData
+          ? (formdata ?? FormData.fromMap(formData)) // ✅ multipart only when image
+          : formData, // ✅ normal JSON when no image
+      options: Options(
+        headers: {
+          ...?header,
+          if (withFormData) 'Content-Type': 'multipart/form-data',
+        },
+        validateStatus: (status) => status != null && status < 800,
+      ),
+    );
+    return response;
+  } on DioException catch (e) {
+      failureMessage(url: url, data: formData.toString(), statusCode: e.response?.statusCode.toString() ?? '500');
+      rethrow;
+    }
+  }
+
+  /// ❌ DELETE Request
+  Future<Response> deleteRequest(String url, {Map<String, String>? header}) async {
+    try {
+      final response = await _dio.delete(
+        url,
+        options: Options(headers: header, validateStatus: (status) => status != null && status < 800),
+      );
+      return response;
+    } on DioException catch (e) {
+      failureMessage(url: url, data: '', statusCode: e.response?.statusCode.toString() ?? '500');
+      rethrow;
+    }
+  }
+
+  /// 🪣 Error logger
+  void failureMessage({required String url, required dynamic data, required String statusCode}) {
+    print("❌ API Error:\nURL: $url\nBody: $data\nStatus Code: $statusCode");
+  }
+
+  /// 🧱 Getter to access Dio directly (for advanced use if needed)
+  Dio get dio => _dio;
 }

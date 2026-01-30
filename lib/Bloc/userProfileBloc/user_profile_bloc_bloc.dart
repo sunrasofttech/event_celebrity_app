@@ -28,7 +28,7 @@ class UserProfileBlocBloc extends Bloc<UserProfileBlocEvent, UserProfileBlocStat
           // TODO: Need to show error here change it later on..
           (left) => emit(UserProfileBlocInitial()),
           (right) {
-            log("Call the Api Profile right ---->>> ${data.right.data?.lowBalanceAmountText}");
+            log("Call the Api Profile right ---->>>");
             emit(
               UserProfileFetchedState(
                 user: data.right,

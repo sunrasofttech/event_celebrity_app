@@ -15,28 +15,24 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       log("Phone No=>$mobile & $pass=>$pass");
       emit(LoadingState());
-      final resp = await repository.postRequest(loginApi, {
-        "mobile": mobile,
-        "password": pass,
-        "deviceToken": pref.getString(sharedPrefFCMTokenKey).toString(),
-      });
-      final Map<String, dynamic> result = jsonDecode(resp.body);
+      final resp = await repository.postRequest(
+        loginApi,
+        {"emailOrMobile": mobile, "password": pass},
+        header: {'Content-Type': 'application/json'},
+      );
+      final Map<String, dynamic> result = jsonDecode(jsonEncode(resp.data));
+      log("--- $result");
       if (resp.statusCode == 200) {
         if (result["status"]) {
-          emit(LoadedState(loginModelFromJson(resp.body)));
+          emit(LoadedState(LoginModel.fromJson(resp.data)));
         } else {
-          emit(ErrorState(result["error"]));
+          emit(ErrorState(result["message"]));
         }
       } else {
-        if (result["error"] == "Login limit exceeded contact admin") {
+        if (result["message"] == "Login limit exceeded contact admin") {
           emit(LimitReachState(result["error"]));
         } else {
-          emit(ErrorState(result["error"]));
-          repository.failureMessage(
-            url: resp.request!.url.toString(),
-            data: resp.body,
-            statusCode: resp.statusCode.toString(),
-          );
+          emit(ErrorState(result["message"]));
         }
       }
     } catch (e, stk) {
