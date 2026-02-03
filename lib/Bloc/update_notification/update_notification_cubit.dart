@@ -10,7 +10,7 @@ class UpdateNotificationCubit extends Cubit<UpdateNotificationState> {
   UpdateNotificationCubit() : super(UpdateNotificationInitial());
 
   updateNotification({
-    required bool enableAll,
+    bool? enableAll,
     required bool orderEmail,
     required bool orderPush,
     required bool orderSms,
@@ -34,11 +34,11 @@ class UpdateNotificationCubit extends Cubit<UpdateNotificationState> {
           "order_push": orderPush,
           "order_sms": orderSms,
           "order_whatsapp": orderWhatsapp,
-          "promotion_email": promotionEmail,
-          "promotion_push": promotionPush,
-          "promotion_sms": promotionSms,
-          "promotion_whatsapp": promotionWhatsapp,
-        },
+          "prmotion_email": promotionEmail,
+          "prmotion_push": promotionPush,
+          "prmotion_sms": promotionSms,
+          "prmotion_whatsapp": promotionWhatsapp,
+        }..removeWhere((k, v) => v == null),
         header: {"Authorization": "Bearer $token"},
       );
 

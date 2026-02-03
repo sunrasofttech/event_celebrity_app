@@ -76,6 +76,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
     super.initState();
   }
 
+  bool get _areAllEnabled =>
+      orderEmail &&
+      orderPush &&
+      orderSMS &&
+      orderWhatsapp &&
+      promoEmail &&
+      promoPush &&
+      promoSMS &&
+      promoWhatsapp;
+
+  bool get _areAllDisabled =>
+      !orderEmail &&
+      !orderPush &&
+      !orderSMS &&
+      !orderWhatsapp &&
+      !promoEmail &&
+      !promoPush &&
+      !promoSMS &&
+      !promoWhatsapp;
+
   bool enableAll = false;
   bool orderEmail = false;
   bool orderPush = false;
@@ -283,11 +303,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                   const SizedBox(height: 14),
                   SimpleButton(
-                  
                     title: "   Save Changes ",
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     onPressed: () {
-                      // Use controller.text values
+                      
+
                       context
                           .read<UpdateNotificationCubit>()
                           .updateNotification(

@@ -81,7 +81,7 @@ class _BookingScreenState extends State<BookingScreen>
                 ),
                 indicatorColor: redColor,
                 indicatorWeight: 2,
-                labelPadding: const EdgeInsets.symmetric(horizontal: 20),
+                labelPadding: const EdgeInsets.symmetric(horizontal: 15),
                 tabs: const [
                   Tab(text: "Upcoming"),
                   Tab(text: "Today"),

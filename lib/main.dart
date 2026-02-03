@@ -287,9 +287,12 @@ class _MyAppState extends State<MyApp> {
             scaffoldBackgroundColor: scaffoldBgColor,
             iconTheme: IconThemeData(color: greyColor),
             switchTheme: SwitchThemeData(
-              trackColor: MaterialStateColor.resolveWith(
-                (states) => primaryColor,
-              ),
+              trackColor: MaterialStateColor.resolveWith((states) {
+                if (states.contains(MaterialState.selected)) {
+                  return primaryColor;
+                }
+                return Colors.grey.shade300;
+              }),
               thumbColor: MaterialStateColor.resolveWith(
                 (states) => Colors.white,
               ),

@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "Mobile",
                     keyboardType: TextInputType.phone,
                     prefixIcon: IconsaxPlusBold.mobile,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly,LengthLimitingTextInputFormatter(10)],
                   ),
 
                   const SizedBox(height: 12),
