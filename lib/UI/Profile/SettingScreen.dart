@@ -157,30 +157,30 @@ class _SettingScreenState extends State<SettingScreen> {
                 //     );
                 //   },
                 // ),
-                ProfileTile(
-                  icon: IconsaxPlusBold.user,
-                  title: "Account settings",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AccountSettingScreen(),
-                      ),
-                    );
-                  },
-                ),
-                ProfileTile(
-                  icon: IconsaxPlusBold.wallet_3,
-                  title: "Payment settings",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PaymentSettingScreen(),
-                      ),
-                    );
-                  },
-                ),
+                // ProfileTile(
+                //   icon: IconsaxPlusBold.user,
+                //   title: "Account settings",
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => AccountSettingScreen(),
+                //       ),
+                //     );
+                //   },
+                // ),
+                // ProfileTile(
+                //   icon: IconsaxPlusBold.wallet_3,
+                //   title: "Payment settings",
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => PaymentSettingScreen(),
+                //       ),
+                //     );
+                //   },
+                // ),
                 ProfileTile(
                   icon: IconsaxPlusBold.calendar,
                   title: "Update Availability Dates",
