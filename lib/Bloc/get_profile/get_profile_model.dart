@@ -43,6 +43,15 @@ class Data {
     dynamic latitude;
     dynamic longitude;
     int? profileViews;
+    bool? enableAll;
+    bool? orderEmail;
+    bool? orderPush;
+    bool? orderSms;
+    bool? orderWhatsapp;
+    bool? prmotionEmail;
+    bool? prmotionPush;
+    bool? prmotionSms;
+    bool? prmotionWhatsapp;
     DateTime? createdAt;
     DateTime? updatedAt;
     List<GalleryImage>? galleryImages;
@@ -64,6 +73,15 @@ class Data {
         this.latitude,
         this.longitude,
         this.profileViews,
+        this.enableAll,
+        this.orderEmail,
+        this.orderPush,
+        this.orderSms,
+        this.orderWhatsapp,
+        this.prmotionEmail,
+        this.prmotionPush,
+        this.prmotionSms,
+        this.prmotionWhatsapp,
         this.createdAt,
         this.updatedAt,
         this.galleryImages,
@@ -86,6 +104,15 @@ class Data {
         latitude: json["latitude"],
         longitude: json["longitude"],
         profileViews: json["profileViews"],
+        enableAll: json["enable_all"],
+        orderEmail: json["order_email"],
+        orderPush: json["order_push"],
+        orderSms: json["order_sms"],
+        orderWhatsapp: json["order_whatsapp"],
+        prmotionEmail: json["prmotion_email"],
+        prmotionPush: json["prmotion_push"],
+        prmotionSms: json["prmotion_sms"],
+        prmotionWhatsapp: json["prmotion_whatsapp"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
         galleryImages: json["galleryImages"] == null ? [] : List<GalleryImage>.from(json["galleryImages"]!.map((x) => GalleryImage.fromJson(x))),
@@ -108,6 +135,15 @@ class Data {
         "latitude": latitude,
         "longitude": longitude,
         "profileViews": profileViews,
+        "enable_all": enableAll,
+        "order_email": orderEmail,
+        "order_push": orderPush,
+        "order_sms": orderSms,
+        "order_whatsapp": orderWhatsapp,
+        "prmotion_email": prmotionEmail,
+        "prmotion_push": prmotionPush,
+        "prmotion_sms": prmotionSms,
+        "prmotion_whatsapp": prmotionWhatsapp,
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
         "galleryImages": galleryImages == null ? [] : List<dynamic>.from(galleryImages!.map((x) => x.toJson())),
