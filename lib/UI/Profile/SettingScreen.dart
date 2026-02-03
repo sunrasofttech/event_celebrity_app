@@ -147,16 +147,16 @@ class _SettingScreenState extends State<SettingScreen> {
                 // ),
 
                 // --- Manage Section ---
-                ProfileTile(
-                  icon: IconsaxPlusBold.dollar_square,
-                  title: "Earnings",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EarningsScreen()),
-                    );
-                  },
-                ),
+                // ProfileTile(
+                //   icon: IconsaxPlusBold.dollar_square,
+                //   title: "Earnings",
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(builder: (context) => EarningsScreen()),
+                //     );
+                //   },
+                // ),
                 ProfileTile(
                   icon: IconsaxPlusBold.user,
                   title: "Account settings",

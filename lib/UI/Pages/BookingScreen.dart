@@ -267,23 +267,23 @@ class _BookingScreenState extends State<BookingScreen>
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on_outlined,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          b.eventPlace ?? "",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   children: [
+                    //     const Icon(
+                    //       Icons.location_on_outlined,
+                    //       size: 16,
+                    //       color: Colors.grey,
+                    //     ),
+                    //     const SizedBox(width: 6),
+                    //     Text(
+                    //       b.eventPlace ?? "",
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //         color: Colors.grey.shade600,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

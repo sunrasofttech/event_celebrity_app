@@ -26,6 +26,7 @@ import 'package:planner_celebrity/Bloc/get_all_earing/get_all_earing_cubit.dart'
 import 'package:planner_celebrity/Bloc/get_all_events/get_all_events_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
+import 'package:planner_celebrity/Bloc/share_feedback/share_feedback_cubit.dart';
 import 'package:planner_celebrity/Bloc/userProfileBloc/user_profile_bloc_bloc.dart';
 import 'package:planner_celebrity/Repository/repository.dart';
 import 'package:planner_celebrity/SecurityWatcher.dart';
@@ -245,6 +246,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => GetUserAppContentCubit()),
           BlocProvider(create: (context) => GetAllEaringCubit()),
           BlocProvider(create: (context) => GetAllEventsCubit()),
+          BlocProvider(create: (context) => ShareFeedbackCubit(),)
         ],
         child: MaterialApp(
           title: appName,

@@ -415,9 +415,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   bool _isAutofillDone = false;
   CalendarView _view = CalendarView.month;
-  DateTime _focusedMonth = DateTime(2026, 1, 1);
+  late DateTime _focusedMonth;
 
   DateTime _parse(String date) => DateUtils.dateOnly(DateTime.parse(date));
+
+  @override
+  void initState() {
+    final now = DateTime.now();
+    _focusedMonth = DateTime(now.year, now.month);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -428,6 +435,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             return current is GetAvalibilityLoadedState;
           },
           builder: (context, state) {
+            if (state is GetAvalibilityLoadingState) {
+              return Center(child: CircularProgressIndicator());
+            }
             if (state is GetAvalibilityErrorState) {
               return Center(
                 child: InkWell(

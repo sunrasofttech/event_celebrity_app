@@ -20,7 +20,7 @@
         </intent>
     </queries>
     <application
-        android:label="Celeb Planner"
+        android:label="Celebrity Planner"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="false"

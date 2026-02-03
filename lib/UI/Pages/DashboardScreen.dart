@@ -92,6 +92,12 @@ class _DashBoardScreenState extends State<DashBoardScreen>
             // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: BlocBuilder<GetDashboardCubit, GetDashboardState>(
               builder: (context, state) {
+                if (state is GetDashboardLoadingState) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if(state is GetDashboardErrorState){
+                  return Center(child: Text(state.error,maxLines: 1,overflow: TextOverflow.ellipsis,),);
+                }
                 if (state is GetDashboardLoadedState) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +132,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                         return CircleAvatar(
                                           radius: 28,
                                           backgroundImage: NetworkImage(
-                                           "${Constants.baseUrl}/${state.model.data?.profilePictureUrl}",
+                                            "${Constants.baseUrl}/${state.model.data?.profilePictureUrl}",
                                           ),
                                         );
                                       }
@@ -176,7 +182,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             const SizedBox(height: 12),
 
                             SizedBox(
-                              height: 260,
+                              height: 230,
                               child: ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 itemCount:
@@ -275,23 +281,23 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                 ],
                                               ),
                                               const SizedBox(height: 6),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    IconsaxPlusBold.location,
-                                                    size: 12,
-                                                    color: Colors.grey,
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  Text(
-                                                    booking?.eventAddress ?? "",
-                                                    style: TextStyle(
-                                                      color: greyColor,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                              // Row(
+                                              //   children: [
+                                              //     Icon(
+                                              //       IconsaxPlusBold.location,
+                                              //       size: 12,
+                                              //       color: Colors.grey,
+                                              //     ),
+                                              //     const SizedBox(width: 6),
+                                              //     Text(
+                                              //       booking?.eventAddress ?? "",
+                                              //       style: TextStyle(
+                                              //         color: greyColor,
+                                              //         fontSize: 12,
+                                              //       ),
+                                              //     ),
+                                              //   ],
+                                              // ),
                                             ],
                                           ),
                                         ),
