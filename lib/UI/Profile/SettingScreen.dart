@@ -281,6 +281,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     _showLogoutDialog(context);
                   },
                 ),
+                SizedBox(height: 50,)
               ],
             );
           },

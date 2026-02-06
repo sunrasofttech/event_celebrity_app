@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     // Initialize pages here directly (no need for post frame callback)
     pages = [
-      CalendarScreen(), 
+      CalendarScreen(showButton: false,), 
       DashBoardScreen(), 
       BookingScreen(),
       ProfileScreen(),

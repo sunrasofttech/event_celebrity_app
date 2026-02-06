@@ -30,7 +30,7 @@ class ShareFeedbackCubit extends Cubit<ShareFeedbackState> {
 
       log("GET CELEBRITIES RESPONSE: $result");
 
-      if (resp.statusCode == 200) {
+      if (resp.statusCode == 200 || resp.statusCode==201) {
         if (result["status"] == true) {
           emit(ShareFeedbackLoadedState());
         } else {

@@ -102,7 +102,7 @@ void main() async {
         blockOnHighRisk: true,
         sslPinningConfig: SSLPinningConfig(
           mode: SSLPinningMode.strict,
-          pinnedPublicKeys: [dotenv.get("KEY")],
+        //  pinnedPublicKeys: [dotenv.get("KEY")],
         ),
         obfuscationConfig: ObfuscationConfig(
           enableDartObfuscation: true,

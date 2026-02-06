@@ -65,15 +65,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// Back Button
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(Icons.arrow_left, color: greyColor),
-                  ),
+                  // Container(
+                  //   height: 50,
+                  //   width: 50,
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   child: const Icon(Icons.arrow_left, color: greyColor),
+                  // ),
 
                   const SizedBox(height: 40),
 

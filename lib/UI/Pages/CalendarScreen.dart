@@ -400,7 +400,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 // }
 
 class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({super.key});
+  final bool showButton;
+  const CalendarScreen({super.key, this.showButton = true});
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -418,6 +419,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   late DateTime _focusedMonth;
 
   DateTime _parse(String date) => DateUtils.dateOnly(DateTime.parse(date));
+  final DateTime today = DateUtils.dateOnly(DateTime.now());
 
   @override
   void initState() {
@@ -473,10 +475,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back),
-                          onPressed: () => Navigator.pop(context),
-                        ),
+                        widget.showButton
+                            ? IconButton(
+                              icon: const Icon(Icons.arrow_back),
+                              onPressed: () => Navigator.pop(context),
+                            )
+                            : SizedBox(),
                         const SizedBox(width: 12),
                         const Text(
                           "Update Availability Dates",
@@ -494,13 +498,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     child: SfCalendar(
                       view: _view,
                       initialDisplayDate: _focusedMonth,
+                      minDate: today,
                       todayHighlightColor: Colors.transparent,
                       cellBorderColor: Colors.transparent,
                       showNavigationArrow: true,
-
-                      onSelectionChanged: (calendarSelectionDetails) {
-                        log("--- 11111");
-                      },
+                      monthViewSettings: const MonthViewSettings(
+                        showTrailingAndLeadingDates: false,
+                      ),
+                      onSelectionChanged: (calendarSelectionDetails) {},
                       onViewChanged: (ViewChangedDetails details) {
                         final middleIndex = details.visibleDates.length ~/ 2;
                         final visibleDate = details.visibleDates[middleIndex];
@@ -539,6 +544,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       // },
                       onTap: (details) {
                         final date = DateUtils.dateOnly(details.date!);
+
+                        // ❌ Block past dates
+                        if (date.isBefore(today)) return;
+
+                        // final date = DateUtils.dateOnly(details.date!);
                         log("------ onTap Trigreed");
                         if (bookedDates.contains(date)) return;
                         setState(() {
@@ -567,40 +577,49 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       monthCellBuilder: (context, details) {
                         final date = DateUtils.dateOnly(details.date);
 
+                        final bool isPastDate = date.isBefore(today);
+                        final bool isBooked = bookedDates.contains(date);
+                        final bool isUnavailable = unavailableDates.contains(
+                          date,
+                        );
+                        final bool isAvailable = availableDates.contains(date);
+
                         Color bg = Colors.white;
                         Color text = Colors.black;
 
-                        if (bookedDates.contains(date)) {
+                        if (isPastDate) {
+                          bg = Colors.grey.shade200;
+                          text = Colors.grey.shade400;
+                        } else if (isBooked) {
                           bg = Colors.pink.shade300;
                           text = Colors.white;
-                        } else if (unavailableDates.contains(date)) {
+                        } else if (isUnavailable) {
                           bg = Colors.grey.shade300;
                           text = Colors.grey.shade700;
-                        } else if (availableDates.contains(date)) {
-                          bg = Colors.white;
                         }
 
                         return GestureDetector(
                           behavior: HitTestBehavior.opaque,
-                          onTap: () {
-                            log("CELL TAPPED: $date");
 
-                            if (bookedDates.contains(date)) return;
+                          // 🔒 BLOCK past + booked dates completely
+                          onTap:
+                              (isPastDate || isBooked)
+                                  ? null
+                                  : () {
+                                    setState(() {
+                                      if (isAvailable) {
+                                        availableDates.remove(date);
+                                        unavailableDates.add(date);
+                                      } else if (isUnavailable) {
+                                        unavailableDates.remove(date);
+                                        availableDates.add(date);
+                                      } else {
+                                        availableDates.add(date);
+                                      }
+                                      selectedDates.add(date);
+                                    });
+                                  },
 
-                            setState(() {
-                              if (availableDates.contains(date)) {
-                                availableDates.remove(date);
-                                unavailableDates.add(date);
-                              } else if (unavailableDates.contains(date)) {
-                                unavailableDates.remove(date);
-                                availableDates.add(date);
-                              } else {
-                                availableDates.add(date);
-                              }
-
-                              selectedDates.add(date);
-                            });
-                          },
                           child: Container(
                             margin: const EdgeInsets.all(4),
                             decoration: BoxDecoration(

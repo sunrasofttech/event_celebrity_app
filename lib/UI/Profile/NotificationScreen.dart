@@ -302,27 +302,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
 
                   const SizedBox(height: 14),
-                  SimpleButton(
-                    title: "   Save Changes ",
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    onPressed: () {
-                      
-
-                      context
-                          .read<UpdateNotificationCubit>()
-                          .updateNotification(
-                            enableAll: enableAll,
-                            orderEmail: orderEmail,
-                            orderPush: orderPush,
-                            orderSms: orderSMS,
-                            orderWhatsapp: orderWhatsapp,
-                            promotionEmail: promoEmail,
-                            promotionPush: promoPush,
-                            promotionSms: promoSMS,
-                            promotionWhatsapp: promoWhatsapp,
-                          );
-                    },
+                  SizedBox(
+                    width: double.infinity,
+                    child: SimpleButton(
+                      title: "   Save Changes ",
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      onPressed: () {
+                        context
+                            .read<UpdateNotificationCubit>()
+                            .updateNotification(
+                              enableAll: enableAll,
+                              orderEmail: orderEmail,
+                              orderPush: orderPush,
+                              orderSms: orderSMS,
+                              orderWhatsapp: orderWhatsapp,
+                              promotionEmail: promoEmail,
+                              promotionPush: promoPush,
+                              promotionSms: promoSMS,
+                              promotionWhatsapp: promoWhatsapp,
+                            );
+                      },
+                    ),
                   ),
+                  SizedBox(height: 50),
                 ],
               );
             },
