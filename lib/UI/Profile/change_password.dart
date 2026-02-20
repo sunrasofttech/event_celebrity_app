@@ -40,70 +40,69 @@ class _ChangePasswordState extends State<ChangePassword> {
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.white),
             child: const Icon(IconsaxPlusBold.arrow_left_3, color: greyColor),
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           "Change Password",
-          style: TextStyle(
-            color: titleTextColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: titleTextColor, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         centerTitle: false,
       ),
-      body: BlocListener<SettingCubit, SettingState>(
+      body: BlocListener<GetProfileCubit, GetProfileState>(
         listener: (context, state) {
-          log("----->> $state");
-          if (state is SettingLoadedState) {
-            moblieNo = state.model.data?.contact ?? "";
-            setState(() {});
+          if (state is GetProfileLoadedState) {
+            setState(() {
+              fullName = state.model.data?.fullName ?? "";
+              email = state.model.data?.email ?? "";
+              mobile = state.model.data?.mobile ?? "";
+            });
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: SimpleButton(
-                  onPressed: () async {
-                    final message = """
-                        Change Password Request
-      
-                        Name: $fullName
-                        Email: $email
-                        Mobile: $mobile
-      
-                        Please reset my account password.
-                         """;
-                    log("------- $mobile $moblieNo");
-                    await sendToWhatsApp(
-                      phone: moblieNo ?? "",
-                      message: message,
-                    );
-                  },
+        child: BlocListener<SettingCubit, SettingState>(
+          listener: (context, state) {
+            log("----->> $state");
+            if (state is SettingLoadedState) {
+              moblieNo = state.model.data?.contact ?? "";
+              setState(() {});
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: SimpleButton(
+                    title: "Request to Admin",
+                    onPressed: () async {
+                      final message = """
+                              Change Password Request
+            
+                              Name: $fullName
+                              Email: $email
+                              Mobile: $mobile
+            
+                              Please reset my account password.
+                               """;
+                      log("------- $mobile $moblieNo");
+                      await sendToWhatsApp(phone: moblieNo ?? "", message: message);
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Future<void> sendToWhatsApp({
-    required String phone,
-    required String message,
-  }) async {
+  Future<void> sendToWhatsApp({required String phone, required String message}) async {
     final encodedMessage = Uri.encodeComponent(message);
 
     final uri = Uri.parse("https://wa.me/91$phone?text=$encodedMessage");

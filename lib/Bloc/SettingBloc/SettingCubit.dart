@@ -22,7 +22,7 @@ class SettingCubit extends Cubit<SettingState> {
         "Content-Type": "application/json",
       };
       final resp = await repository.getRequest(
-        "${Constants.baseUrl}/api/celebrity/app-settings",
+        "$settingApi",
         header: headers,
       );
       final result = jsonDecode(jsonEncode(resp.data));

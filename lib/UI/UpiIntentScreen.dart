@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+// import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_upi_india/flutter_upi_india.dart';
 import 'package:http/http.dart' as http;
 import 'package:planner_celebrity/Utility/CustomFont.dart';
@@ -114,16 +114,16 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
               ),
             ),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
-                    (route) => false,
-                  );
-                },
-                child: Text(translate("ok")),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.pushAndRemoveUntil(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => MainScreen()),
+              //       (route) => false,
+              //     );
+              //   },
+              //   child: Text(translate("ok")),
+              // ),
             ],
           );
         },
@@ -135,12 +135,12 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
           return AlertDialog(
             title: Text("Payment Failed"),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(translate("ok")),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.of(context).pop();
+              //   },
+              //   child: Text(translate("ok")),
+              // ),
             ],
           );
         },
@@ -152,12 +152,12 @@ class _UPIIntentScreenState extends State<UPIIntentScreen> {
           return AlertDialog(
             title: Text("Something Went Wrong"),
             actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(translate("ok")),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     Navigator.of(context).pop();
+              //   },
+              //   child: Text(translate("ok")),
+              // ),
             ],
           );
         },

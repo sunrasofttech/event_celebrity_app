@@ -81,14 +81,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: RefreshIndicator(
-        onRefresh: () async {
-          context.read<GetDashboardCubit>().getDash();
-        },
-        child: Scaffold(
-          backgroundColor: Colors.grey.shade100,
-          body: SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<GetDashboardCubit>().getDash();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        body: SafeArea(
+          child: SingleChildScrollView(
             // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: BlocBuilder<GetDashboardCubit, GetDashboardState>(
               builder: (context, state) {
@@ -162,7 +162,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                           ],
                         ),
                       ),
-
+              
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -180,7 +180,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               ),
                             ),
                             const SizedBox(height: 12),
-
+              
                             SizedBox(
                               height: 230,
                               child: ListView.separated(
@@ -307,9 +307,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                 },
                               ),
                             ),
-
+              
                             const SizedBox(height: 12),
-
+              
                             // Analytics Header
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -348,14 +348,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               ],
                             ),
                             const SizedBox(height: 12),
-
+              
                             // Analytics Cards
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Expanded(flex: 1, child: revenuCard()),
                                 const SizedBox(width: 12),
-
+              
                                 Expanded(
                                   flex: 1,
                                   child: Column(
@@ -421,7 +421,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             //               fontWeight: FontWeight.w500,
                             //             ),
                             //           ),
-
+              
                             //           const SizedBox(height: 8),
                             //           Text(
                             //             "₹23341",

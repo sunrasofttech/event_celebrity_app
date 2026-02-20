@@ -11,7 +11,7 @@ plugins {
 }
 
 val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("/Users/admin/Downloads/celibrity/key.properties")
+val keystorePropertiesFile = rootProject.file("C://Users//sagar//Downloads//lotta celi//key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }

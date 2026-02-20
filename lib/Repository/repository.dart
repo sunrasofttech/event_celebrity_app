@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:planner_celebrity/Repository/EncryptionInterceptor.dart';
 
 class Repository {
   final Dio _dio;
@@ -12,7 +13,7 @@ class Repository {
         ),
       ) {
     // 🧩 Add your encryption interceptor later like this:
-    // _dio.interceptors.add(EncryptionInterceptor());
+    _dio.interceptors.add(EncryptionInterceptor());
 
     _dio.interceptors.add(LogInterceptor(request: true, requestBody: true, responseBody: true, error: true));
   }

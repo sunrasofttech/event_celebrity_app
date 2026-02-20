@@ -9,12 +9,11 @@ class AppConstants {
   static final String appLogo = "asset/icons/logo.png"; //TODO: Change This FILE
 }
 
-
 final String sharedPrefUserIdKey = 'user_id';
 final String sharedPrefFCMTokenKey = 'fcm_token';
 final String sharedPrefAPITokenKey = 'api_token';
 
-const String appName = "Vip999";
+const String appName = "Celebrity Planner";
 const String appLogo = "asset/icons/logo.png";
 
 final String url = dotenv.env['SHARE_URL'] ?? '';
@@ -62,7 +61,6 @@ final String sendOtpApi = _full(dotenv.env['SEND_OTP_ALT_API'] ?? '');
 final String verifyOtpApi = _full(dotenv.env['VERIFY_OTP_API'] ?? '');
 final String gameRateApi = _full(dotenv.env['GAME_RATE_API'] ?? '');
 final String checkOpenCloseTimeApi = _full(dotenv.env['CHECK_OPEN_CLOSE_TIME_API'] ?? '');
-final String settingApi = _full(dotenv.env['SETTING_API'] ?? '');
 final String getPhoneNumberApi = _full(dotenv.env['GET_PHONE_NUMBER_API'] ?? '');
 final String panaListApi = _full(dotenv.env['PANA_LIST_API'] ?? '');
 final String searchDigitApi = _full(dotenv.env['SEARCH_DIGIT_API'] ?? '');
@@ -86,10 +84,6 @@ final String getAviApi = _full(dotenv.env['GET_AVI'] ?? '');
 final String setAviApi = _full(dotenv.env['SET_AVI'] ?? '');
 final String addGalleryImageApi = _full(dotenv.env['ADD_GALLERY_IMAGES'] ?? '');
 final String getAllEaringApi = _full(dotenv.env['GET_ALL_EARING'] ?? '');
-
-
-
-
-
-
+final String getSessionApi = _full(dotenv.env['SESSION_API'] ?? '');
+final String settingApi = _full(dotenv.env['SETTING_API'] ?? '');
 ///-----------------------------

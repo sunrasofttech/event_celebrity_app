@@ -56,15 +56,15 @@ class _BookingScreenState extends State<BookingScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Back Button
-              Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 8, bottom: 8),
+              //   child: IconButton(
+              //     icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+              //     onPressed: () {
+              //       Navigator.pop(context);
+              //     },
+              //   ),
+              // ),
 
               // Tabs
               TabBar(

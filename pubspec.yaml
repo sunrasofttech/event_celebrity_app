@@ -105,10 +105,12 @@ dependencies:
 #  apk_installer:
   ultra_secure_flutter_kit: ^1.1.0
   http_certificate_pinning: ^3.0.1
-  flutter_translate:
+  # flutter_translate:
   app_settings: ^6.1.1
   android_intent_plus:
   socket_io_client: ^3.1.4
+  flutter_secure_storage: ^10.0.0
+  encrypt: ^5.0.3
 #  device_policy_manager:
 
 #  android_intent_plus: ^5.2.2

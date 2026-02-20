@@ -504,6 +504,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       showNavigationArrow: true,
                       monthViewSettings: const MonthViewSettings(
                         showTrailingAndLeadingDates: false,
+                         dayFormat: 'EEE', 
                       ),
                       onSelectionChanged: (calendarSelectionDetails) {},
                       onViewChanged: (ViewChangedDetails details) {

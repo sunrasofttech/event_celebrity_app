@@ -3,10 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_translate/flutter_translate.dart';
+// import 'package:flutter_translate/flutter_translate.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:planner_celebrity/Bloc/AccountBloc/AccountCubit.dart';
@@ -15,6 +16,7 @@ import 'package:planner_celebrity/Bloc/Auth/LoginBloc/LoginCubit.dart';
 import 'package:planner_celebrity/Bloc/CheckBankBloc/CheckBankCubit.dart';
 import 'package:planner_celebrity/Bloc/EditProfileBloc/EditProfileBloc.dart';
 import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationCubit.dart';
+import 'package:planner_celebrity/Bloc/SessionKeyBloc/SessionKeyCubit.dart';
 import 'package:planner_celebrity/Bloc/SettingBloc/SettingCubit.dart';
 import 'package:planner_celebrity/Bloc/SuggestionListBloc/SuggestionListBloc.dart';
 import 'package:planner_celebrity/Bloc/WalletBloc/AddMoneyBloc/AddMoneyCubit.dart';
@@ -56,11 +58,7 @@ Future<void> backgroundHandler(RemoteMessage event) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null) {
-      FirebaseMessaging.instance.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
+      FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
 
       //print(message.notification!.android!.count);
       FirebaseMessaging.instance.getToken().then((token) {
@@ -84,10 +82,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   pref = await SharedPreferences.getInstance();
   if (!kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   }
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.black,
+  //     statusBarIconBrightness: Brightness.light,
+  //     statusBarBrightness: Brightness.dark,
+  //   ),
+  // );
   await dotenv.load(fileName: "asset/.env");
   final securityKit = UltraSecureFlutterKit();
   if (kReleaseMode) {
@@ -102,7 +105,7 @@ void main() async {
         blockOnHighRisk: true,
         sslPinningConfig: SSLPinningConfig(
           mode: SSLPinningMode.strict,
-        //  pinnedPublicKeys: [dotenv.get("KEY")],
+          //  pinnedPublicKeys: [dotenv.get("KEY")],
         ),
         obfuscationConfig: ObfuscationConfig(
           enableDartObfuscation: true,
@@ -177,26 +180,26 @@ void main() async {
   //   debugPrint("Catch Error $err");
   // }
 
-  final savedLocale = pref.getString('selected_locale') ?? 'en_US';
-  final delegate = await LocalizationDelegate.create(
-    fallbackLocale: 'en_US',
-    supportedLocales: [
-      'bn_IN',
-      'pa_IN',
-      'en_US',
-      'mr_IN',
-      'hi_IN',
-      'ta_IN',
-      'te_IN',
-      'gu_IN',
-      'kn_IN',
-    ],
-    basePath: 'asset/Translation/',
-  );
-  delegate.changeLocale(
-    Locale(savedLocale.split('_')[0], savedLocale.split('_')[1]),
-  );
-  runApp(LocalizedApp(delegate, MyApp(securityKit: securityKit)));
+  // final savedLocale = pref.getString('selected_locale') ?? 'en_US';
+  // final delegate = await LocalizationDelegate.create(
+  //   fallbackLocale: 'en_US',
+  //   supportedLocales: [
+  //     'bn_IN',
+  //     'pa_IN',
+  //     'en_US',
+  //     'mr_IN',
+  //     'hi_IN',
+  //     'ta_IN',
+  //     'te_IN',
+  //     'gu_IN',
+  //     'kn_IN',
+  //   ],
+  //   basePath: 'asset/Translation/',
+  // );
+  // delegate.changeLocale(
+  //   Locale(savedLocale.split('_')[0], savedLocale.split('_')[1]),
+  // );
+  runApp(MyApp(securityKit: securityKit));
 }
 
 class MyApp extends StatefulWidget {
@@ -218,110 +221,98 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var localizationDelegate = LocalizedApp.of(context).delegate;
-    return LocalizationProvider(
-      state: LocalizationProvider.of(context).state,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => SendOtpCubit()),
-          BlocProvider(create: (context) => GetSubscriptionsCubit()),
-          BlocProvider(create: (context) => LoginCubit()),
-          BlocProvider(create: (context) => SettingCubit()),
-          BlocProvider(create: (context) => AddMoneyCubit()),
-          BlocProvider(create: (context) => CheckUserCubit()),
-          /* ChangeNotifierProvider(create: (context) => CheckUpi()),*/
-          BlocProvider(create: (context) => UserProfileBlocBloc()),
-          BlocProvider(create: (context) => CheckBankCubit()),
-          BlocProvider(create: (context) => NotificationCubit()),
-          BlocProvider(create: (context) => AccountCubit()),
-          BlocProvider(create: (context) => ReferCubit()),
-          BlocProvider(create: (context) => SuggestionListBloc()),
-          BlocProvider(create: (context) => EditProfileBloc()),
-          BlocProvider(create: (context) => LogOutCubit()),
-          BlocProvider(create: (context) => SetAvailbiltyCubit()),
-          BlocProvider(create: (context) => GetAvalibilityCubit()),
-          BlocProvider(create: (context) => DeleteGalleryImageCubit()),
-          BlocProvider(create: (context) => AddGalleryImagesCubit()),
-          BlocProvider(create: (context) => GetDashboardCubit()),
-          BlocProvider(create: (context) => GetProfileCubit()),
-          BlocProvider(create: (context) => GetUserAppContentCubit()),
-          BlocProvider(create: (context) => GetAllEaringCubit()),
-          BlocProvider(create: (context) => GetAllEventsCubit()),
-          BlocProvider(create: (context) => ShareFeedbackCubit()),
-          BlocProvider(create: (context) => UpdateNotificationCubit()),
-        ],
-        child: MaterialApp(
-          title: appName,
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: [
-            localizationDelegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: localizationDelegate.supportedLocales,
-          locale: localizationDelegate.currentLocale,
-          theme: ThemeData(
-            fontFamily: GoogleFonts.inter().fontFamily,
-            drawerTheme: const DrawerThemeData(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            ),
-            cardTheme: CardThemeData(
-              elevation: 10,
-              shadowColor: Colors.white,
-              surfaceTintColor: Colors.white,
-              color: Colors.white,
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                elevation: 20,
-                shadowColor: Colors.grey,
-              ),
-            ),
-            appBarTheme: AppBarTheme(
-              backgroundColor: Colors.transparent,
-              titleTextStyle: whiteStyle,
-              iconTheme: IconThemeData(color: Colors.white),
-            ),
-            splashColor: Colors.transparent,
-            scaffoldBackgroundColor: scaffoldBgColor,
-            iconTheme: IconThemeData(color: greyColor),
-            switchTheme: SwitchThemeData(
-              trackColor: MaterialStateColor.resolveWith((states) {
-                if (states.contains(MaterialState.selected)) {
-                  return primaryColor;
-                }
-                return Colors.grey.shade300;
-              }),
-              thumbColor: MaterialStateColor.resolveWith(
-                (states) => Colors.white,
-              ),
-              trackOutlineColor: MaterialStateColor.resolveWith(
-                (states) => Colors.transparent,
-              ),
-            ),
-            inputDecorationTheme: InputDecorationTheme(
-              contentPadding: EdgeInsets.symmetric(horizontal: 40),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(color: greyColor),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(color: greyColor),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(color: primaryColor),
-              ),
-            ),
-            highlightColor: Colors.transparent,
-            hoverColor: Colors.transparent,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-            useMaterial3: true,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => SendOtpCubit()),
+        BlocProvider(create: (context) => GetSubscriptionsCubit()),
+        BlocProvider(create: (context) => LoginCubit()),
+        BlocProvider(create: (context) => SettingCubit()),
+        BlocProvider(create: (context) => AddMoneyCubit()),
+        BlocProvider(create: (context) => CheckUserCubit()),
+        /* ChangeNotifierProvider(create: (context) => CheckUpi()),*/
+        BlocProvider(create: (context) => UserProfileBlocBloc()),
+        BlocProvider(create: (context) => CheckBankCubit()),
+        BlocProvider(create: (context) => NotificationCubit()),
+        BlocProvider(create: (context) => AccountCubit()),
+        BlocProvider(create: (context) => ReferCubit()),
+        BlocProvider(create: (context) => SuggestionListBloc()),
+        BlocProvider(create: (context) => EditProfileBloc()),
+        BlocProvider(create: (context) => LogOutCubit()),
+        BlocProvider(create: (context) => SetAvailbiltyCubit()),
+        BlocProvider(create: (context) => GetAvalibilityCubit()),
+        BlocProvider(create: (context) => DeleteGalleryImageCubit()),
+        BlocProvider(create: (context) => AddGalleryImagesCubit()),
+        BlocProvider(create: (context) => GetDashboardCubit()),
+        BlocProvider(create: (context) => GetProfileCubit()),
+        BlocProvider(create: (context) => GetUserAppContentCubit()),
+        BlocProvider(create: (context) => GetAllEaringCubit()),
+        BlocProvider(create: (context) => GetAllEventsCubit()),
+        BlocProvider(create: (context) => ShareFeedbackCubit()),
+        BlocProvider(create: (context) => UpdateNotificationCubit()),
+         BlocProvider(create: (context) => SessionKeyCubit()),
+      ],
+      child: MaterialApp(
+        title: appName,
+        debugShowCheckedModeBanner: false,
+        // localizationsDelegates: [
+        //   localizationDelegate,
+        //   GlobalMaterialLocalizations.delegate,
+        //   GlobalWidgetsLocalizations.delegate,
+        //   GlobalCupertinoLocalizations.delegate,
+        // ],
+        // supportedLocales: localizationDelegate.supportedLocales,
+        // locale: localizationDelegate.currentLocale,
+        theme: ThemeData(
+          fontFamily: GoogleFonts.inter().fontFamily,
+          drawerTheme: const DrawerThemeData(shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+          cardTheme: CardThemeData(
+            elevation: 10,
+            shadowColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            color: Colors.white,
           ),
-          home: SplashScreen(),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(elevation: 20, shadowColor: Colors.grey),
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.transparent,
+            titleTextStyle: whiteStyle,
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+          splashColor: Colors.transparent,
+          scaffoldBackgroundColor: scaffoldBgColor,
+          iconTheme: IconThemeData(color: greyColor),
+          switchTheme: SwitchThemeData(
+            trackColor: MaterialStateColor.resolveWith((states) {
+              if (states.contains(MaterialState.selected)) {
+                return primaryColor;
+              }
+              return Colors.grey.shade300;
+            }),
+            thumbColor: MaterialStateColor.resolveWith((states) => Colors.white),
+            trackOutlineColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            contentPadding: EdgeInsets.symmetric(horizontal: 40),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: greyColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: greyColor),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: primaryColor),
+            ),
+          ),
+          highlightColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+          useMaterial3: true,
         ),
+        home: SplashScreen(),
       ),
     );
   }

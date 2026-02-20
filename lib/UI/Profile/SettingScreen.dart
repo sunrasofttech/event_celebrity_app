@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:planner_celebrity/Bloc/AppContentsBloc/UserAppContentCubit.dart';
@@ -9,6 +11,8 @@ import 'package:planner_celebrity/Bloc/AppContentsBloc/UserAppContentState.dart'
 import 'package:planner_celebrity/Bloc/LogOutCubit/LogOutCubit.dart';
 import 'package:planner_celebrity/Bloc/LogOutCubit/LogOutState.dart';
 import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
+import 'package:planner_celebrity/Repository/EncryptionInterceptor.dart';
+import 'package:planner_celebrity/Repository/EncryptionService.dart';
 import 'package:planner_celebrity/UI/Auth/LoginScreen.dart';
 import 'package:planner_celebrity/UI/Pages/CalendarScreen.dart';
 import 'package:planner_celebrity/UI/Profile/AboutScreen.dart';
@@ -34,7 +38,6 @@ class SettingScreen extends StatefulWidget {
 }
 
 class _SettingScreenState extends State<SettingScreen> {
-  
   @override
   void initState() {
     context.read<GetUserAppContentCubit>().getUserAppContent();
@@ -51,21 +54,14 @@ class _SettingScreenState extends State<SettingScreen> {
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: Colors.white,
-            ),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.white),
             child: const Icon(IconsaxPlusBold.arrow_left_3, color: greyColor),
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           "All Settings",
-          style: TextStyle(
-            color: titleTextColor,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: titleTextColor, fontSize: 18, fontWeight: FontWeight.w600),
         ),
         centerTitle: false,
       ),
@@ -98,30 +94,19 @@ class _SettingScreenState extends State<SettingScreen> {
                               children: [
                                 Text(
                                   state.model.data?.fullName ?? "",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   "+91 ${state.model.data?.mobile ?? ""}",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: greyColor,
-                                  ),
+                                  style: TextStyle(fontSize: 14, color: greyColor),
                                 ),
                               ],
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditProfileScreen(),
-                                ),
-                              );
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileScreen()));
                             },
                             child: Icon(IconsaxPlusBold.edit, color: greyColor),
                           ),
@@ -185,10 +170,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   icon: IconsaxPlusBold.calendar,
                   title: "Update Availability Dates",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CalendarScreen()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CalendarScreen()));
                   },
                 ),
 
@@ -200,10 +182,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   icon: IconsaxPlusBold.message_question,
                   title: "Frequently asked questions",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FAQScreen()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FAQScreen()));
                   },
                 ),
                 ProfileTile(
@@ -216,10 +195,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       log("THIS IS ADMIN ID: $id");
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => ChatAssistantScreen(receiverId: id),
-                        ),
+                        MaterialPageRoute(builder: (context) => ChatAssistantScreen(receiverId: id)),
                       );
                     }
                   },
@@ -228,22 +204,14 @@ class _SettingScreenState extends State<SettingScreen> {
                   icon: IconsaxPlusBold.password_check,
                   title: "Change Password",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChangePassword()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePassword()));
                   },
                 ),
                 ProfileTile(
                   icon: IconsaxPlusBold.message_text_1,
                   title: "Share feedback",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ShareFeedbackScreen(),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ShareFeedbackScreen()));
                   },
                 ),
 
@@ -255,12 +223,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   icon: IconsaxPlusBold.notification,
                   title: "Notification settings",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NotificationScreen(),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => NotificationScreen()));
                   },
                 ),
 
@@ -268,10 +231,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   icon: IconsaxPlusBold.information,
                   title: "About us",
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AboutScreen()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AboutScreen()));
                   },
                 ),
                 ProfileTile(
@@ -281,7 +241,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     _showLogoutDialog(context);
                   },
                 ),
-                SizedBox(height: 50,)
+                SizedBox(height: 50),
               ],
             );
           },
@@ -298,15 +258,12 @@ void _showLogoutDialog(BuildContext context) {
     builder: (context) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          "Logout",
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
+        title: const Text("Logout", style: TextStyle(fontWeight: FontWeight.w600)),
         content: const Text("Do you really want to logout?"),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context); // ❌ Cancel
+              Navigator.pop(context);
             },
             child: const Text("Cancel"),
           ),
@@ -317,26 +274,31 @@ void _showLogoutDialog(BuildContext context) {
                 Fluttertoast.showToast(msg: "${state.error}");
               }
               if (state is LogOutLoadedState) {
-                Navigator.pop(context);
-
-                // 🔐 CLEAR SESSION
-                final pref = await SharedPreferences.getInstance();
-                await pref.clear();
-
-                // 🚀 GO TO LOGIN SCREEN
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const LoginScreen()),
-                  (route) => false,
-                );
+                try {
+                  Navigator.pop(context);
+                  final pref = await SharedPreferences.getInstance();
+                  await pref.clear();
+                  log("Shared Pref is Clear");
+                  EncryptionService().resetKey();
+                  EncryptionInterceptor().clearInitialization();
+                  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+                  await _secureStorage.delete(key: dotenv.env['ENCRYPTION_KEY_REQUEST'] ?? 'ENCRYPTION_KEY_REQUEST');
+                  await _secureStorage.deleteAll(aOptions: AndroidOptions(encryptedSharedPreferences: true));
+                } catch (e, s) {
+                  log("------>>  $e --- $s");
+                } finally {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (c) => false,
+                  );
+                }
               }
             },
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               onPressed: () async {
                 context.read<LogOutCubit>().logOutApiCall();
@@ -358,14 +320,7 @@ class SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8, left: 4),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Colors.grey.shade700,
-          fontWeight: FontWeight.w600,
-          fontSize: 13,
-        ),
-      ),
+      child: Text(title, style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600, fontSize: 13)),
     );
   }
 }
@@ -381,26 +336,12 @@ class ProfileTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(14)),
       child: ListTile(
         onTap: onTap,
         leading: Icon(icon, color: greyColor),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
-            color: titleTextColor,
-          ),
-        ),
-        trailing: Icon(
-          IconsaxPlusBold.arrow_right_3,
-          size: 16,
-          color: greyColor,
-        ),
+        title: Text(title, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: titleTextColor)),
+        trailing: Icon(IconsaxPlusBold.arrow_right_3, size: 16, color: greyColor),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
       ),
     );
