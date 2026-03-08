@@ -56,15 +56,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        height: 150,
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 16,
-                          vertical: 2,
+                          vertical: 12,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
-                            // stops: [0.0, 0.7404,],
                             colors: [
                               Color(0xFFFFDCDD),
                               Color(0xFFFFDCDD),
@@ -72,58 +72,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        child: Row(
+                        child: Stack(
                           children: [
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: 28,
-                                    backgroundImage: NetworkImage(
-                                      "${Constants.baseUrl}/${state.model.data?.profilePictureUrl}",
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Flexible(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Welcome",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey.shade600,
-                                          ),
-                                        ),
-                                        Text(
-                                          "${state.model.data?.fullName}",
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                            /// Background Guitar
+                            Positioned(
+                              right: 30,
+                              bottom: -10,
+                              child: Image.asset(
+                                "asset/icons/gitar.png",
+                                height: 140,
+                                fit: BoxFit.contain,
                               ),
                             ),
-                            SizedBox(width: 5),
 
-                            Image.asset("asset/icons/gitar.png", height: 150),
-                            SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SettingScreen(),
+                            /// Foreground Content
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 28,
+                                        backgroundImage: NetworkImage(
+                                          "${Constants.baseUrl}/${state.model.data?.profilePictureUrl}",
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Welcome",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey.shade600,
+                                              ),
+                                            ),
+
+                                            /// Name with overflow protection
+                                            Text(
+                                              "${state.model.data?.fullName ?? ""}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                              child: Image.asset("asset/icons/setting.png"),
+                                ),
+
+                                const SizedBox(width: 10),
+
+                                /// Settings Icon
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SettingScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    "asset/icons/setting.png",
+                                    height: 26,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

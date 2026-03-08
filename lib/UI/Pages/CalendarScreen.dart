@@ -413,7 +413,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Set<DateTime> bookedDates = {};
   Set<DateTime> selectedDates = {};
   bool _isInitialized = false;
-
+  DateTime? _selectedDate;
+  String? _selectedStatus;
   bool _isAutofillDone = false;
   CalendarView _view = CalendarView.month;
   late DateTime _focusedMonth;
@@ -504,7 +505,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       showNavigationArrow: true,
                       monthViewSettings: const MonthViewSettings(
                         showTrailingAndLeadingDates: false,
-                         dayFormat: 'EEE', 
+                        dayFormat: 'EEE',
                       ),
                       onSelectionChanged: (calendarSelectionDetails) {},
                       onViewChanged: (ViewChangedDetails details) {
@@ -608,10 +609,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   ? null
                                   : () {
                                     setState(() {
+                                      _selectedDate = date;
                                       if (isAvailable) {
+                                        _selectedStatus = "unavailable";
                                         availableDates.remove(date);
                                         unavailableDates.add(date);
                                       } else if (isUnavailable) {
+                                        _selectedStatus = "available";
                                         unavailableDates.remove(date);
                                         availableDates.add(date);
                                       } else {
@@ -648,17 +652,128 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
 
                   /// ---------- LEGEND ----------
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _legend("Available", Colors.white),
-                        _legend("Unavailable", Colors.grey.shade300),
-                        _legend("Booked", Colors.pink.shade300),
-                      ],
+                  if (_selectedDate != null)
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Text(
+                            //   "Selected Date: ${_format(_selectedDate!)}",
+                            //   style: const TextStyle(
+                            //     fontWeight: FontWeight.bold,
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 12),
+
+                            /// ROW STARTS HERE
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  /// AVAILABLE
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: _selectedStatus == "available",
+                                        onChanged: (_) {
+                                          setState(() {
+                                            _selectedStatus = "available";
+
+                                            for (var d in selectedDates) {
+                                              availableDates.add(d);
+                                              unavailableDates.remove(d);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      Container(
+                                        height: 14,
+                                        width: 14,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      const Text("Available"),
+                                    ],
+                                  ),
+                                  SizedBox(width: 10),
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        value: _selectedStatus == "unavailable",
+                                        onChanged: (_) {
+                                          setState(() {
+                                            _selectedStatus = "unavailable";
+
+                                            for (var d in selectedDates) {
+                                              unavailableDates.add(d);
+                                              availableDates.remove(d);
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      Container(
+                                        height: 14,
+                                        width: 14,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade300,
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      const Text("Unavailable"),
+                                    ],
+                                  ),
+
+                                  SizedBox(width: 10),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 14,
+                                        width: 14,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.pink.shade300,
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      const Text("Booked"),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
 
                   /// ---------- SAVE BUTTON ----------
                   Padding(

@@ -23,6 +23,8 @@ final String url = dotenv.env['SHARE_URL'] ?? '';
 String _full(String path) => '${Constants.baseUrl}$path';
 
 final String loginApi = _full(dotenv.env['LOGIN_API'] ?? '');
+final getEventByIdApi = _full(dotenv.env['GET_EVENT_BY_ID'] ?? '');
+
 final String logOutApi = _full(dotenv.env['LOGOUT_API'] ?? '');
 final String checkUserExistApi = _full(dotenv.env['CHECK_USER_EXIST_API'] ?? '');
 final String sendOtpApiUrl = _full(dotenv.env['SEND_OTP_API'] ?? '');

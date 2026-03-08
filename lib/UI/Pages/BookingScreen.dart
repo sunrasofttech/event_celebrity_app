@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:planner_celebrity/Bloc/get_all_events/get_all_events_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_all_events/get_all_events_model.dart';
+import 'package:planner_celebrity/UI/Pages/event_detail_screen.dart';
 import 'package:planner_celebrity/UI/Profile/booking_details_screen.dart';
 import 'package:planner_celebrity/Utility/MainColor.dart';
 import 'package:planner_celebrity/Utility/const.dart';
@@ -152,145 +153,151 @@ class _BookingScreenState extends State<BookingScreen>
   }
 
   Widget _buildBookingList(List<UpcomingEvent> bookings) {
-    return ListView.separated(
-      itemCount: bookings.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        final b = bookings[index];
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context,MaterialPageRoute(builder: (context) => EventDetailsScreen(eventId: bookings.last.id??"",)));
+      },
+      child: ListView.separated(
+        
+        itemCount: bookings.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
+          final b = bookings[index];
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 6,
+                  offset: const Offset(0, 3),
                 ),
-                child: Image.network(
-                  "${Constants.baseUrl}/${b.coverImageUrl ?? ""}",
-                  height: 180,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(20),
+                  ),
+                  child: Image.network(
+                    "${Constants.baseUrl}/${b.coverImageUrl ?? ""}",
+                    height: 180,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Container(
                   width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Color(0xFFFFFBFB), Color(0xFFFDF8F8)],
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFFFFFBFB), Color(0xFFFDF8F8)],
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(20),
+                    ),
                   ),
-                  borderRadius: BorderRadius.vertical(
-                    bottom: Radius.circular(20),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
                   ),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      b.eventName ?? "",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        b.eventName ?? "",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black87,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Text(
-                          "Booking Amount",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade700,
-                            fontWeight: FontWeight.w500,
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Text(
+                            "Booking Amount",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        // Text(
-                        //   b.amount,
-                        //   style: TextStyle(
-                        //     fontSize: 15,
-                        //     fontWeight: FontWeight.w600,
-                        //     color: const Color(0xFFE53935),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today_outlined,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: Text(
-                            formatEventDates(b.eventDate),
+                          const SizedBox(width: 8),
+                          // Text(
+                          //   b.amount,
+                          //   style: TextStyle(
+                          //     fontSize: 15,
+                          //     fontWeight: FontWeight.w600,
+                          //     color: const Color(0xFFE53935),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              formatEventDates(b.eventDate),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ),
+      
+                          const Icon(
+                            Icons.access_time,
+                            size: 16,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            b.showStartTime ?? "",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey.shade600,
                             ),
                           ),
-                        ),
-
-                        const Icon(
-                          Icons.access_time,
-                          size: 16,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          b.showStartTime ?? "",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    // Row(
-                    //   children: [
-                    //     const Icon(
-                    //       Icons.location_on_outlined,
-                    //       size: 16,
-                    //       color: Colors.grey,
-                    //     ),
-                    //     const SizedBox(width: 6),
-                    //     Text(
-                    //       b.eventPlace ?? "",
-                    //       style: TextStyle(
-                    //         fontSize: 14,
-                    //         color: Colors.grey.shade600,
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      // Row(
+                      //   children: [
+                      //     const Icon(
+                      //       Icons.location_on_outlined,
+                      //       size: 16,
+                      //       color: Colors.grey,
+                      //     ),
+                      //     const SizedBox(width: 6),
+                      //     Text(
+                      //       b.eventPlace ?? "",
+                      //       style: TextStyle(
+                      //         fontSize: 14,
+                      //         color: Colors.grey.shade600,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

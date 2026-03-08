@@ -47,7 +47,8 @@ import 'EncryptionService.dart';
 class EncryptionInterceptor extends Interceptor {
   final EncryptionService _encryptionService = EncryptionService();
   EncryptionInterceptor._internal();
-  static final EncryptionInterceptor _instance = EncryptionInterceptor._internal();
+  static final EncryptionInterceptor _instance =
+      EncryptionInterceptor._internal();
   factory EncryptionInterceptor() => _instance;
   bool _initialized = false;
   final List<String> excludedApis = [loginApi, settingApi];
@@ -70,12 +71,17 @@ class EncryptionInterceptor extends Interceptor {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     await _init();
     log("➡️ Request URL: ${options.uri}");
+    options.headers["encryption"] = "true";
 
     if (_isExcluded(options.uri.toString()) || !_initialized) {
       log("⏭️ Skipping encryption for ${options.uri}");
+
       return super.onRequest(options, handler);
     } else if (options.data != null) {
       try {
@@ -98,10 +104,13 @@ class EncryptionInterceptor extends Interceptor {
     log("⬅️ Response from: ${response.requestOptions.uri}");
 
     try {
-      if (_isExcluded(response.requestOptions.uri.toString()) || !_initialized) {
+      if (_isExcluded(response.requestOptions.uri.toString()) ||
+          !_initialized) {
         log("⏭️ Skipping decryption for ${response.requestOptions.uri}");
         return super.onResponse(response, handler);
-      } else if (response.data is Map && response.data['data'] != null && response.data['iv'] != null) {
+      } else if (response.data is Map &&
+          response.data['data'] != null &&
+          response.data['iv'] != null) {
         final encryptedData = response.data['data'];
         final iv = response.data['iv'];
         log("Response before decryption:- ${response.data}");
@@ -109,7 +118,9 @@ class EncryptionInterceptor extends Interceptor {
         final decrypted = _encryptionService.decryptWithIV(encryptedData, iv);
         response.data = jsonDecode(decrypted);
         if (kDebugMode) {
-          log("Response after decryption:- \nLink:-${response.requestOptions.uri.toString()} \nResponse:$decrypted");
+          log(
+            "Response after decryption:- \nLink:-${response.requestOptions.uri.toString()} \nResponse:$decrypted",
+          );
         }
       }
     } catch (e, s) {

@@ -15,6 +15,7 @@ import 'package:planner_celebrity/Bloc/AppContentsBloc/UserAppContentCubit.dart'
 import 'package:planner_celebrity/Bloc/Auth/LoginBloc/LoginCubit.dart';
 import 'package:planner_celebrity/Bloc/CheckBankBloc/CheckBankCubit.dart';
 import 'package:planner_celebrity/Bloc/EditProfileBloc/EditProfileBloc.dart';
+import 'package:planner_celebrity/Bloc/EventDetailsBloc/EventDetailsCubit.dart';
 import 'package:planner_celebrity/Bloc/NotificationBloc/NotificationCubit.dart';
 import 'package:planner_celebrity/Bloc/SessionKeyBloc/SessionKeyCubit.dart';
 import 'package:planner_celebrity/Bloc/SettingBloc/SettingCubit.dart';
@@ -250,6 +251,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => ShareFeedbackCubit()),
         BlocProvider(create: (context) => UpdateNotificationCubit()),
          BlocProvider(create: (context) => SessionKeyCubit()),
+         BlocProvider(create: (context) => EventDetailsCubit(),)
       ],
       child: MaterialApp(
         title: appName,

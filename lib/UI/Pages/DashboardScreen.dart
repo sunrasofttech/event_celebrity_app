@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:intl/intl.dart';
 import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
+import 'package:planner_celebrity/UI/Pages/event_detail_screen.dart';
 import 'package:planner_celebrity/Utility/MainColor.dart';
 import 'package:planner_celebrity/Utility/const.dart';
 
@@ -78,6 +80,17 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     profileViews: "13K+",
     eventsBooked: 34,
   );
+  String formatEventDates(List<String>? dates) {
+    if (dates == null || dates.isEmpty) return "";
+
+    try {
+      return dates
+          .map((d) => DateFormat("EEE, d MMM").format(DateTime.parse(d)))
+          .join(", ");
+    } catch (e) {
+      return "";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +108,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                 if (state is GetDashboardLoadingState) {
                   return Center(child: CircularProgressIndicator());
                 }
-                if(state is GetDashboardErrorState){
-                  return Center(child: Text(state.error,maxLines: 1,overflow: TextOverflow.ellipsis,),);
+                if (state is GetDashboardErrorState) {
+                  return Center(
+                    child: Text(
+                      state.error,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
                 }
                 if (state is GetDashboardLoadedState) {
                   return Column(
@@ -147,6 +166,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       children: [
                                         Text(
                                           "${state.model.data?.welcomeMessage ?? ""}",
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.grey.shade600,
@@ -162,7 +183,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                           ],
                         ),
                       ),
-              
+
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
@@ -180,136 +201,200 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               ),
                             ),
                             const SizedBox(height: 12),
-              
-                            SizedBox(
-                              height: 230,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount:
-                                    state.model.data?.upcomingEvents?.length ??
-                                    0,
-                                separatorBuilder:
-                                    (context, index) =>
-                                        const SizedBox(width: 14),
-                                itemBuilder: (context, index) {
-                                  final booking =
-                                      state.model.data?.upcomingEvents?[index];
-                                  return Container(
-                                    width: 280,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(16),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black12.withOpacity(
-                                            0.05,
+
+                            state.model.data?.upcomingEvents?.isEmpty ?? true
+                                ? SizedBox(
+                                  height: 180,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.event_busy_outlined,
+                                          size: 40,
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          "No Upcoming Bookings",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
                                           ),
-                                          blurRadius: 6,
-                                          offset: const Offset(0, 2),
                                         ),
                                       ],
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(16),
-                                            topRight: Radius.circular(16),
+                                  ),
+                                )
+                                : SizedBox(
+                                  height: 320,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        state
+                                            .model
+                                            .data
+                                            ?.upcomingEvents
+                                            ?.length ??
+                                        0,
+                                    separatorBuilder:
+                                        (context, index) =>
+                                            const SizedBox(width: 14),
+                                    itemBuilder: (context, index) {
+                                      final booking =
+                                          state
+                                              .model
+                                              .data
+                                              ?.upcomingEvents?[index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) =>
+                                                      EventDetailsScreen(
+                                                        eventId:
+                                                            booking?.id ?? "",
+                                                      ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          width: 280,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black12
+                                                    .withOpacity(0.05),
+                                                blurRadius: 6,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
                                           ),
-                                          child: Image.network(
-                                            "${Constants.baseUrl}/${booking?.coverImageUrl ?? ""}",
-                                            height: 130,
-                                            width: double.infinity,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                booking?.eventName ?? "",
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 14,
-                                                ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              const SizedBox(height: 4),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    IconsaxPlusBold.calendar_1,
-                                                    size: 12,
-                                                    color: greyColor,
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  Expanded(
-                                                    child: Text(
-                                                      booking?.eventDate
-                                                              .toString() ??
-                                                          "",
-                                                      style: TextStyle(
-                                                        color: greyColor,
-                                                        fontSize: 12,
+                                              ClipRRect(
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                      topLeft: Radius.circular(
+                                                        16,
+                                                      ),
+                                                      topRight: Radius.circular(
+                                                        16,
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                child: Image.network(
+                                                  "${Constants.baseUrl}/${booking?.coverImageUrl ?? ""}",
+                                                  height: 230,
+                                                  width: double.infinity,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
-                                              const SizedBox(height: 4),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    IconsaxPlusBold.timer,
-                                                    size: 14,
-                                                    color: greyColor,
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  Text(
-                                                    booking?.entryTime ?? "",
-                                                    style: TextStyle(
-                                                      color: greyColor,
-                                                      fontSize: 13,
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                  8.0,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      booking?.eventName ?? "",
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 14,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                  ),
-                                                ],
+                                                    const SizedBox(height: 4),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          IconsaxPlusBold
+                                                              .calendar_1,
+                                                          size: 12,
+                                                          color: greyColor,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
+                                                        Expanded(
+                                                          child: Text(
+                                                            "${formatEventDates(
+                                                              booking?.eventDate ??
+                                                                  [],
+                                                            )}",
+                                                            style: TextStyle(
+                                                              color: greyColor,
+                                                              fontSize: 12,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          IconsaxPlusBold.timer,
+                                                          size: 14,
+                                                          color: greyColor,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
+                                                        Text(
+                                                          booking?.entryTime ??
+                                                              "",
+                                                          style: TextStyle(
+                                                            color: greyColor,
+                                                            fontSize: 13,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 6),
+                                                    // Row(
+                                                    //   children: [
+                                                    //     Icon(
+                                                    //       IconsaxPlusBold.location,
+                                                    //       size: 12,
+                                                    //       color: Colors.grey,
+                                                    //     ),
+                                                    //     const SizedBox(width: 6),
+                                                    //     Text(
+                                                    //       booking?.eventAddress ?? "",
+                                                    //       style: TextStyle(
+                                                    //         color: greyColor,
+                                                    //         fontSize: 12,
+                                                    //       ),
+                                                    //     ),
+                                                    //   ],
+                                                    // ),
+                                                  ],
+                                                ),
                                               ),
-                                              const SizedBox(height: 6),
-                                              // Row(
-                                              //   children: [
-                                              //     Icon(
-                                              //       IconsaxPlusBold.location,
-                                              //       size: 12,
-                                              //       color: Colors.grey,
-                                              //     ),
-                                              //     const SizedBox(width: 6),
-                                              //     Text(
-                                              //       booking?.eventAddress ?? "",
-                                              //       style: TextStyle(
-                                              //         color: greyColor,
-                                              //         fontSize: 12,
-                                              //       ),
-                                              //     ),
-                                              //   ],
-                                              // ),
                                             ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-              
+                                      );
+                                    },
+                                  ),
+                                ),
+
                             const SizedBox(height: 12),
-              
+
                             // Analytics Header
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -348,14 +433,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               ],
                             ),
                             const SizedBox(height: 12),
-              
+
                             // Analytics Cards
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Expanded(flex: 1, child: revenuCard()),
                                 const SizedBox(width: 12),
-              
+
                                 Expanded(
                                   flex: 1,
                                   child: Column(
@@ -421,7 +506,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             //               fontWeight: FontWeight.w500,
                             //             ),
                             //           ),
-              
+
                             //           const SizedBox(height: 8),
                             //           Text(
                             //             "₹23341",
