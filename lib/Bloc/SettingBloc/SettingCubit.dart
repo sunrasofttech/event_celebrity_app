@@ -28,7 +28,7 @@ class SettingCubit extends Cubit<SettingState> {
       final result = jsonDecode(jsonEncode(resp.data));
       log("Settings API response : $result");
       if (resp.statusCode == 200) {
-        if (result["status"]) {
+        if (result["status"]==true) {
           emit(SettingLoadedState(SettingModel.fromJson(resp.data)));
         } else {
           emit(

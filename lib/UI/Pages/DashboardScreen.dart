@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
@@ -36,11 +38,7 @@ class AnalyticsModel {
   final String profileViews;
   final int eventsBooked;
 
-  AnalyticsModel({
-    required this.totalEarnings,
-    required this.profileViews,
-    required this.eventsBooked,
-  });
+  AnalyticsModel({required this.totalEarnings, required this.profileViews, required this.eventsBooked});
 }
 
 class DashBoardScreen extends StatefulWidget {
@@ -50,12 +48,8 @@ class DashBoardScreen extends StatefulWidget {
   State<DashBoardScreen> createState() => _DashBoardScreenState();
 }
 
-class _DashBoardScreenState extends State<DashBoardScreen>
-    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
-  final UserModel user = UserModel(
-    name: "Alexandra Davis",
-    imageUrl: "https://i.pravatar.cc/150?img=3",
-  );
+class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingObserver, SingleTickerProviderStateMixin {
+  final UserModel user = UserModel(name: "Alexandra Davis", imageUrl: "https://i.pravatar.cc/150?img=3");
 
   // final List<BookingModel> bookings = [
   //   BookingModel(
@@ -75,22 +69,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   //   ),
   // ];
 
-  final AnalyticsModel analytics = AnalyticsModel(
-    totalEarnings: "₹23.34L",
-    profileViews: "13K+",
-    eventsBooked: 34,
-  );
-  String formatEventDates(List<String>? dates) {
-    if (dates == null || dates.isEmpty) return "";
-
-    try {
-      return dates
-          .map((d) => DateFormat("EEE, d MMM").format(DateTime.parse(d)))
-          .join(", ");
-    } catch (e) {
-      return "";
-    }
-  }
+  final AnalyticsModel analytics = AnalyticsModel(totalEarnings: "₹23.34L", profileViews: "13K+", eventsBooked: 34);
 
   @override
   Widget build(BuildContext context) {
@@ -102,20 +81,19 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         backgroundColor: Colors.grey.shade100,
         body: SafeArea(
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: BlocBuilder<GetDashboardCubit, GetDashboardState>(
               builder: (context, state) {
+                log("--------------------> $state");
                 if (state is GetDashboardLoadingState) {
-                  return Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
                 }
                 if (state is GetDashboardErrorState) {
-                  return Center(
-                    child: Text(
-                      state.error,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
+                  return Center(child: Text(state.error, maxLines: 1, overflow: TextOverflow.ellipsis));
                 }
                 if (state is GetDashboardLoadedState) {
                   return Column(
@@ -123,20 +101,13 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                     children: [
                       // Header Section
                       Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 2,
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             // stops: [0.0, 0.7404,],
-                            colors: [
-                              Color(0xFFFFDCDD),
-                              Color(0xFFFFDCDD),
-                              Color(0xFFF4F4F4),
-                            ],
+                            colors: [Color(0xFFFFDCDD), Color(0xFFFFDCDD), Color(0xFFF4F4F4)],
                           ),
                         ),
                         child: Row(
@@ -161,17 +132,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "${state.model.data?.welcomeMessage ?? ""}",
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.grey.shade600,
-                                          ),
+                                          style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                                         ),
                                       ],
                                     ),
@@ -185,213 +150,122 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 2,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Upcoming Bookings
-                            Text(
-                              "Upcoming Bookings",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                            Text("Upcoming Bookings", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                             const SizedBox(height: 12),
 
-                            state.model.data?.upcomingEvents?.isEmpty ?? true
-                                ? SizedBox(
-                                  height: 180,
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          Icons.event_busy_outlined,
-                                          size: 40,
-                                          color: Colors.grey,
-                                        ),
-                                        SizedBox(height: 8),
-                                        Text(
-                                          "No Upcoming Bookings",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                                : SizedBox(
-                                  height: 320,
-                                  child: ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        state
-                                            .model
-                                            .data
-                                            ?.upcomingEvents
-                                            ?.length ??
-                                        0,
-                                    separatorBuilder:
-                                        (context, index) =>
-                                            const SizedBox(width: 14),
-                                    itemBuilder: (context, index) {
-                                      final booking =
-                                          state
-                                              .model
-                                              .data
-                                              ?.upcomingEvents?[index];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      EventDetailsScreen(
-                                                        eventId:
-                                                            booking?.id ?? "",
-                                                      ),
-                                            ),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 280,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(
-                                              16,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black12
-                                                    .withOpacity(0.05),
-                                                blurRadius: 6,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.only(
-                                                      topLeft: Radius.circular(
-                                                        16,
-                                                      ),
-                                                      topRight: Radius.circular(
-                                                        16,
-                                                      ),
-                                                    ),
-                                                child: Image.network(
-                                                  "${Constants.baseUrl}/${booking?.coverImageUrl ?? ""}",
-                                                  height: 230,
-                                                  width: double.infinity,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8.0,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      booking?.eventName ?? "",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 14,
-                                                      ),
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          IconsaxPlusBold
-                                                              .calendar_1,
-                                                          size: 12,
-                                                          color: greyColor,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 6,
-                                                        ),
-                                                        Expanded(
-                                                          child: Text(
-                                                            "${formatEventDates(
-                                                              booking?.eventDate ??
-                                                                  [],
-                                                            )}",
-                                                            style: TextStyle(
-                                                              color: greyColor,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Row(
-                                                      children: [
-                                                        Icon(
-                                                          IconsaxPlusBold.timer,
-                                                          size: 14,
-                                                          color: greyColor,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 6,
-                                                        ),
-                                                        Text(
-                                                          booking?.entryTime ??
-                                                              "",
-                                                          style: TextStyle(
-                                                            color: greyColor,
-                                                            fontSize: 13,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(height: 6),
-                                                    // Row(
-                                                    //   children: [
-                                                    //     Icon(
-                                                    //       IconsaxPlusBold.location,
-                                                    //       size: 12,
-                                                    //       color: Colors.grey,
-                                                    //     ),
-                                                    //     const SizedBox(width: 6),
-                                                    //     Text(
-                                                    //       booking?.eventAddress ?? "",
-                                                    //       style: TextStyle(
-                                                    //         color: greyColor,
-                                                    //         fontSize: 12,
-                                                    //       ),
-                                                    //     ),
-                                                    //   ],
-                                                    // ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                            SizedBox(
+                              height: 230,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.model.data?.upcomingEvents?.length ?? 0,
+                                separatorBuilder: (context, index) => const SizedBox(width: 14),
+                                itemBuilder: (context, index) {
+                                  final booking = state.model.data?.upcomingEvents?[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EventDetailsScreen(eventId: booking?.id ?? ""),
                                         ),
                                       );
                                     },
-                                  ),
-                                ),
+                                    child: Container(
+                                      width: 280,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(16),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black12.withOpacity(0.05),
+                                            blurRadius: 6,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(16),
+                                              topRight: Radius.circular(16),
+                                            ),
+                                            child: Image.network(
+                                              "${Constants.baseUrl}/${booking?.coverImageUrl ?? ""}",
+                                              height: 130,
+                                              width: double.infinity,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  booking?.eventName ?? "",
+                                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Row(
+                                                  children: [
+                                                    Icon(IconsaxPlusBold.calendar_1, size: 12, color: greyColor),
+                                                    const SizedBox(width: 6),
+                                                    Expanded(
+                                                      child: Text(
+                                                        formatEventDates(booking?.eventDate ?? []),
+                                                        style: TextStyle(color: greyColor, fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Row(
+                                                  children: [
+                                                    Icon(IconsaxPlusBold.timer, size: 14, color: greyColor),
+                                                    const SizedBox(width: 6),
+                                                    Text(
+                                                      booking?.entryTime ?? "",
+                                                      style: TextStyle(color: greyColor, fontSize: 13),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 6),
+                                                // Row(
+                                                //   children: [
+                                                //     Icon(
+                                                //       IconsaxPlusBold.location,
+                                                //       size: 12,
+                                                //       color: Colors.grey,
+                                                //     ),
+                                                //     const SizedBox(width: 6),
+                                                //     Text(
+                                                //       booking?.eventAddress ?? "",
+                                                //       style: TextStyle(
+                                                //         color: greyColor,
+                                                //         fontSize: 12,
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
 
                             const SizedBox(height: 12),
 
@@ -399,13 +273,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  "Analytics",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+                                Text("Analytics", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                                 // Container(
                                 //   padding: const EdgeInsets.symmetric(
                                 //     horizontal: 12,
@@ -438,7 +306,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Expanded(flex: 1, child: revenuCard()),
+                                Expanded(
+                                  flex: 1,
+                                  child: revenuCard(state.model.data?.revenue?.totalRevenue.toString() ?? ""),
+                                ),
                                 const SizedBox(width: 12),
 
                                 Expanded(
@@ -448,28 +319,13 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       _buildAnalyticsCard(
                                         imagePath: ("asset/icons/profile.png"),
                                         title: "Profile Views",
-                                        value:
-                                            state
-                                                .model
-                                                .data
-                                                ?.analytics
-                                                ?.profileViews
-                                                .toString() ??
-                                            "",
+                                        value: state.model.data?.analytics?.profileViews.toString() ?? "",
                                       ),
                                       const SizedBox(height: 12),
                                       _buildAnalyticsCard(
-                                        imagePath:
-                                            ("asset/icons/calendar_tick.png"),
+                                        imagePath: ("asset/icons/calendar_tick.png"),
                                         title: "Events Booked",
-                                        value:
-                                            state
-                                                .model
-                                                .data
-                                                ?.analytics
-                                                ?.upcomingEventsCount
-                                                .toString() ??
-                                            "",
+                                        value: state.model.data?.analytics?.upcomingEventsCount.toString() ?? "",
                                       ),
                                     ],
                                   ),
@@ -477,50 +333,51 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               ],
                             ),
                             SizedBox(height: 10),
-                            // Container(
-                            //   width: double.infinity,
-                            //   padding: const EdgeInsets.all(16),
-                            //   decoration: BoxDecoration(
-                            //     color: Colors.white,
-                            //     borderRadius: BorderRadius.circular(16),
-                            //     boxShadow: [
-                            //       BoxShadow(
-                            //         color: Colors.black12.withOpacity(0.05),
-                            //         blurRadius: 6,
-                            //         offset: const Offset(0, 3),
-                            //       ),
-                            //     ],
-                            //   ),
-                            //   child: Row(
-                            //     crossAxisAlignment: CrossAxisAlignment.start,
-                            //     children: [
-                            //       Image.asset("asset/icons/trans.png"),
-                            //       const SizedBox(width: 8),
-                            //       Column(
-                            //         children: [
-                            //           Text(
-                            //             "Total Revenue",
-                            //             style: TextStyle(
-                            //               color: Colors.grey.shade600,
-                            //               fontSize: 12,
-                            //               fontWeight: FontWeight.w500,
-                            //             ),
-                            //           ),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12.withOpacity(0.05),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.asset("asset/icons/trans.png"),
+                                  const SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Total Transaction",
+                                        style: TextStyle(
+                                          color: Colors.grey.shade600,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
 
-                            //           const SizedBox(height: 8),
-                            //           Text(
-                            //             "₹23341",
-                            //             style: TextStyle(
-                            //               fontSize: 18,
-                            //               fontWeight: FontWeight.w700,
-                            //               color: Colors.black87,
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        "${state.model.data?.revenue?.totalTransactions.toString() ?? ""}",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -549,13 +406,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, 3))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -564,31 +415,17 @@ class _DashBoardScreenState extends State<DashBoardScreen>
             children: [
               Image.asset(imagePath),
               SizedBox(width: 5),
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              Text(title, style: TextStyle(color: Colors.grey.shade600, fontSize: 12, fontWeight: FontWeight.w500)),
             ],
           ),
           const SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-            ),
-          ),
+          Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black87)),
         ],
       ),
     );
   }
 
-  Widget revenuCard() {
+  Widget revenuCard(String totalRevenue) {
     return Container(
       height: 188,
       width: double.infinity,
@@ -596,38 +433,46 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12.withOpacity(0.05),
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black12.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, 3))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             "Total Revenue",
-            style: TextStyle(
-              color: Colors.grey.shade600,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 12, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           Image.asset("asset/icons/total_revenu.png"),
           const SizedBox(height: 8),
-          Text(
-            "₹23341",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: Colors.black87,
-            ),
-          ),
+          Text("₹$totalRevenue", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.black87)),
         ],
       ),
     );
+  }
+
+  String formatEventDates(List<String> dates) {
+    if (dates.isEmpty) return "";
+
+    final parsedDates = dates.map((e) => DateTime.tryParse(e)).whereType<DateTime>().toList()..sort();
+
+    if (parsedDates.isEmpty) return "";
+
+    // Single date
+    if (parsedDates.length == 1) {
+      return DateFormat("EEE, d MMM").format(parsedDates.first);
+    }
+
+    // Multiple dates → range
+    final first = parsedDates.first;
+    final last = parsedDates.last;
+
+    // Same month
+    if (first.month == last.month && first.year == last.year) {
+      return "${first.day}–${last.day} ${DateFormat("MMM").format(first)}";
+    }
+
+    // Different months
+    return parsedDates.map((d) => DateFormat("d MMM").format(d)).join(", ");
   }
 }

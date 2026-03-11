@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(LoadingState());
       final resp = await repository.postRequest(
         loginApi,
-        {"emailOrMobile": mobile, "password": pass},
+        {"emailOrMobile": mobile, "password": pass, "deviceToken": "${pref.getString(sharedPrefFCMTokenKey)}"},
         header: {'Content-Type': 'application/json'},
       );
       final Map<String, dynamic> result = jsonDecode(jsonEncode(resp.data));

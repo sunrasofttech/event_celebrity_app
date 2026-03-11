@@ -85,26 +85,26 @@ class _MainScreenState extends State<MainScreen> {
       },
       child: BlocListener<SessionKeyCubit, SessionKeyState>(
         listener: (context, state) async {
-          if(state is SessionKeyErrorState && state.error.contains("Not authorized, no token")){
-             try {
-                  Navigator.pop(context);
-                  final pref = await SharedPreferences.getInstance();
-                  await pref.clear();
-                  log("Shared Pref is Clear");
-                  EncryptionService().resetKey();
-                  EncryptionInterceptor().clearInitialization();
-                  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
-                  await _secureStorage.delete(key: dotenv.env['ENCRYPTION_KEY_REQUEST'] ?? 'ENCRYPTION_KEY_REQUEST');
-                  await _secureStorage.deleteAll(aOptions: AndroidOptions(encryptedSharedPreferences: true));
-                } catch (e, s) {
-                  log("------>>  $e --- $s");
-                } finally {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                    (c) => false,
-                  );
-                }
+          if (state is SessionKeyErrorState && state.error.contains("Not authorized, no token")) {
+            try {
+              Navigator.pop(context);
+              final pref = await SharedPreferences.getInstance();
+              await pref.clear();
+              log("Shared Pref is Clear");
+              EncryptionService().resetKey();
+              EncryptionInterceptor().clearInitialization();
+              final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+              await _secureStorage.delete(key: dotenv.env['ENCRYPTION_KEY_REQUEST'] ?? 'ENCRYPTION_KEY_REQUEST');
+              await _secureStorage.deleteAll(aOptions: AndroidOptions(encryptedSharedPreferences: true));
+            } catch (e, s) {
+              log("------>>  $e --- $s");
+            } finally {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                (c) => false,
+              );
+            }
           }
         },
         child: Scaffold(
@@ -123,10 +123,12 @@ class _MainScreenState extends State<MainScreen> {
                   unselectedItemColor: greyColor,
                   currentIndex: currentIndex,
                   onTap: (index) {
+                    if (index == 0) {
+                      context.read<GetAvalibilityCubit>().GetAvailability();
+                    }
                     setState(() {
                       currentIndex = index;
                     });
-                    
                   },
                   items: const [
                     BottomNavigationBarItem(icon: Icon(IconsaxPlusBold.calendar), label: "Availability"),

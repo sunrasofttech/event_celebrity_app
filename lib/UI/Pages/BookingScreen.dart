@@ -15,8 +15,7 @@ class BookingScreen extends StatefulWidget {
   State<BookingScreen> createState() => _BookingScreenState();
 }
 
-class _BookingScreenState extends State<BookingScreen>
-    with SingleTickerProviderStateMixin {
+class _BookingScreenState extends State<BookingScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   // final List<Booking> bookings = [
@@ -48,92 +47,83 @@ class _BookingScreenState extends State<BookingScreen>
   @override
   Widget build(BuildContext context) {
     final redColor = primaryColor;
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF7F7F7),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Back Button
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 8, bottom: 8),
-              //   child: IconButton(
-              //     icon: const Icon(Icons.arrow_back_ios_new, size: 20),
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //     },
-              //   ),
-              // ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context.read<GetAllEventsCubit>().getAllEvent();
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF7F7F7),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Back Button
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 8, bottom: 8),
+                //   child: IconButton(
+                //     icon: const Icon(Icons.arrow_back_ios_new, size: 20),
+                //     onPressed: () {
+                //       Navigator.pop(context);
+                //     },
+                //   ),
+                // ),
 
-              // Tabs
-              TabBar(
-                controller: _tabController,
-                labelColor: redColor,
-                unselectedLabelColor: Colors.grey.shade600,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                // Tabs
+                TabBar(
+                  controller: _tabController,
+                  labelColor: redColor,
+                  unselectedLabelColor: Colors.grey.shade600,
+                  labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  indicatorColor: redColor,
+                  indicatorWeight: 2,
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 15),
+                  tabs: const [Tab(text: "Upcoming"), Tab(text: "Today"), Tab(text: "Completed")],
                 ),
-                unselectedLabelStyle: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 16,
+
+                const SizedBox(height: 16),
+
+                // Tab Views
+                Expanded(
+                  child: BlocBuilder<GetAllEventsCubit, GetAllEventsState>(
+                    builder: (context, state) {
+                      if (state is GetAllEventsLoadingState) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (state is GetAllEventsLoadedState) {
+                        final data = state.model.data;
+
+                        final upcoming = data?.upcomingEvents ?? [];
+                        final today = data?.todayEvents ?? [];
+                        final completed = data?.completedEvents ?? [];
+
+                        return TabBarView(
+                          controller: _tabController,
+                          children: [
+                            upcoming.isEmpty ? _buildEmptyState("No upcoming bookings") : _buildBookingList(upcoming),
+
+                            today.isEmpty ? _buildEmptyState("No bookings for today") : _buildBookingList(today),
+
+                            completed.isEmpty
+                                ? _buildEmptyState("No completed bookings yet")
+                                : _buildBookingList(completed),
+                          ],
+                        );
+                      }
+
+                      if (state is GetAllEventsErrorState) {
+                        return Center(child: Text(state.error));
+                      }
+
+                      return const SizedBox();
+                    },
+                  ),
                 ),
-                indicatorColor: redColor,
-                indicatorWeight: 2,
-                labelPadding: const EdgeInsets.symmetric(horizontal: 15),
-                tabs: const [
-                  Tab(text: "Upcoming"),
-                  Tab(text: "Today"),
-                  Tab(text: "Completed"),
-                ],
-              ),
-
-              const SizedBox(height: 16),
-
-              // Tab Views
-              Expanded(
-                child: BlocBuilder<GetAllEventsCubit, GetAllEventsState>(
-                  builder: (context, state) {
-                    if (state is GetAllEventsLoadingState) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (state is GetAllEventsLoadedState) {
-                      final data = state.model.data;
-
-                      final upcoming = data?.upcomingEvents ?? [];
-                      final today = data?.todayEvents ?? [];
-                      final completed = data?.completedEvents ?? [];
-
-                      return TabBarView(
-                        controller: _tabController,
-                        children: [
-                          upcoming.isEmpty
-                              ? _buildEmptyState("No upcoming bookings")
-                              : _buildBookingList(upcoming),
-
-                          today.isEmpty
-                              ? _buildEmptyState("No bookings for today")
-                              : _buildBookingList(today),
-
-                          completed.isEmpty
-                              ? _buildEmptyState("No completed bookings yet")
-                              : _buildBookingList(completed),
-                        ],
-                      );
-                    }
-
-                    if (state is GetAllEventsErrorState) {
-                      return Center(child: Text(state.error));
-                    }
-
-                    return const SizedBox();
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -144,9 +134,7 @@ class _BookingScreenState extends State<BookingScreen>
     if (dates == null || dates.isEmpty) return "";
 
     try {
-      return dates
-          .map((d) => DateFormat("EEE, d MMM").format(DateTime.parse(d)))
-          .join(", ");
+      return dates.map((d) => DateFormat("EEE, d MMM").format(DateTime.parse(d))).join(", ");
     } catch (e) {
       return "";
     }
@@ -155,10 +143,12 @@ class _BookingScreenState extends State<BookingScreen>
   Widget _buildBookingList(List<UpcomingEvent> bookings) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context,MaterialPageRoute(builder: (context) => EventDetailsScreen(eventId: bookings.last.id??"",)));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => EventDetailsScreen(eventId: bookings.last.id ?? "")),
+        );
       },
       child: ListView.separated(
-        
         itemCount: bookings.length,
         separatorBuilder: (_, __) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
@@ -167,21 +157,13 @@ class _BookingScreenState extends State<BookingScreen>
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 6,
-                  offset: const Offset(0, 3),
-                ),
-              ],
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, 3))],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
-                  ),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                   child: Image.network(
                     "${Constants.baseUrl}/${b.coverImageUrl ?? ""}",
                     height: 180,
@@ -197,35 +179,22 @@ class _BookingScreenState extends State<BookingScreen>
                       end: Alignment.bottomCenter,
                       colors: [Color(0xFFFFFBFB), Color(0xFFFDF8F8)],
                     ),
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(20),
-                    ),
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         b.eventName ?? "",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black87,
-                        ),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black87),
                       ),
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           Text(
                             "Booking Amount",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade700,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: TextStyle(fontSize: 14, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(width: 8),
                           // Text(
@@ -241,35 +210,18 @@ class _BookingScreenState extends State<BookingScreen>
                       const SizedBox(height: 10),
                       Row(
                         children: [
-                          const Icon(
-                            Icons.calendar_today_outlined,
-                            size: 16,
-                            color: Colors.grey,
-                          ),
+                          const Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               formatEventDates(b.eventDate),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey.shade600,
-                              ),
+                              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                             ),
                           ),
-      
-                          const Icon(
-                            Icons.access_time,
-                            size: 16,
-                            color: Colors.grey,
-                          ),
+
+                          const Icon(Icons.access_time, size: 16, color: Colors.grey),
                           const SizedBox(width: 6),
-                          Text(
-                            b.showStartTime ?? "",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
+                          Text(b.showStartTime ?? "", style: TextStyle(fontSize: 14, color: Colors.grey.shade600)),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -302,11 +254,6 @@ class _BookingScreenState extends State<BookingScreen>
   }
 
   Widget _buildEmptyState(String text) {
-    return Center(
-      child: Text(
-        text,
-        style: TextStyle(fontSize: 15, color: Colors.grey.shade600),
-      ),
-    );
+    return Center(child: Text(text, style: TextStyle(fontSize: 15, color: Colors.grey.shade600)));
   }
 }

@@ -152,11 +152,6 @@ icons_launcher:
     ios:
       enable: true
 
-package_rename_config:
-  android:
-    app_name: "Celeb Planner" # (String) The display name of the android app
-    package_name: "com.celeb.planner" # (String) The package name of the android app
-    override_old_package: "com.jio7.user"
 
   #flutter_launcher_icons:
   #  android: "launcher_icon"

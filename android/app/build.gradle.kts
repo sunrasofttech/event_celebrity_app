@@ -11,13 +11,13 @@ plugins {
 }
 
 val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("/Users/admin/Downloads/LottaEvents/key.properties")
+val keystorePropertiesFile = rootProject.file("C:/Users/sagar/Downloads/lotta celi/key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
-    namespace = "com.celeb.planner"
+    namespace = "com.showmanch.celebratity"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -32,7 +32,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.celeb.planner"
+        applicationId = "com.showmanch.celebratity"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24

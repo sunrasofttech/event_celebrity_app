@@ -1,4 +1,4 @@
-package com.celeb.planner
+package com.showmanch.celebratity
 
 import android.content.Intent
 import android.content.pm.ApplicationInfo

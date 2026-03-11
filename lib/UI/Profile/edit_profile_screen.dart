@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
@@ -27,6 +29,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     context.read<GetProfileCubit>().getProfile();
+    context.read<SettingCubit>().getSettingsApiCall();
     super.initState();
   }
 
@@ -61,6 +64,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
       body: BlocListener<GetProfileCubit, GetProfileState>(
         listener: (context, state) {
+          log("--------GetProfileCubit  $state");
           if (state is GetProfileLoadedState) {
             setState(() {
               fullName = state.model.data?.fullName ?? "";
@@ -71,6 +75,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         },
         child: BlocBuilder<SettingCubit, SettingState>(
           builder: (context, state) {
+            log("--------SettingCubit  $state");
             if (state is SettingLoadingState) {
               return Center(child: CircularProgressIndicator());
             }

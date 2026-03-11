@@ -36,11 +36,11 @@ import 'package:planner_celebrity/Repository/repository.dart';
 import 'package:planner_celebrity/SecurityWatcher.dart';
 import 'package:planner_celebrity/UI/SplashScreen.dart';
 import 'package:planner_celebrity/Utility/CustomFont.dart';
+import 'package:planner_celebrity/Utility/CustomNotification.dart';
 import 'package:planner_celebrity/Utility/MainColor.dart';
 import 'package:planner_celebrity/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ultra_secure_flutter_kit/ultra_secure_flutter_kit.dart';
-
 import 'Bloc/CheckUserExistBloc/CheckUserExistCubit.dart';
 import 'Bloc/LogOutCubit/LogOutCubit.dart';
 import 'Bloc/ReferCubit/ReferCubit.dart';
@@ -141,45 +141,44 @@ void main() async {
     }
   }
 
-  // try {
-  //   CustomNotification().init();
-  //   await Firebase.initializeApp(options: _firebaseOptions()).then((value) => log("Firebase Connected"));
-  //   await FirebaseMessaging.instance.subscribeToTopic("all");
-  //   FirebaseMessaging.instance.getInitialMessage().then((value) {
-  //     print(value);
-  //     print("object called");
-  //     if (value != null) {
-  //       backgroundHandler(value);
-  //     }
-  //   });
-  //   FirebaseMessaging.onMessage.listen((event) {
-  //     log("Listen Message=>${event.data}");
-  //     RemoteNotification? notification = event.notification;
-  //     AndroidNotification? android = event.notification?.android;
-  //     if (notification != null && android != null) {
-  //       FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
-  //       CustomNotification().createNotification(
-  //         event.notification!.title.toString(),
-  //         event.notification!.body.toString(),
-  //       );
-  //     }
-  //   });
-  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-  //     print('A new onMessageOpenedApp event was published!');
-  //   });
-  //   FirebaseMessaging.instance.getToken().then((value) async {
-  //     log("Device FCM Token ${value}");
-  //     if (value != null && value.toString().isNotEmpty) {
-  //       await pref.setString(sharedPrefFCMTokenKey, value);
-  //     }
-  //   });
-  //   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-  //   log("UserId=> ${pref.getString("key")}");
-  //   log("Firebase FCM token => ${pref.getString(sharedPrefFCMTokenKey)}");
-  //   log("Firebase API token => ${pref.getString(sharedPrefAPITokenKey)}");
-  // } catch (err) {
-  //   debugPrint("Catch Error $err");
-  // }
+  try {
+    CustomNotification().init();
+    await FirebaseMessaging.instance.subscribeToTopic("all");
+    FirebaseMessaging.instance.getInitialMessage().then((value) {
+      print(value);
+      print("object called");
+      if (value != null) {
+        backgroundHandler(value);
+      }
+    });
+    FirebaseMessaging.onMessage.listen((event) {
+      log("Listen Message=>${event.data}");
+      RemoteNotification? notification = event.notification;
+      AndroidNotification? android = event.notification?.android;
+      if (notification != null && android != null) {
+        FirebaseMessaging.instance.requestPermission(alert: true, badge: true, sound: true);
+        CustomNotification().createNotification(
+          event.notification!.title.toString(),
+          event.notification!.body.toString(),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+    });
+    FirebaseMessaging.instance.getToken().then((value) async {
+      log("Device FCM Token ${value}");
+      if (value != null && value.toString().isNotEmpty) {
+        await pref.setString(sharedPrefFCMTokenKey, value);
+      }
+    });
+    FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+    log("UserId=> ${pref.getString("key")}");
+    log("Firebase FCM token => ${pref.getString(sharedPrefFCMTokenKey)}");
+    log("Firebase API token => ${pref.getString(sharedPrefAPITokenKey)}");
+  } catch (err) {
+    debugPrint("Catch Error $err");
+  }
 
   // final savedLocale = pref.getString('selected_locale') ?? 'en_US';
   // final delegate = await LocalizationDelegate.create(

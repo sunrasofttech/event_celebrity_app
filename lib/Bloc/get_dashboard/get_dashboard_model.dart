@@ -35,12 +35,14 @@ class GetDashboardModel {
 class Data {
     String? welcomeMessage;
     List<UpcomingEvent>? upcomingEvents;
+    Revenue? revenue;
     List<UpcomingBookingRequest>? upcomingBookingRequests;
     Analytics? analytics;
 
     Data({
         this.welcomeMessage,
         this.upcomingEvents,
+            this.revenue,
         this.upcomingBookingRequests,
         this.analytics,
     });
@@ -48,6 +50,7 @@ class Data {
     factory Data.fromJson(Map<String, dynamic> json) => Data(
         welcomeMessage: json["welcomeMessage"],
         upcomingEvents: json["upcomingEvents"] == null ? [] : List<UpcomingEvent>.from(json["upcomingEvents"]!.map((x) => UpcomingEvent.fromJson(x))),
+        revenue: json["revenue"] == null ? null : Revenue.fromJson(json["revenue"]),
         upcomingBookingRequests: json["upcomingBookingRequests"] == null ? [] : List<UpcomingBookingRequest>.from(json["upcomingBookingRequests"]!.map((x) => UpcomingBookingRequest.fromJson(x))),
         analytics: json["analytics"] == null ? null : Analytics.fromJson(json["analytics"]),
     );
@@ -56,14 +59,35 @@ class Data {
         "welcomeMessage": welcomeMessage,
         "upcomingEvents": upcomingEvents == null ? [] : List<dynamic>.from(upcomingEvents!.map((x) => x.toJson())),
         "upcomingBookingRequests": upcomingBookingRequests == null ? [] : List<dynamic>.from(upcomingBookingRequests!.map((x) => x.toJson())),
+        "revenue": revenue?.toJson(),
         "analytics": analytics?.toJson(),
     };
 }
 
+class Revenue {
+    dynamic totalRevenue;
+    dynamic totalTransactions;
+
+    Revenue({
+        this.totalRevenue,
+        this.totalTransactions,
+    });
+
+    factory Revenue.fromJson(Map<String, dynamic> json) => Revenue(
+        totalRevenue: json["totalRevenue"],
+        totalTransactions: json["totalTransactions"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "totalRevenue": totalRevenue,
+        "totalTransactions": totalTransactions,
+    };
+}
+
 class Analytics {
-    int? profileViews;
-    int? upcomingEventsCount;
-    int? pendingRequestsCount;
+    dynamic profileViews;
+    dynamic upcomingEventsCount;
+    dynamic pendingRequestsCount;
 
     Analytics({
         this.profileViews,

@@ -23,7 +23,7 @@ class GetDashboardCubit extends Cubit<GetDashboardState> {
           'Authorization': "Bearer ${pref.getString(sharedPrefAPITokenKey) ?? ""}",
         },
       );
-      final Map<String, dynamic> result = jsonDecode(jsonEncode(resp.data));
+      final  result = jsonDecode(jsonEncode(resp.data));
       log("--- $result");
       if (resp.statusCode == 200) {
         if (result["status"]) {
