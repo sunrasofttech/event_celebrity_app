@@ -27,6 +27,7 @@ import 'package:planner_celebrity/Bloc/avaibility/set_ava/set_availbilty_cubit.d
 import 'package:planner_celebrity/Bloc/delete_gallery_image/delete_gallery_image_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_all_earing/get_all_earing_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_all_events/get_all_events_cubit.dart';
+import 'package:planner_celebrity/Bloc/get_all_revenue/get_all_revenue_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
 import 'package:planner_celebrity/Bloc/share_feedback/share_feedback_cubit.dart';
@@ -249,8 +250,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => GetAllEventsCubit()),
         BlocProvider(create: (context) => ShareFeedbackCubit()),
         BlocProvider(create: (context) => UpdateNotificationCubit()),
-         BlocProvider(create: (context) => SessionKeyCubit()),
-         BlocProvider(create: (context) => EventDetailsCubit(),)
+        BlocProvider(create: (context) => SessionKeyCubit()),
+        BlocProvider(create: (context) => EventDetailsCubit()),
+        BlocProvider(create: (context) => GetAllRevenueCubit()),
       ],
       child: MaterialApp(
         title: appName,

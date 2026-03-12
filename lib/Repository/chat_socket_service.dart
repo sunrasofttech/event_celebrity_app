@@ -27,10 +27,19 @@ class ChatSocketService {
       log("🟢 Socket connected");
     });
 
+    
+
     socket.onDisconnect((_) {
       log("🔴 Socket disconnected");
     });
   }
+
+   void joinRoom(String id, String type) {
+    socket.emit("join_room", {"id": id, "type": type});
+
+    log("📌 Joined Room: ${type}_$id");
+  }
+
 
   void listenToMessages(Function(dynamic data) onMessage) {
     socket.on("receive_message", (data) {

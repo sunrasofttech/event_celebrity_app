@@ -36,23 +36,16 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
     final token = pref.getString(sharedPrefAPITokenKey) ?? "";
 
     /// 1️⃣ Load history
-    final history = await chatRepo.getChatHistory(
-      adminId: widget.receiverId.toString(),
-    );
+    final history = await chatRepo.getChatHistory(adminId: widget.receiverId.toString());
 
     setState(() {
-      _messages.addAll(
-        history.map(
-          (e) => ChatMessage(
-            text: e["message"],
-            isUser: e["senderType"] == "celebrity",
-          ),
-        ),
-      );
+      _messages.addAll(history.map((e) => ChatMessage(text: e["message"], isUser: e["senderType"] == "celebrity")));
     });
 
     /// 2️⃣ Connect socket
     socketService.connect(token);
+
+    socketService.joinRoom("${pref.getString(sharedPrefUserIdKey)}", "celebrity");
 
     /// 3️⃣ Listen to incoming messages
     socketService.listenToMessages((data) {
@@ -74,11 +67,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
       _messages.add(ChatMessage(text: text, isUser: true));
     });
     _scrollToBottom();
-    await chatRepo.sendMessage(
-      receiverId: widget.receiverId.toString(),
-      receiverType: "admin",
-      message: text,
-    );
+    await chatRepo.sendMessage(receiverId: widget.receiverId.toString(), receiverType: "admin", message: text);
   }
 
   @override
@@ -113,10 +102,7 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(IconsaxPlusBold.arrow_left_3),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+                  IconButton(icon: const Icon(IconsaxPlusBold.arrow_left_3), onPressed: () => Navigator.pop(context)),
                   const SizedBox(width: 12),
                   const Text("Chat Assistant"),
                 ],
@@ -132,21 +118,13 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                 itemBuilder: (_, index) {
                   final msg = _messages[index];
                   return Align(
-                    alignment:
-                        msg.isUser
-                            ? Alignment.centerRight
-                            : Alignment.centerLeft,
+                    alignment: msg.isUser ? Alignment.centerRight : Alignment.centerLeft,
                     child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width / 1.5,
-                      ),
+                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 1.5),
                       margin: const EdgeInsets.symmetric(vertical: 6),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color:
-                            msg.isUser
-                                ? Colors.grey.shade300
-                                : Colors.pink.shade50,
+                        color: msg.isUser ? Colors.grey.shade300 : Colors.pink.shade50,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(msg.text),
@@ -173,20 +151,13 @@ class _ChatAssistantScreenState extends State<ChatAssistantScreen> {
                             } else {
                               textNotEmpty.value = false;
                             }
-                            log(
-                              "V- $v, text not empty:- ${textNotEmpty.value}",
-                            );
+                            log("V- $v, text not empty:- ${textNotEmpty.value}");
                           },
-                          decoration: const InputDecoration(
-                            hintText: "Type message...",
-                          ),
+                          decoration: const InputDecoration(hintText: "Type message..."),
                         ),
                       ),
                       IconButton(
-                        icon: Icon(
-                          IconsaxPlusBold.send_2,
-                          color: !_textNotEmpty ? greyColor : primaryColor,
-                        ),
+                        icon: Icon(IconsaxPlusBold.send_2, color: !_textNotEmpty ? greyColor : primaryColor),
                         onPressed: _sendMessage,
                       ),
                     ],

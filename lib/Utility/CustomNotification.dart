@@ -22,7 +22,7 @@ class CustomNotification {
         groupAlertBehavior: GroupAlertBehavior.All,
         ledColor: Colors.red,
         importance: NotificationImportance.High,
-        defaultRingtoneType: DefaultRingtoneType.Notification,
+        soundSource: 'resource://raw/noti2',
       ),
     ]);
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {

@@ -6,7 +6,9 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:intl/intl.dart';
 import 'package:planner_celebrity/Bloc/get_dashboard/get_dashboard_cubit.dart';
 import 'package:planner_celebrity/Bloc/get_profile/get_profile_cubit.dart';
+import 'package:planner_celebrity/UI/Pages/all_event.dart';
 import 'package:planner_celebrity/UI/Pages/event_detail_screen.dart';
+import 'package:planner_celebrity/UI/Pages/revenuw_screen.dart';
 import 'package:planner_celebrity/Utility/MainColor.dart';
 import 'package:planner_celebrity/Utility/const.dart';
 
@@ -308,7 +310,15 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                               children: [
                                 Expanded(
                                   flex: 1,
-                                  child: revenuCard(state.model.data?.revenue?.totalRevenue.toString() ?? ""),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => TotalRevenueScreen()),
+                                      );
+                                    },
+                                    child: revenuCard(state.model.data?.revenue?.totalRevenue.toString() ?? ""),
+                                  ),
                                 ),
                                 const SizedBox(width: 12),
 
@@ -322,10 +332,21 @@ class _DashBoardScreenState extends State<DashBoardScreen> with WidgetsBindingOb
                                         value: state.model.data?.analytics?.profileViews.toString() ?? "",
                                       ),
                                       const SizedBox(height: 12),
-                                      _buildAnalyticsCard(
-                                        imagePath: ("asset/icons/calendar_tick.png"),
-                                        title: "Events Booked",
-                                        value: state.model.data?.analytics?.upcomingEventsCount.toString() ?? "",
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (_) => AllEventsScreen(events: state.model.data?.allEvents ?? []),
+                                            ),
+                                          );
+                                        },
+                                        child: _buildAnalyticsCard(
+                                          imagePath: ("asset/icons/calendar_tick.png"),
+                                          title: "Events Booked",
+                                          value: state.model.data?.analytics?.totalEventsCount.toString() ?? "",
+                                        ),
                                       ),
                                     ],
                                   ),
