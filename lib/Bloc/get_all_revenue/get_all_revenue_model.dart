@@ -58,7 +58,6 @@ class RevenueList {
     String? status;
     String? paymentStatus;
     List<DateTime>? requestedDates;
-    DateTime? createdAt;
     String? userId;
     String? userName;
     dynamic profileImg;
@@ -80,7 +79,6 @@ class RevenueList {
         this.status,
         this.paymentStatus,
         this.requestedDates,
-        this.createdAt,
         this.userId,
         this.userName,
         this.profileImg,
@@ -103,7 +101,6 @@ class RevenueList {
         status: json["status"],
         paymentStatus: json["paymentStatus"],
         requestedDates: json["requestedDates"] == null ? [] : List<DateTime>.from(json["requestedDates"]!.map((x) => DateTime.parse(x))),
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         userId: json["userId"],
         userName: json["userName"],
         profileImg: json["profile_img"],
@@ -126,7 +123,6 @@ class RevenueList {
         "status": status,
         "paymentStatus": paymentStatus,
         "requestedDates": requestedDates == null ? [] : List<dynamic>.from(requestedDates!.map((x) => "${x.year.toString().padLeft(4, '0')}-${x.month.toString().padLeft(2, '0')}-${x.day.toString().padLeft(2, '0')}")),
-        "createdAt": createdAt?.toIso8601String(),
         "userId": userId,
         "userName": userName,
         "profile_img": profileImg,

@@ -10,6 +10,7 @@ import 'package:planner_celebrity/UI/MainScreen.dart';
 import 'package:planner_celebrity/Utility/SimpleButton.dart';
 import 'package:planner_celebrity/Utility/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import '../../Utility/CustomTextField.dart';
 import '../../Utility/MainColor.dart';
 
@@ -26,6 +27,20 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
 
   bool obscurePassword = true;
+
+   @override
+  void initState() {
+    super.initState();
+    askPermission();
+  }
+
+  void askPermission() async {
+    bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
+
+    if (!isAllowed) {
+      await AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   /// Continue Button
                   SizedBox(
                     width: double.infinity,
-                    child: SimpleButton(
+                    child: (state is LoadingState) ? Center(child:CircularProgressIndicator()) : SimpleButton(
                       onPressed: () {
                         if (state is LoadingState) return;
                         if (mobileController.text.isEmpty || passwordController.text.isEmpty) {

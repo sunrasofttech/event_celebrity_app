@@ -9,7 +9,7 @@ class CustomNotification {
   init() async {
     //'resource://drawable/icon_notification'
     //'resource://drawable/ic_launcher'
-    await AwesomeNotifications().initialize(null, [
+    await AwesomeNotifications().initialize("", [
       //[
       NotificationChannel(
         channelKey: 'basic_channel',
@@ -17,6 +17,7 @@ class CustomNotification {
         channelDescription: "Hi",
         playSound: true,
         channelShowBadge: true,
+        icon: 'resource://drawable/ic_notification',
         enableVibration: true,
         defaultColor: Color(0xFF1E1E1E),
         groupAlertBehavior: GroupAlertBehavior.All,
@@ -64,6 +65,7 @@ class CustomNotification {
         title: '<b>$title</b>',
         body: isMarketResult ? '${parsed['title']}: <b><i>${parsed['code']}</i></b>' : parsed['code'],
         notificationLayout: NotificationLayout.BigPicture,
+        icon: 'resource://drawable/ic_notification',
         bigPicture:
             title.contains("Deposit Reminder")
                 ? "${Constants.baseUrl}/low-balance.png"

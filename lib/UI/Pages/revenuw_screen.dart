@@ -116,10 +116,10 @@ class _TotalRevenueScreenState extends State<TotalRevenueScreen> {
 
                                 const SizedBox(height: 4),
 
-                                Text(
-                                  formatDate(item.createdAt.toString()),
-                                  style: const TextStyle(color: Colors.grey, fontSize: 11),
-                                ),
+                                // Text(
+                                //   formatDate(item.createdAt.toString()),
+                                //   style: const TextStyle(color: Colors.grey, fontSize: 11),
+                                // ),
                               ],
                             ),
 
@@ -191,11 +191,10 @@ class _TotalRevenueScreenState extends State<TotalRevenueScreen> {
                     Navigator.pop(context);
                   }),
 
-                  _filterOption("Tomorrow", () {
-                    _applyFilter(filterType: "tomorrow");
-                    Navigator.pop(context);
-                  }),
-
+                  // _filterOption("Tomorrow", () {
+                  //   _applyFilter(filterType: "tomorrow");
+                  //   Navigator.pop(context);
+                  // }),
                   const SizedBox(height: 20),
 
                   /// From Date
