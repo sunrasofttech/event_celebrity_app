@@ -1,4 +1,4 @@
-package com.showmanch.celebratity
+package com.showmanch.celebapp
 
 import android.content.Intent
 import android.content.pm.ApplicationInfo

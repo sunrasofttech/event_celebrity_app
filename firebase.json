@@ -3,16 +3,16 @@
     "platforms": {
       "android": {
         "default": {
-          "projectId": "showmanch-3cc6d",
-          "appId": "1:270025676614:android:01d92481a6972d90e8b747",
+          "projectId": "show-manch",
+          "appId": "1:972413436480:android:06fbf02ce216220f41d5a5",
           "fileOutput": "android/app/google-services.json"
         }
       },
       "dart": {
         "lib/firebase_options.dart": {
-          "projectId": "showmanch-3cc6d",
+          "projectId": "show-manch",
           "configurations": {
-            "android": "1:270025676614:android:01d92481a6972d90e8b747"
+            "android": "1:972413436480:android:06fbf02ce216220f41d5a5"
           }
         }
       }

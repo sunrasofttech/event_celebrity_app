@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "270025676614",
-    "project_id": "showmanch-3cc6d",
-    "storage_bucket": "showmanch-3cc6d.firebasestorage.app"
+    "project_number": "972413436480",
+    "project_id": "show-manch",
+    "storage_bucket": "show-manch.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:270025676614:android:01d92481a6972d90e8b747",
+        "mobilesdk_app_id": "1:972413436480:android:2707f256ad22c7a441d5a5",
         "android_client_info": {
-          "package_name": "com.showmanch.celebratity"
+          "package_name": "com.showmanch.admin"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDG-YHXvSnNpsR4T_KjRtYwzVkgcQCtMBk"
+          "current_key": "AIzaSyA5eagDcLuyeTfoNsBclNFOU0tQslctRcw"
         }
       ],
       "services": {
@@ -26,15 +26,34 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:270025676614:android:21f0b6b105e7c53ee8b747",
+        "mobilesdk_app_id": "1:972413436480:android:06fbf02ce216220f41d5a5",
         "android_client_info": {
-          "package_name": "com.showmanch.user"
+          "package_name": "com.showmanch.celebapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDG-YHXvSnNpsR4T_KjRtYwzVkgcQCtMBk"
+          "current_key": "AIzaSyA5eagDcLuyeTfoNsBclNFOU0tQslctRcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972413436480:android:ddc094afa46e0ceb41d5a5",
+        "android_client_info": {
+          "package_name": "com.showmanch.eventapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5eagDcLuyeTfoNsBclNFOU0tQslctRcw"
         }
       ],
       "services": {

@@ -84,7 +84,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   pref = await SharedPreferences.getInstance();
   if (!kIsWeb) {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then((e)=>{
+      log("FIREBASE CONNECT SUCCESSFULLY...."),
+    });
   }
   // SystemChrome.setSystemUIOverlayStyle(
   //   const SystemUiOverlayStyle(
