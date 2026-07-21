@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import '../../Utility/CustomTextField.dart';
 import '../../Utility/MainColor.dart';
+import 'RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool obscurePassword = true;
 
-   @override
+  @override
   void initState() {
     super.initState();
     askPermission();
@@ -54,12 +55,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 Fluttertoast.showToast(msg: "Login Successful");
 
                 final pref = await SharedPreferences.getInstance();
-                await pref.setString(sharedPrefUserIdKey, state.model.data?.celebrity?.id?.toString() ?? "");
-                await pref.setString(sharedPrefAPITokenKey, state.model.data?.token?.toString() ?? "");
-                await context.read<SessionKeyCubit>().sessionKey(tok: state.model.data?.token?.toString());
+                await pref.setString(
+                  sharedPrefUserIdKey,
+                  state.model.data?.celebrity?.id?.toString() ?? "",
+                );
+                await pref.setString(
+                  sharedPrefAPITokenKey,
+                  state.model.data?.token?.toString() ?? "",
+                );
+                await context.read<SessionKeyCubit>().sessionKey(
+                  tok: state.model.data?.token?.toString(),
+                );
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => MainScreen()),
+                  MaterialPageRoute(
+                    builder:
+                        (context) => MainScreen(
+                          isApproved: state.model.data?.celebrity?.isApproved,
+                        ),
+                  ),
                   (c) => false,
                 );
               }
@@ -88,12 +102,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   /// Title
                   const Text(
                     "Log In",
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 8),
 
                   const SizedBox(height: 20),
-                  Center(child: Image.asset('asset/icons/signup_img.png', height: 180, fit: BoxFit.contain)),
+                  Center(
+                    child: Image.asset(
+                      'asset/icons/signup_img.png',
+                      height: 180,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   const SizedBox(height: 20),
 
                   /// Mobile
@@ -102,7 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "Mobile",
                     keyboardType: TextInputType.phone,
                     prefixIcon: IconsaxPlusBold.mobile,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ],
                   ),
 
                   const SizedBox(height: 12),
@@ -115,7 +142,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     prefixIcon: IconsaxPlusBold.lock,
                     obscureText: obscurePassword,
                     suffixIcon: IconButton(
-                      icon: Icon(obscurePassword ? IconsaxPlusBold.eye_slash : IconsaxPlusBold.eye, color: Colors.grey),
+                      icon: Icon(
+                        obscurePassword
+                            ? IconsaxPlusBold.eye_slash
+                            : IconsaxPlusBold.eye,
+                        color: Colors.grey,
+                      ),
                       onPressed: () {
                         setState(() => obscurePassword = !obscurePassword);
                       },
@@ -127,23 +159,60 @@ class _LoginScreenState extends State<LoginScreen> {
                   /// Continue Button
                   SizedBox(
                     width: double.infinity,
-                    child: (state is LoadingState) ? Center(child:CircularProgressIndicator()) : SimpleButton(
-                      onPressed: () {
-                        if (state is LoadingState) return;
-                        if (mobileController.text.isEmpty || passwordController.text.isEmpty) {
-                          Fluttertoast.showToast(msg: "All Fields are required");
-                          return;
-                        }
+                    child:
+                        (state is LoadingState)
+                            ? Center(child: CircularProgressIndicator())
+                            : SimpleButton(
+                              onPressed: () {
+                                if (state is LoadingState) return;
+                                if (mobileController.text.isEmpty ||
+                                    passwordController.text.isEmpty) {
+                                  Fluttertoast.showToast(
+                                    msg: "All Fields are required",
+                                  );
+                                  return;
+                                }
 
-                        context.read<LoginCubit>().signIn(mobileController.text, passwordController.text);
-                      },
-                      title: "Continue",
-                    ),
+                                context.read<LoginCubit>().signIn(
+                                  mobileController.text,
+                                  passwordController.text,
+                                );
+                              },
+                              title: "Continue",
+                            ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
 
-                  /// Already a member?
+                  /// Don't have an account? Register Now
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: RichText(
+                        text: const TextSpan(
+                          text: "Don't have an account? ",
+                          style: TextStyle(color: Colors.black45, fontSize: 14),
+                          children: [
+                            TextSpan(
+                              text: "Register Now",
+                              style: TextStyle(
+                                color: primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               );
             },

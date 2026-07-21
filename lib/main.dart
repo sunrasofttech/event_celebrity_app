@@ -47,6 +47,9 @@ import 'Bloc/LogOutCubit/LogOutCubit.dart';
 import 'Bloc/ReferCubit/ReferCubit.dart';
 import 'Bloc/SendOtpBloc/sendotp_cubit.dart';
 import 'Bloc/subscription_bloc/subscription_cubit.dart';
+import 'Bloc/Auth/RegisterBloc/RegisterCubit.dart';
+import 'Bloc/CategoryCubit/CategoryCubit.dart';
+import 'Bloc/CityCubit/CityCubit.dart';
 import 'Utility/const.dart';
 
 Repository repository = Repository();
@@ -255,6 +258,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (context) => SessionKeyCubit()),
         BlocProvider(create: (context) => EventDetailsCubit()),
         BlocProvider(create: (context) => GetAllRevenueCubit()),
+        BlocProvider(create: (context) => RegisterCubit()),
+        BlocProvider(create: (context) => CategoryCubit()),
+        BlocProvider(create: (context) => CityCubit()),
       ],
       child: MaterialApp(
         title: appName,

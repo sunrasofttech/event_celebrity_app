@@ -19,11 +19,24 @@ class Repository {
   }
 
   String errorMessage(var result) {
-    return result["error"]?.toString() ??
-        result["message"]?.toString() ??
-        result["errors"]?.toString() ??
-        result["msg"]?.toString() ??
-        "Something went wrong";
+    if (result is Map) {
+      return result["error"]?.toString() ??
+          result["message"]?.toString() ??
+          result["errors"]?.toString() ??
+          result["msg"]?.toString() ??
+          "Something went wrong";
+    }
+    if (result is String) {
+      if (result.contains("<pre>") && result.contains("</pre>")) {
+        final match = RegExp(r'<pre>(.*?)</pre>', dotAll: true).firstMatch(result);
+        if (match != null) {
+          final cleanErr = match.group(1)?.replaceAll(RegExp(r'<[^>]*>'), '') ?? result;
+          return cleanErr.split('\n').first.trim();
+        }
+      }
+      return result;
+    }
+    return result?.toString() ?? "Something went wrong";
   }
 
   /// 🌐 GET Request

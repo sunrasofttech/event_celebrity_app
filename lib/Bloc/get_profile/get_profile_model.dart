@@ -34,6 +34,7 @@ class Data {
     String? mobile;
     bool? isVerified;
     bool? isActive;
+    bool? isApproved;
     String? fullName;
     String? publicHandle;
     String? profilePictureUrl;
@@ -64,6 +65,7 @@ class Data {
         this.mobile,
         this.isVerified,
         this.isActive,
+        this.isApproved,
         this.fullName,
         this.publicHandle,
         this.profilePictureUrl,
@@ -95,6 +97,7 @@ class Data {
         mobile: json["mobile"],
         isVerified: json["isVerified"],
         isActive: json["isActive"],
+        isApproved: json["isApproved"] ?? json["is_approved"],
         fullName: json["fullName"],
         publicHandle: json["publicHandle"],
         profilePictureUrl: json["profilePictureUrl"],
@@ -126,6 +129,7 @@ class Data {
         "mobile": mobile,
         "isVerified": isVerified,
         "isActive": isActive,
+        "isApproved": isApproved,
         "fullName": fullName,
         "publicHandle": publicHandle,
         "profilePictureUrl": profilePictureUrl,

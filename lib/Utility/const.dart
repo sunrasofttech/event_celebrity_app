@@ -22,6 +22,11 @@ final String url = dotenv.env['SHARE_URL'] ?? '';
 
 String _full(String path) => '${Constants.baseUrl}$path';
 
+final String sendOtpCelebrityApi = _full('/api/celebrity/send-otp');
+final String verifyOtpRegisterApi = _full('/api/celebrity/verify-otp-register');
+final String getAllCategoriesApi = _full('/api/celebrity/getAllCategories');
+final String getAllCitiesApi = _full('/api/admin/getAllCities');
+
 final String loginApi = _full(dotenv.env['LOGIN_API'] ?? '');
 final getEventByIdApi = _full(dotenv.env['GET_EVENT_BY_ID'] ?? '');
 

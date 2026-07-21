@@ -60,6 +60,7 @@ class Celebrity {
     String? publicHandle;
     String? profilePictureUrl;
     bool? isVerified;
+    bool? isApproved;
 
     Celebrity({
         this.id,
@@ -69,6 +70,7 @@ class Celebrity {
         this.publicHandle,
         this.profilePictureUrl,
         this.isVerified,
+        this.isApproved,
     });
 
     factory Celebrity.fromJson(Map<String, dynamic> json) => Celebrity(
@@ -79,6 +81,7 @@ class Celebrity {
         publicHandle: json["publicHandle"],
         profilePictureUrl: json["profilePictureUrl"],
         isVerified: json["isVerified"],
+        isApproved: json["isApproved"] ?? json["is_approved"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -89,5 +92,6 @@ class Celebrity {
         "publicHandle": publicHandle,
         "profilePictureUrl": profilePictureUrl,
         "isVerified": isVerified,
+        "isApproved": isApproved,
     };
 }
