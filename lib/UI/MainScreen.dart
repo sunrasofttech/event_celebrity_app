@@ -106,6 +106,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         const Icon(
                           IconsaxPlusBold.timer_1,
@@ -113,12 +114,14 @@ class _MainScreenState extends State<MainScreen> {
                           color: primaryColor,
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          "Approval wait time: ~2 Hours",
-                          style: GoogleFonts.inter(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: primaryColor,
+                        Flexible(
+                          child: Text(
+                            "Approval wait time: ~2 Hours",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: primaryColor,
+                            ),
                           ),
                         ),
                       ],
@@ -146,16 +149,26 @@ class _MainScreenState extends State<MainScreen> {
                       child: TextButton(
                         onPressed: () async {
                           _isDialogShowing = false;
-                          final pref = await SharedPreferences.getInstance();
-                          await pref.clear();
-                          if (context.mounted) {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                              (c) => false,
-                            );
+                          try {
+                            Navigator.pop(ctx);
+                            final pref = await SharedPreferences.getInstance();
+                            await pref.clear();
+                            log("Shared Pref is Clear");
+                            EncryptionService().resetKey();
+                            EncryptionInterceptor().clearInitialization();
+                            final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+                            await secureStorage.delete(key: dotenv.env['ENCRYPTION_KEY_REQUEST'] ?? 'ENCRYPTION_KEY_REQUEST');
+                            await secureStorage.deleteAll(aOptions: const AndroidOptions(encryptedSharedPreferences: true));
+                          } catch (e, s) {
+                            log("------>>  $e --- $s");
+                          } finally {
+                            if (context.mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => const LoginScreen()),
+                                (c) => false,
+                              );
+                            }
                           }
                         },
                         child: Text(

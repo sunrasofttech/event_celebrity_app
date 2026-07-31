@@ -31,6 +31,8 @@ class VerifyOTPScreen extends StatefulWidget {
   final String instagramHandle;
   final String twitterHandle;
   final String? profilePicturePath;
+  final String? aadharFrontImagePath;
+  final String? aadharBackImagePath;
 
   const VerifyOTPScreen({
     super.key,
@@ -47,6 +49,8 @@ class VerifyOTPScreen extends StatefulWidget {
     required this.instagramHandle,
     required this.twitterHandle,
     this.profilePicturePath,
+    this.aadharFrontImagePath,
+    this.aadharBackImagePath,
   });
 
   @override
@@ -243,6 +247,10 @@ class _VerifyOTPScreenState extends State<VerifyOTPScreen> {
                                         twitterHandle: widget.twitterHandle,
                                         profilePicturePath:
                                             widget.profilePicturePath,
+                                        aadharFrontImagePath:
+                                            widget.aadharFrontImagePath,
+                                        aadharBackImagePath:
+                                            widget.aadharBackImagePath,
                                       );
                                 },
                                 title: "Verify & Complete Registration",

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:planner_celebrity/Bloc/Auth/LoginBloc/LoginCubit.dart';
 import 'package:planner_celebrity/Bloc/Auth/LoginBloc/LoginState.dart';
@@ -186,31 +187,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   /// Don't have an account? Register Now
                   Center(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
-                      },
-                      child: RichText(
-                        text: const TextSpan(
-                          text: "Don't have an account? ",
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Don't have an account? ",
                           style: TextStyle(color: Colors.black45, fontSize: 14),
-                          children: [
-                            TextSpan(
-                              text: "Register Now",
-                              style: TextStyle(
-                                color: primaryColor,
-                                fontWeight: FontWeight.bold,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF2563EB),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              'Register Now',
+                              style: GoogleFonts.inter(
                                 fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

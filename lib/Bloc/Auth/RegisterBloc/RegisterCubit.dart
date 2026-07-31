@@ -64,6 +64,8 @@ class RegisterCubit extends Cubit<RegisterState> {
     required String instagramHandle,
     required String twitterHandle,
     String? profilePicturePath,
+    String? aadharFrontImagePath,
+    String? aadharBackImagePath,
     String latitude = "19.0760",
     String longitude = "72.8777",
   }) async {
@@ -114,6 +116,28 @@ class RegisterCubit extends Cubit<RegisterState> {
         data.files.add(MapEntry('profilePicture', file));
       }
 
+      if (aadharFrontImagePath != null && aadharFrontImagePath.isNotEmpty) {
+        final mimeType =
+            lookupMimeType(aadharFrontImagePath)?.split('/') ?? ['image', 'png'];
+        final file = await MultipartFile.fromFile(
+          aadharFrontImagePath,
+          filename: aadharFrontImagePath.split('/').last,
+          contentType: MediaType(mimeType[0], mimeType[1]),
+        );
+        data.files.add(MapEntry('aadharFrontImage', file));
+      }
+
+      if (aadharBackImagePath != null && aadharBackImagePath.isNotEmpty) {
+        final mimeType =
+            lookupMimeType(aadharBackImagePath)?.split('/') ?? ['image', 'png'];
+        final file = await MultipartFile.fromFile(
+          aadharBackImagePath,
+          filename: aadharBackImagePath.split('/').last,
+          contentType: MediaType(mimeType[0], mimeType[1]),
+        );
+        data.files.add(MapEntry('aadharBackImage', file));
+      }
+
       final curlCmd = StringBuffer();
       curlCmd.writeln("curl --location '$verifyOtpRegisterApi' \\");
       formMap.forEach((key, value) {
@@ -121,7 +145,13 @@ class RegisterCubit extends Cubit<RegisterState> {
         curlCmd.writeln("  --form '$key=\"$escapedVal\"' \\");
       });
       if (profilePicturePath != null && profilePicturePath.isNotEmpty) {
-        curlCmd.writeln("  --form 'profilePicture=@\"$profilePicturePath\"'");
+        curlCmd.writeln("  --form 'profilePicture=@\"$profilePicturePath\"' \\");
+      }
+      if (aadharFrontImagePath != null && aadharFrontImagePath.isNotEmpty) {
+        curlCmd.writeln("  --form 'aadharFrontImage=@\"$aadharFrontImagePath\"' \\");
+      }
+      if (aadharBackImagePath != null && aadharBackImagePath.isNotEmpty) {
+        curlCmd.writeln("  --form 'aadharBackImage=@\"$aadharBackImagePath\"'");
       }
       log("VERIFY OTP REGISTER CURL:\n${curlCmd.toString()}");
 
